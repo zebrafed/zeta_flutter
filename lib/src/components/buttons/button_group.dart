@@ -67,6 +67,19 @@ class ZetaButtonGroup extends StatelessWidget {
 
 /// Group Button item
 class ZetaGroupButton extends StatefulWidget {
+
+  /// Public Constructor for [ZetaGroupButton]
+  const ZetaGroupButton({
+    super.key,
+    this.label,
+    this.icon,
+    this.onPressed,
+    this.dropdown,
+  })  : isFinal = false,
+        isInitial = false,
+        isInverse = false,
+        isLarge = true,
+        rounded = true;
   /// Private constructor
   const ZetaGroupButton._({
     super.key,
@@ -81,19 +94,6 @@ class ZetaGroupButton extends StatefulWidget {
     required this.rounded,
   });
 
-  /// Public Constructor for [ZetaGroupButton]
-  const ZetaGroupButton({
-    super.key,
-    this.label,
-    this.icon,
-    this.onPressed,
-    this.dropdown,
-  })  : isFinal = false,
-        isInitial = false,
-        isInverse = false,
-        isLarge = true,
-        rounded = true;
-
   /// Constructs dropdown group button
   const ZetaGroupButton.dropdown({
     super.key,
@@ -101,11 +101,11 @@ class ZetaGroupButton extends StatefulWidget {
     required this.dropdown,
     this.icon,
     this.label,
-  })  : this.isFinal = false,
-        this.isInitial = false,
-        this.isInverse = false,
-        this.isLarge = true,
-        this.rounded = true;
+  })  : isFinal = false,
+        isInitial = false,
+        isInverse = false,
+        isLarge = true,
+        rounded = true;
 
   ///Constructs group button with icon
   const ZetaGroupButton.icon({
@@ -114,11 +114,11 @@ class ZetaGroupButton extends StatefulWidget {
     this.dropdown,
     this.onPressed,
     this.label,
-  })  : this.isFinal = false,
-        this.isInitial = false,
-        this.isInverse = false,
-        this.isLarge = true,
-        this.rounded = true;
+  })  : isFinal = false,
+        isInitial = false,
+        isInverse = false,
+        isLarge = true,
+        rounded = true;
 
   /// Label for [ZetaGroupButton].
   final String? label;
@@ -196,9 +196,7 @@ class _ZetaGroupButtonState extends State<ZetaGroupButton> {
     super.initState();
     controller = MaterialStatesController();
     controller.addListener(() {
-      if (!controller.value.contains(MaterialState.disabled) &&
-          context.mounted &&
-          mounted) {
+      if (!controller.value.contains(MaterialState.disabled) && context.mounted && mounted) {
         // TODO(UX-1005): setState causing exception when going from disabled to enabled.
         setState(() {});
       }
@@ -217,11 +215,9 @@ class _ZetaGroupButtonState extends State<ZetaGroupButton> {
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
 
-    final borderType =
-        widget.rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp;
+    final borderType = widget.rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp;
 
-    final BorderSide borderSide =
-        _getBorderSide(controller.value, colors, false);
+    final BorderSide borderSide = _getBorderSide(controller.value, colors, false);
 
     return Container(
       decoration: BoxDecoration(
@@ -250,9 +246,7 @@ class _ZetaGroupButtonState extends State<ZetaGroupButton> {
               Text(widget.label!),
               if (widget.dropdown != null) // TODO(UX-1006): Dropdown
                 Icon(
-                  widget.rounded
-                      ? ZetaIcons.expand_more_round
-                      : ZetaIcons.expand_more_sharp,
+                  widget.rounded ? ZetaIcons.expand_more_round : ZetaIcons.expand_more_sharp,
                   size: 20,
                 ),
             ],
