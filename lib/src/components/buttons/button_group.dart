@@ -67,7 +67,21 @@ class ZetaButtonGroup extends StatelessWidget {
 
 /// Group Button item
 class ZetaGroupButton extends StatefulWidget {
-  /// Constructs [ZetaGroupButton]
+  /// Private constructor
+  const ZetaGroupButton._({
+    super.key,
+    this.label,
+    this.icon,
+    this.onPressed,
+    this.dropdown,
+    required this.isFinal,
+    required this.isInitial,
+    required this.isInverse,
+    required this.isLarge,
+    required this.rounded,
+  });
+
+  /// Public Constructor for [ZetaGroupButton]
   const ZetaGroupButton({
     super.key,
     this.label,
@@ -80,18 +94,6 @@ class ZetaGroupButton extends StatefulWidget {
         isLarge = true,
         rounded = true;
 
-  // const ZetaGroupButton({
-  //   super.key,
-  //   this.label,
-  //   this.icon,
-  //   this.onPressed,
-  //   this.dropdown,
-  // }) : this.isFinal = false,
-  //       this.isInitial = false,
-  //       this.isInverse = false,
-  //       this.isLarge = true,
-  //       this.rounded = true;
-
   /// Constructs dropdown group button
   const ZetaGroupButton.dropdown({
     super.key,
@@ -99,12 +101,11 @@ class ZetaGroupButton extends StatefulWidget {
     required this.dropdown,
     this.icon,
     this.label,
-    this.isFinal = false,
-    this.isInitial = false,
-    this.isInverse = false,
-    this.isLarge = true,
-    this.rounded = true,
-  });
+  })  : this.isFinal = false,
+        this.isInitial = false,
+        this.isInverse = false,
+        this.isLarge = true,
+        this.rounded = true;
 
   ///Constructs group button with icon
   const ZetaGroupButton.icon({
@@ -113,12 +114,11 @@ class ZetaGroupButton extends StatefulWidget {
     this.dropdown,
     this.onPressed,
     this.label,
-    this.isFinal = false,
-    this.isInitial = false,
-    this.isInverse = false,
-    this.isLarge = true,
-    this.rounded = true,
-  });
+  })  : this.isFinal = false,
+        this.isInitial = false,
+        this.isInverse = false,
+        this.isLarge = true,
+        this.rounded = true;
 
   /// Label for [ZetaGroupButton].
   final String? label;
@@ -159,12 +159,17 @@ class ZetaGroupButton extends StatefulWidget {
     bool? round,
     bool? inverse,
   }) {
-    return ZetaGroupButton(
+    return ZetaGroupButton._(
       key: key,
       label: label,
       icon: icon,
       onPressed: onPressed,
       dropdown: dropdown,
+      isFinal: fin ?? isFinal,
+      isInitial: initial ?? isInitial,
+      isLarge: large ?? isLarge,
+      rounded: round ?? rounded,
+      isInverse: inverse ?? isInverse,
     );
   }
 
