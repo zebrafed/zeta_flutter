@@ -1,7 +1,7 @@
 {
     "hosting": {
         "public": "build",
-        "target": "qa",
+        "target": "flutter",
         "rewrites": [
             {
                 "source": "**",
