@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "zeta-ds"
-  }
+  },
+  "targets": {
+    "zeta-ds": {
+      "hosting": {
+        "qa": [
+          "zeta-ds-qa"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
