@@ -11,6 +11,7 @@ import 'package:zeta_example/pages/components/checkbox_example.dart';
 import 'package:zeta_example/pages/components/chip_example.dart';
 import 'package:zeta_example/pages/components/dialpad_example.dart';
 import 'package:zeta_example/pages/components/navigation_bar_example.dart';
+import 'package:zeta_example/pages/components/switch_example.dart';
 import 'package:zeta_example/pages/theme/color_example.dart';
 import 'package:zeta_example/pages/components/password_input_example.dart';
 import 'package:zeta_example/pages/components/progress_example.dart';
@@ -42,6 +43,7 @@ final List<Component> components = [
   Component(PasswordInputExample.name, (context) => const PasswordInputExample()),
   Component(ProgressExample.name, (context) => const ProgressExample()),
   Component(DialPadExample.name, (context) => const DialPadExample()),
+  Component(SwitchExample.name, (context) => const SwitchExample()),
 ];
 
 final List<Component> theme = [
