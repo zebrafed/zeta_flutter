@@ -12,8 +12,8 @@ class SwitchExample extends StatefulWidget {
 }
 
 class _SwitchExampleState extends State<SwitchExample> {
-  bool? isOn = false;
-  bool isEnabled = true;
+  bool? isOnAndroid = false, isOnIOS = false;
+  bool isEnabledAndroid = true, isEnabledIOS = true;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +27,29 @@ class _SwitchExampleState extends State<SwitchExample> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ZetaSwitch(
-                  value: isOn,
-                  onChanged: isEnabled ? (value) => setState(() => isOn = value) : null,
+                Text('Android'),
+                ZetaSwitch.android(
+                  value: isOnAndroid,
+                  onChanged: isEnabledAndroid ? (value) => setState(() => isOnAndroid = value) : null,
                 ),
                 ZetaButton(
-                  label: isEnabled ? 'Disable' : 'Enable',
-                  onPressed: () => setState(() => isEnabled = !isEnabled),
+                  label: isEnabledAndroid ? 'Disable' : 'Enable',
+                  onPressed: () => setState(() => isEnabledAndroid = !isEnabledAndroid),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text('iOS'),
+                ZetaSwitch.ios(
+                  value: isOnIOS,
+                  onChanged: isEnabledIOS ? (value) => setState(() => isOnIOS = value) : null,
+                ),
+                ZetaButton(
+                  label: isEnabledIOS ? 'Disable' : 'Enable',
+                  onPressed: () => setState(() => isEnabledIOS = !isEnabledIOS),
                 ),
               ],
             ),
