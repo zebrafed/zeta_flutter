@@ -35,6 +35,7 @@ class MaterialSwitch extends StatefulWidget {
     this.focusNode,
     this.onFocusChange,
     this.autofocus = false,
+    this.showHover = false,
   })  : assert(activeThumbImage != null || onActiveThumbImageError == null),
         assert(inactiveThumbImage != null || onInactiveThumbImageError == null);
 
@@ -63,6 +64,7 @@ class MaterialSwitch extends StatefulWidget {
   final FocusNode? focusNode;
   final ValueChanged<bool>? onFocusChange;
   final bool autofocus;
+  final bool showHover;
   final Size size;
 
   @override
@@ -320,7 +322,7 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
             ..splashRadius = effectiveSplashRadius
             ..downPosition = downPosition
             ..isFocused = states.contains(MaterialState.focused)
-            ..isHovered = false //states.contains(MaterialState.hovered)
+            ..isHovered = widget.showHover && states.contains(MaterialState.hovered)
             ..activeColor = effectiveActiveThumbColor
             ..inactiveColor = effectiveInactiveThumbColor
             ..activePressedColor = effectiveActivePressedThumbColor
