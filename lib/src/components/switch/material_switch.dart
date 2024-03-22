@@ -72,17 +72,13 @@ class MaterialSwitch extends StatefulWidget {
 class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStateMixin, ToggleableStateMixin {
   final _SwitchPainter _painter = _SwitchPainter();
   late final Size _size;
+  late final _SwitchConfig switchConfig;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _size = _getSwitchSize(context);
-  }
-
-  Size _getSwitchSize(BuildContext context) {
-    final _SwitchConfig switchConfig = _SwitchConfigM3(context, size: widget.size);
-    // return Size(switchConfig.switchWidth, switchConfig.switchHeight);
-    return Size(switchConfig.switchWidth, switchConfig.switchHeightCollapsed);
+  void initState() {
+    super.initState();
+    switchConfig = _SwitchConfigM3(size: widget.size);
+    _size = Size(switchConfig.switchWidth, switchConfig.switchHeightCollapsed);
   }
 
   @override
@@ -204,7 +200,6 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
 
     final ThemeData theme = Theme.of(context);
     final SwitchThemeData switchTheme = SwitchTheme.of(context);
-    final _SwitchConfig switchConfig = _SwitchConfigM3(context, size: widget.size);
     final SwitchThemeData defaults = _SwitchDefaultsM3(context, size: widget.size);
 
     positionController.duration = Duration(milliseconds: switchConfig.toggleDuration);
@@ -250,9 +245,8 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
     final Icon? effectiveInactiveIcon =
         widget.thumbIcon?.resolve(inactiveStates) ?? switchTheme.thumbIcon?.resolve(inactiveStates);
 
-    final Color effectiveActiveIconColor = effectiveActiveIcon?.color ?? switchConfig.iconColor.resolve(activeStates);
-    final Color effectiveInactiveIconColor =
-        effectiveInactiveIcon?.color ?? switchConfig.iconColor.resolve(inactiveStates);
+    final Color effectiveActiveIconColor = effectiveActiveIcon?.color ?? effectiveActiveThumbColor;
+    final Color effectiveInactiveIconColor = effectiveInactiveIcon?.color ?? effectiveInactiveThumbColor;
 
     final Set<MaterialState> focusedStates = states..add(MaterialState.focused);
     final Color effectiveFocusOverlayColor = widget.overlayColor?.resolve(focusedStates) ??
@@ -326,7 +320,7 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
             ..splashRadius = effectiveSplashRadius
             ..downPosition = downPosition
             ..isFocused = states.contains(MaterialState.focused)
-            ..isHovered = states.contains(MaterialState.hovered)
+            ..isHovered = false //states.contains(MaterialState.hovered)
             ..activeColor = effectiveActiveThumbColor
             ..inactiveColor = effectiveInactiveThumbColor
             ..activePressedColor = effectiveActivePressedThumbColor
@@ -936,7 +930,6 @@ mixin _SwitchConfig {
   double get pressedThumbRadius;
   double get thumbRadiusWithIcon;
   List<BoxShadow>? get thumbShadow;
-  MaterialStateProperty<Color> get iconColor;
   double? get thumbOffset;
   int get toggleDuration;
 }
@@ -1079,48 +1072,11 @@ class _SwitchDefaultsM3 extends SwitchThemeData {
 }
 
 class _SwitchConfigM3 with _SwitchConfig {
-  _SwitchConfigM3(
-    this.context, {
+  _SwitchConfigM3({
     required this.size,
-  }) : _colors = Theme.of(context).colorScheme;
+  });
 
-  BuildContext context;
   final Size size;
-  final ColorScheme _colors;
-
-  @override
-  MaterialStateProperty<Color> get iconColor {
-    return MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-      if (states.contains(MaterialState.disabled)) {
-        if (states.contains(MaterialState.selected)) {
-          return _colors.onSurface.withOpacity(0.38);
-        }
-        return _colors.surfaceVariant.withOpacity(0.38);
-      }
-      if (states.contains(MaterialState.selected)) {
-        if (states.contains(MaterialState.pressed)) {
-          return _colors.onPrimaryContainer;
-        }
-        if (states.contains(MaterialState.hovered)) {
-          return _colors.onPrimaryContainer;
-        }
-        if (states.contains(MaterialState.focused)) {
-          return _colors.onPrimaryContainer;
-        }
-        return _colors.onPrimaryContainer;
-      }
-      if (states.contains(MaterialState.pressed)) {
-        return _colors.surfaceVariant;
-      }
-      if (states.contains(MaterialState.hovered)) {
-        return _colors.surfaceVariant;
-      }
-      if (states.contains(MaterialState.focused)) {
-        return _colors.surfaceVariant;
-      }
-      return _colors.surfaceVariant;
-    });
-  }
 
   @override
   double get activeThumbRadius => (size.height - 4) / 2;
