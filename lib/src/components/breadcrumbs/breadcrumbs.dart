@@ -106,7 +106,8 @@ class _ZetaBreadCrumbsState extends State<ZetaBreadCrumbs> {
 
       final List<Widget> truncatedChildren = [];
 
-      for (final (index, element) in children.sublist(1, children.length - 1).indexed) {
+      for (final (index, element)
+          in children.sublist(1, children.length - 1).indexed) {
         truncatedChildren.add(createBreadCrumb(element, index + 1));
       }
       returnList
@@ -184,32 +185,29 @@ class _ZetaBreadCrumbState extends State<ZetaBreadCrumb> {
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        statesController: controller,
-        onTap: widget.onPressed,
-        enableFeedback: false,
-        splashColor: Colors.transparent,
-        overlayColor: MaterialStateProperty.resolveWith((states) {
-          return Colors.transparent;
-        }),
-        child: Row(
-          children: [
-            if (widget.isSelected)
-              Icon(
-                widget.activeIcon ?? ZetaIcons.star_round,
-                color: getColor(controller.value, colors),
-              ),
-            const SizedBox(
-              width: ZetaSpacing.xs,
+    return InkWell(
+      statesController: controller,
+      onTap: widget.onPressed,
+      enableFeedback: false,
+      splashColor: Colors.transparent,
+      overlayColor: MaterialStateProperty.resolveWith((states) {
+        return Colors.transparent;
+      }),
+      child: Row(
+        children: [
+          if (widget.isSelected)
+            Icon(
+              widget.activeIcon ?? ZetaIcons.star_round,
+              color: getColor(controller.value, colors),
             ),
-            Text(
-              widget.label,
-              style: TextStyle(color: getColor(controller.value, colors)),
-            ),
-          ],
-        ),
+          const SizedBox(
+            width: ZetaSpacing.xs,
+          ),
+          Text(
+            widget.label,
+            style: TextStyle(color: getColor(controller.value, colors)),
+          ),
+        ],
       ),
     );
   }
@@ -295,7 +293,8 @@ class _BreadCrumbsTruncatedState extends State<BreadCrumbsTruncated> {
               }),
               shape: MaterialStatePropertyAll(
                 RoundedRectangleBorder(
-                  borderRadius: (widget.rounded ? ZetaRadius.minimal : ZetaRadius.none),
+                  borderRadius:
+                      (widget.rounded ? ZetaRadius.minimal : ZetaRadius.none),
                 ),
               ),
               side: MaterialStateProperty.resolveWith((states) {
@@ -315,9 +314,13 @@ class _BreadCrumbsTruncatedState extends State<BreadCrumbsTruncated> {
               elevation: const MaterialStatePropertyAll(0),
             ),
             child: Icon(
-              widget.rounded ? ZetaIcons.more_horizontal_round : ZetaIcons.more_horizontal_sharp,
+              widget.rounded
+                  ? ZetaIcons.more_horizontal_round
+                  : ZetaIcons.more_horizontal_sharp,
               size: ZetaSpacing.x4,
-            ).paddingHorizontal(ZetaSpacing.xs).paddingVertical(ZetaSpacing.xxs),
+            )
+                .paddingHorizontal(ZetaSpacing.xs)
+                .paddingVertical(ZetaSpacing.xxs),
           );
   }
 
