@@ -12,7 +12,7 @@ class ZetaDropDown extends StatefulWidget {
     required this.onChange,
     required this.selectedItem,
     this.rounded = true,
-    this.checkBoxType,
+    this.checkBoxType = CheckBoxType.none,
     this.isLarge = false,
   });
 
@@ -29,7 +29,7 @@ class ZetaDropDown extends StatefulWidget {
   final bool rounded;
 
   /// If checkbox is to be shown and if its circular or square
-  final CheckBoxType? checkBoxType;
+  final CheckBoxType checkBoxType;
 
   /// If menu is large or minimised.
   final bool isLarge;
@@ -40,7 +40,7 @@ class ZetaDropDown extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<CheckBoxType?>('checkBoxType', checkBoxType))
+      ..add(EnumProperty<CheckBoxType>('checkBoxType', checkBoxType))
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(
         ObjectFlagProperty<ValueSetter<ZetaDropdownItem>>.has(
@@ -155,6 +155,9 @@ class _ZetaDropDownState extends State<ZetaDropDown> {
 
 /// Checkbox enum for different checkbox types
 enum CheckBoxType {
+  /// No checkbox
+  none,
+
   /// Circular checkbox
   rounded,
 
@@ -171,7 +174,7 @@ class ZetaDropdownItem extends StatefulWidget {
     this.leadingIcon,
   })  : rounded = true,
         selected = false,
-        checkBoxType = null,
+        checkBoxType = CheckBoxType.none,
         onPress = null;
 
   const ZetaDropdownItem._({
@@ -263,7 +266,7 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
         child: Row(
           children: [
             const SizedBox(width: ZetaSpacing.x3),
-            if (widget.checkBoxType != null)
+            if (widget.checkBoxType != CheckBoxType.none)
               Checkbox(
                 value: widget.selected,
                 shape: RoundedRectangleBorder(
