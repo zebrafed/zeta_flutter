@@ -13,6 +13,7 @@ class ZetaDropDown extends StatefulWidget {
     required this.selectedItem,
     this.rounded = true,
     this.checkBoxType,
+    this.isLarge = false,
   });
 
   /// Input items as list of [ZetaDropdownItem]
@@ -30,6 +31,9 @@ class ZetaDropDown extends StatefulWidget {
   /// If checkbox is to be shown and if its circular or square
   final CheckBoxType? checkBoxType;
 
+  /// If menu is large or minimised.
+  final bool isLarge;
+
   @override
   State<ZetaDropDown> createState() => _ZetaDropDownState();
   @override
@@ -38,15 +42,19 @@ class ZetaDropDown extends StatefulWidget {
     properties
       ..add(EnumProperty<CheckBoxType?>('checkBoxType', checkBoxType))
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
-      ..add(ObjectFlagProperty<ValueSetter<ZetaDropdownItem>>.has(
-          'onChange', onChange,),);
+      ..add(
+        ObjectFlagProperty<ValueSetter<ZetaDropdownItem>>.has(
+          'onChange',
+          onChange,
+        ),
+      )
+      ..add(DiagnosticsProperty<bool>('isLarge', isLarge));
   }
 }
 
 class _ZetaDropDownState extends State<ZetaDropDown> {
   final OverlayPortalController _tooltipController = OverlayPortalController();
   final _link = LayerLink();
-  double? _buttonWidth;
   bool opened = false;
 
   GlobalKey menuKey = GlobalKey(); // declare a global key
@@ -70,57 +78,62 @@ class _ZetaDropDownState extends State<ZetaDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _link,
-      child: OverlayPortal(
-        controller: _tooltipController,
-        overlayChildBuilder: (BuildContext context) {
-          return CompositedTransformFollower(
-            link: _link,
-            targetAnchor: Alignment
-                .bottomLeft, // Align overlay dropdown in its correct position
-            child: Align(
-              alignment: AlignmentDirectional.topStart,
-              child: TapRegion(
-                onTapOutside: (event) {
-                  final headerBox =
-                      menuKey.currentContext!.findRenderObject()! as RenderBox;
+    return SizedBox(
+      width: _size,
+      child: CompositedTransformTarget(
+        link: _link,
+        child: OverlayPortal(
+          controller: _tooltipController,
+          overlayChildBuilder: (BuildContext context) {
+            return CompositedTransformFollower(
+              link: _link,
+              targetAnchor: Alignment
+                  .bottomLeft, // Align overlay dropdown in its correct position
+              child: Align(
+                alignment: AlignmentDirectional.topStart,
+                child: TapRegion(
+                  onTapOutside: (event) {
+                    final headerBox = menuKey.currentContext!
+                        .findRenderObject()! as RenderBox;
 
-                  final headerPosition = headerBox.localToGlobal(Offset.zero);
+                    final headerPosition = headerBox.localToGlobal(Offset.zero);
 
-                  if (!isInHeader(
-                    headerPosition,
-                    headerBox.size,
-                    event.position,
-                  )) _tooltipController.hide();
-                },
-                child: ZetaDropDownMenu(
-                  items: widget.items,
-                  selected: widget.selectedItem.value,
-                  width: _buttonWidth,
-                  boxType: widget.checkBoxType,
-                  onPress: (item) {
-                    if (item != null) {
-                      widget.onChange(item);
-                    }
-                    _tooltipController.hide();
+                    if (!isInHeader(
+                      headerPosition,
+                      headerBox.size,
+                      event.position,
+                    )) _tooltipController.hide();
                   },
+                  child: ZetaDropDownMenu(
+                    items: widget.items,
+                    selected: widget.selectedItem.value,
+                    width: _size,
+                    boxType: widget.checkBoxType,
+                    onPress: (item) {
+                      if (item != null) {
+                        widget.onChange(item);
+                      }
+                      _tooltipController.hide();
+                    },
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-        child: widget.selectedItem.copyWith(
+            );
+          },
+          child: widget.selectedItem.copyWith(
             round: widget.rounded,
             focus: _tooltipController.isShowing,
             press: onTap,
-            itemKey: menuKey,),
+            itemKey: menuKey,
+          ),
+        ),
       ),
     );
   }
 
+  double get _size => widget.isLarge ? 320 : 120;
+
   void onTap() {
-    _buttonWidth = context.size?.width;
     if (!opened) {
       _tooltipController.toggle();
     }
@@ -261,9 +274,12 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
                 onChanged: (val) {
                   widget.onPress!.call();
                 },
-              ),
-            const SizedBox(width: ZetaSpacing.x3),
-            widget.leadingIcon ?? const SizedBox(width: 24),
+              )
+            else
+              widget.leadingIcon ??
+                  const SizedBox(
+                    width: 24,
+                  ),
             const SizedBox(width: ZetaSpacing.x3),
             Text(
               widget.value,
@@ -296,9 +312,11 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
         }
         return colors.textDefault;
       }),
-      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-        borderRadius: widget.rounded ? ZetaRadius.minimal : ZetaRadius.none,
-      ),),
+      shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: widget.rounded ? ZetaRadius.minimal : ZetaRadius.none,
+        ),
+      ),
       side: MaterialStatePropertyAll(
         widget.selected
             ? BorderSide(color: colors.primary.shade60)
@@ -313,22 +331,27 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<MaterialStatesController>(
-        'controller', controller,),);
+    properties.add(
+      DiagnosticsProperty<MaterialStatesController>(
+        'controller',
+        controller,
+      ),
+    );
   }
 }
 
 ///Class for [ZetaDropDownMenu]
 class ZetaDropDownMenu extends StatefulWidget {
   ///Constructor for [ZetaDropDownMenu]
-  const ZetaDropDownMenu(
-      {super.key,
-      required this.items,
-      required this.onPress,
-      required this.selected,
-      this.rounded = false,
-      this.width,
-      this.boxType,});
+  const ZetaDropDownMenu({
+    super.key,
+    required this.items,
+    required this.onPress,
+    required this.selected,
+    this.rounded = false,
+    this.width,
+    this.boxType,
+  });
 
   /// Input items for the menu
   final List<ZetaDropdownItem> items;
@@ -354,8 +377,12 @@ class ZetaDropDownMenu extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(ObjectFlagProperty<ValueSetter<ZetaDropdownItem?>>.has(
-          'onPress', onPress,),)
+      ..add(
+        ObjectFlagProperty<ValueSetter<ZetaDropdownItem?>>.has(
+          'onPress',
+          onPress,
+        ),
+      )
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DoubleProperty('width', width))
       ..add(EnumProperty<CheckBoxType?>('boxType', boxType))
@@ -374,31 +401,37 @@ class _ZetaDropDownMenuState extends State<ZetaDropDownMenu> {
         boxShadow: const [
           BoxShadow(blurRadius: 2, color: Color.fromRGBO(40, 51, 61, 0.04)),
           BoxShadow(
-              blurRadius: 8,
-              color: Color.fromRGBO(96, 104, 112, 0.16),
-              blurStyle: BlurStyle.outer,
-              offset: Offset(0, 4),),
+            blurRadius: 8,
+            color: Color.fromRGBO(96, 104, 112, 0.16),
+            blurStyle: BlurStyle.outer,
+            offset: Offset(0, 4),
+          ),
         ],
       ),
       width: widget.width,
-      child: Builder(builder: (BuildContext bcontext) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: widget.items.map((item) {
-            return Column(mainAxisSize: MainAxisSize.min, children: [
-              item.copyWith(
-                round: widget.rounded,
-                focus: widget.selected == item.value,
-                boxType: widget.boxType,
-                press: () {
-                  widget.onPress(item);
-                },
-              ),
-              const SizedBox(height: ZetaSpacing.x3),
-            ],);
-          }).toList(),
-        );
-      },),
+      child: Builder(
+        builder: (BuildContext bcontext) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: widget.items.map((item) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  item.copyWith(
+                    round: widget.rounded,
+                    focus: widget.selected == item.value,
+                    boxType: widget.boxType,
+                    press: () {
+                      widget.onPress(item);
+                    },
+                  ),
+                  const SizedBox(height: ZetaSpacing.x3),
+                ],
+              );
+            }).toList(),
+          );
+        },
+      ),
     );
   }
 }
