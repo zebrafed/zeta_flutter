@@ -80,12 +80,14 @@ class _ZetaDropDownState extends State<ZetaDropdown> {
           overlayChildBuilder: (BuildContext context) {
             return CompositedTransformFollower(
               link: _link,
-              targetAnchor: Alignment.bottomLeft, // Align overlay dropdown in its correct position
+              targetAnchor: Alignment
+                  .bottomLeft, // Align overlay dropdown in its correct position
               child: Align(
                 alignment: AlignmentDirectional.topStart,
                 child: TapRegion(
                   onTapOutside: (event) {
-                    final headerBox = _menuKey.currentContext!.findRenderObject()! as RenderBox;
+                    final headerBox = _menuKey.currentContext!
+                        .findRenderObject()! as RenderBox;
 
                     final headerPosition = headerBox.localToGlobal(Offset.zero);
 
@@ -244,7 +246,9 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
   void initState() {
     super.initState();
     controller.addListener(() {
-      if (context.mounted && mounted && !controller.value.contains(MaterialState.disabled)) {
+      if (context.mounted &&
+          mounted &&
+          !controller.value.contains(MaterialState.disabled)) {
         setState(() {});
       }
     });
@@ -267,7 +271,9 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
               Checkbox(
                 value: widget.selected,
                 shape: RoundedRectangleBorder(
-                  borderRadius: widget.checkBoxType == CheckboxType.square ? ZetaRadius.none : ZetaRadius.full,
+                  borderRadius: widget.checkBoxType == CheckboxType.square
+                      ? ZetaRadius.none
+                      : ZetaRadius.full,
                 ),
                 onChanged: (val) {
                   widget.onPress!.call();
@@ -316,7 +322,9 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
         ),
       ),
       side: MaterialStatePropertyAll(
-        widget.selected ? BorderSide(color: colors.primary.shade60) : BorderSide.none,
+        widget.selected
+            ? BorderSide(color: colors.primary.shade60)
+            : BorderSide.none,
       ),
       padding: const MaterialStatePropertyAll(EdgeInsets.zero),
       elevation: const MaterialStatePropertyAll(0),
@@ -421,7 +429,7 @@ class _ZetaDropDownMenuState extends State<ZetaDropDownMenu> {
                       widget.onPress(item);
                     },
                   ),
-                  const SizedBox(height: ZetaSpacing.x3),
+                  const SizedBox(height: ZetaSpacing.x1),
                 ],
               );
             }).toList(),
