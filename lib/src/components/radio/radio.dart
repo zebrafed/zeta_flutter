@@ -64,7 +64,7 @@ class _ZetaRadioState<T> extends State<ZetaRadio<T>> with TickerProviderStateMix
               ..reactionHoverFade = reactionHoverFade
               ..inactiveReactionColor = Colors.transparent
               ..reactionColor = Colors.transparent
-              ..hoverColor = zetaColors.textDefault
+              ..hoverColor = Colors.transparent
               ..focusColor = zetaColors.blue.shade50
               ..splashRadius = 12
               ..downPosition = downPosition
