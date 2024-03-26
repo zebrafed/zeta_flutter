@@ -61,7 +61,7 @@ class _DropdownExampleState extends State<DropdownExample> {
               selectedItem: selectedItem,
               items: _children,
               rounded: widget.c.knobs.boolean(label: "Rounded"),
-              isLarge: widget.c.knobs.boolean(label: "Large"),
+              isMinimized: widget.c.knobs.boolean(label: "Minimized"),
             ),
             Text('Selected item : ${selectedItem.value}')
           ])),

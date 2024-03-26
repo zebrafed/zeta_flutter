@@ -13,7 +13,7 @@ class ZetaDropdown extends StatefulWidget {
     required this.selectedItem,
     this.rounded = true,
     this.checkBoxType = CheckboxType.none,
-    this.isLarge = false,
+    this.isMinimized = false,
   });
 
   /// Input items as list of [ZetaDropdownItem]
@@ -31,8 +31,8 @@ class ZetaDropdown extends StatefulWidget {
   /// If checkbox is to be shown and if its circular or square
   final CheckboxType checkBoxType;
 
-  /// If menu is large or minimised.
-  final bool isLarge;
+  /// If menu is minimised.
+  final bool isMinimized;
 
   @override
   State<ZetaDropdown> createState() => _ZetaDropDownState();
@@ -48,7 +48,7 @@ class ZetaDropdown extends StatefulWidget {
           onChange,
         ),
       )
-      ..add(DiagnosticsProperty<bool>('isLarge', isLarge));
+      ..add(DiagnosticsProperty<bool>('isMinimized', isMinimized));
   }
 }
 
@@ -124,7 +124,7 @@ class _ZetaDropDownState extends State<ZetaDropdown> {
     );
   }
 
-  double get _size => widget.isLarge ? 320 : 120;
+  double get _size => widget.isMinimized ? 120 : 320;
 
   void onTap() {
     _tooltipController.toggle();
