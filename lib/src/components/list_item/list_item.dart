@@ -62,7 +62,8 @@ class ZetaListItem extends StatelessWidget {
       ..add(DiagnosticsProperty<Widget>('trailing', trailing));
   }
 
-  TextStyle get _titleTextStyle => dense ? ZetaTextStyles.titleSmall : ZetaTextStyles.titleMedium;
+  TextStyle get _titleTextStyle =>
+      dense ? ZetaTextStyles.titleSmall : ZetaTextStyles.titleMedium;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,9 @@ class ZetaListItem extends StatelessWidget {
                         if (subtitle != null)
                           DefaultTextStyle(
                             style: ZetaTextStyles.titleSmall.copyWith(
-                              color: zetaColors.textSubtle,
+                              color: enabled
+                                  ? zetaColors.textSubtle
+                                  : zetaColors.textDisabled,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -106,7 +109,9 @@ class ZetaListItem extends StatelessWidget {
                           ),
                         DefaultTextStyle(
                           style: _titleTextStyle.copyWith(
-                            color: enabled ? zetaColors.textDefault : zetaColors.textSubtle,
+                            color: enabled
+                                ? zetaColors.textDefault
+                                : zetaColors.textDisabled,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -194,7 +199,9 @@ class _ListItemContainer extends StatelessWidget {
               border: enabled && enabledDivider
                   ? Border(
                       bottom: BorderSide(
-                        color: selected ? zetaColors.blue.shade40 : zetaColors.borderDefault,
+                        color: selected
+                            ? zetaColors.blue.shade40
+                            : zetaColors.borderDefault,
                       ),
                     )
                   : null,
