@@ -1,16 +1,26 @@
 // ignore_for_file: prefer_asserts_with_message, diagnostic_describe_all_properties, public_member_api_docs
 
+// The content of this file is taken from
+// package:flutter/src/material/switch.dart
+// Changes are commented with "Zeta change:"
+
 import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 const double _kSwitchMinSize = kMinInteractiveDimension - 8.0;
 
+// Zeta change:
+// Converted Flutter's private stateless [_MaterialSwitch]
+// to public stateful [MaterialSwitch], so that it can be
+// imported and used in [ZetaSwitch].
 class MaterialSwitch extends StatefulWidget {
   const MaterialSwitch({
     super.key,
     required this.value,
     required this.onChanged,
+    // Zeta change: Require the switch `size` to be passed
+    // in the constructor of [MaterialSwitch].
     required this.size,
     this.activeColor,
     this.activeTrackColor,
@@ -35,6 +45,7 @@ class MaterialSwitch extends StatefulWidget {
     this.focusNode,
     this.onFocusChange,
     this.autofocus = false,
+    // Zeta change: added optional parameter `showHover`.
     this.showHover = false,
   })  : assert(activeThumbImage != null || onActiveThumbImageError == null),
         assert(inactiveThumbImage != null || onInactiveThumbImageError == null);
@@ -64,6 +75,7 @@ class MaterialSwitch extends StatefulWidget {
   final FocusNode? focusNode;
   final ValueChanged<bool>? onFocusChange;
   final bool autofocus;
+  // Zeta change: added optional parameter `showHover`.
   final bool showHover;
   final Size size;
 
@@ -73,14 +85,16 @@ class MaterialSwitch extends StatefulWidget {
 
 class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStateMixin, ToggleableStateMixin {
   final _SwitchPainter _painter = _SwitchPainter();
+  // Zeta change: added local `_size` and `_switchConfig`.
   late final Size _size;
-  late final _SwitchConfig switchConfig;
+  late final _SwitchConfig _switchConfig;
 
+  // Zeta change: added initState().
   @override
   void initState() {
     super.initState();
-    switchConfig = _SwitchConfigM3(size: widget.size);
-    _size = Size(switchConfig.switchWidth, switchConfig.switchHeightCollapsed);
+    _switchConfig = _SwitchConfigM3(size: widget.size);
+    _size = Size(_switchConfig.switchWidth, _switchConfig.switchHeightCollapsed);
   }
 
   @override
@@ -204,7 +218,7 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
     final SwitchThemeData switchTheme = SwitchTheme.of(context);
     final SwitchThemeData defaults = _SwitchDefaultsM3(context, size: widget.size);
 
-    positionController.duration = Duration(milliseconds: switchConfig.toggleDuration);
+    positionController.duration = Duration(milliseconds: _switchConfig.toggleDuration);
 
     // Colors need to be resolved in selected and non selected states separately
     // so that they can be lerped between.
@@ -290,10 +304,10 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
     });
 
     final double effectiveActiveThumbRadius =
-        effectiveActiveIcon == null ? switchConfig.activeThumbRadius : switchConfig.thumbRadiusWithIcon;
+        effectiveActiveIcon == null ? _switchConfig.activeThumbRadius : _switchConfig.thumbRadiusWithIcon;
     final double effectiveInactiveThumbRadius = effectiveInactiveIcon == null && widget.inactiveThumbImage == null
-        ? switchConfig.inactiveThumbRadius
-        : switchConfig.thumbRadiusWithIcon;
+        ? _switchConfig.inactiveThumbRadius
+        : _switchConfig.thumbRadiusWithIcon;
     final double effectiveSplashRadius = widget.splashRadius ?? switchTheme.splashRadius ?? defaults.splashRadius!;
 
     return Semantics(
@@ -322,6 +336,7 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
             ..splashRadius = effectiveSplashRadius
             ..downPosition = downPosition
             ..isFocused = states.contains(MaterialState.focused)
+            // Zeta change: added `widget.showHover` to the below condition.
             ..isHovered = widget.showHover && states.contains(MaterialState.hovered)
             ..activeColor = effectiveActiveThumbColor
             ..inactiveColor = effectiveInactiveThumbColor
@@ -344,16 +359,16 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
             ..surfaceColor = theme.colorScheme.surface
             ..inactiveThumbRadius = effectiveInactiveThumbRadius
             ..activeThumbRadius = effectiveActiveThumbRadius
-            ..pressedThumbRadius = switchConfig.pressedThumbRadius
-            ..thumbOffset = switchConfig.thumbOffset
-            ..trackHeight = switchConfig.trackHeight
-            ..trackWidth = switchConfig.trackWidth
+            ..pressedThumbRadius = _switchConfig.pressedThumbRadius
+            ..thumbOffset = _switchConfig.thumbOffset
+            ..trackHeight = _switchConfig.trackHeight
+            ..trackWidth = _switchConfig.trackWidth
             ..activeIconColor = effectiveActiveIconColor
             ..inactiveIconColor = effectiveInactiveIconColor
             ..activeIcon = effectiveActiveIcon
             ..inactiveIcon = effectiveInactiveIcon
             ..iconTheme = IconTheme.of(context)
-            ..thumbShadow = switchConfig.thumbShadow
+            ..thumbShadow = _switchConfig.thumbShadow
             ..positionController = positionController,
         ),
       ),
@@ -936,17 +951,13 @@ mixin _SwitchConfig {
   int get toggleDuration;
 }
 
-// BEGIN GENERATED TOKEN PROPERTIES - Switch
-
-// Do not edit by hand. The code between the "BEGIN GENERATED" and
-// "END GENERATED" comments are generated from data in the Material
-// Design token database by the script:
-//   dev/tools/gen_defaults/bin/gen_defaults.dart.
-
 class _SwitchDefaultsM3 extends SwitchThemeData {
+  // Zeta change: Require the switch `size` to be passed
+  // in the constructor of [_SwitchDefaultsM3].
   _SwitchDefaultsM3(this.context, {required this.size});
 
   final BuildContext context;
+  // Zeta change: Added parameter for the switch `size`.
   final Size size;
   late final ColorScheme _colors = Theme.of(context).colorScheme;
 
@@ -1069,23 +1080,32 @@ class _SwitchDefaultsM3 extends SwitchThemeData {
   @override
   MaterialStatePropertyAll<double> get trackOutlineWidth => const MaterialStatePropertyAll<double>(2);
 
+  // Zeta change: `splashRadius` was fixed value in Flutter's [Switch],
+  // but not we use `size.height` for this.
   @override
   double get splashRadius => size.height / 2 + 8;
 }
 
 class _SwitchConfigM3 with _SwitchConfig {
-  _SwitchConfigM3({
-    required this.size,
-  });
+  // Zeta change: Require the switch `size` to be passed
+  // in the constructor of [_SwitchConfigM3].
+  _SwitchConfigM3({required this.size});
 
+  // Zeta change: Added parameter for the switch `size`.
   final Size size;
 
+  // Zeta change: `activeThumbRadius` was fixed value in Flutter's [Switch],
+  // but not we use `size.height` for this.
   @override
   double get activeThumbRadius => (size.height - 4) / 2;
 
+  // Zeta change: `inactiveThumbRadius` was fixed value in Flutter's [Switch],
+  // but not we use `size.height` for this.
   @override
   double get inactiveThumbRadius => (size.height - 4) / 2;
 
+  // Zeta change: `pressedThumbRadius` was fixed value in Flutter's [Switch],
+  // but not we use `size.height` for this.
   @override
   double get pressedThumbRadius => (size.height - 4) / 2;
 
@@ -1104,9 +1124,13 @@ class _SwitchConfigM3 with _SwitchConfig {
   @override
   List<BoxShadow>? get thumbShadow => kElevationToShadow[0];
 
+  // Zeta change: `trackHeight` was fixed value in Flutter's [Switch],
+  // but not we use `size.height` for this.
   @override
   double get trackHeight => size.height;
 
+  // Zeta change: `trackWidth` was fixed value in Flutter's [Switch],
+  // but not we use `size.width` for this.
   @override
   double get trackWidth => size.width;
 
@@ -1118,5 +1142,3 @@ class _SwitchConfigM3 with _SwitchConfig {
   @override
   double? get thumbOffset => null;
 }
-
-// END GENERATED TOKEN PROPERTIES - Switch
