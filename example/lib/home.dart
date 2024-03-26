@@ -40,17 +40,10 @@ final List<Component> components = [
   Component(ButtonExample.name, (context) => const ButtonExample()),
   Component(CheckBoxExample.name, (context) => const CheckBoxExample()),
   Component(ChipExample.name, (context) => const ChipExample()),
-<<<<<<< HEAD
   Component(ListItemExample.name, (context) => const ListItemExample()),
   Component(NavigationBarExample.name, (context) => const NavigationBarExample()),
   Component(PasswordInputExample.name, (context) => const PasswordInputExample()),
-=======
   Component(DropdownExample.name, (context) => const DropdownExample()),
-  Component(
-      NavigationBarExample.name, (context) => const NavigationBarExample()),
-  Component(
-      PasswordInputExample.name, (context) => const PasswordInputExample()),
->>>>>>> 03ed813 (Create dropdown)
   Component(ProgressExample.name, (context) => const ProgressExample()),
   Component(DialPadExample.name, (context) => const DialPadExample()),
 ];
