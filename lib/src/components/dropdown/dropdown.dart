@@ -12,7 +12,7 @@ class ZetaDropdown extends StatefulWidget {
     required this.onChange,
     required this.selectedItem,
     this.rounded = true,
-    this.checkBoxType = CheckboxType.none,
+    this.leadingType = LeadingStyle.none,
     this.isMinimized = false,
   });
 
@@ -28,8 +28,8 @@ class ZetaDropdown extends StatefulWidget {
   /// {@macro zeta-component-rounded}
   final bool rounded;
 
-  /// If checkbox is to be shown and if its circular or square
-  final CheckboxType checkBoxType;
+  /// The style for the leading widget. Can be a checkbox or radio button
+  final LeadingStyle leadingType;
 
   /// If menu is minimised.
   final bool isMinimized;
@@ -40,7 +40,7 @@ class ZetaDropdown extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<CheckboxType>('checkBoxType', checkBoxType))
+      ..add(EnumProperty<LeadingStyle>('leadingType', leadingType))
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(
         ObjectFlagProperty<ValueSetter<ZetaDropdownItem>>.has(
@@ -101,7 +101,7 @@ class _ZetaDropDownState extends State<ZetaDropdown> {
                     items: widget.items,
                     selected: widget.selectedItem.value,
                     width: _size,
-                    boxType: widget.checkBoxType,
+                    boxType: widget.leadingType,
                     onPress: (item) {
                       if (item != null) {
                         widget.onChange(item);
@@ -143,15 +143,15 @@ class _ZetaDropDownState extends State<ZetaDropdown> {
 }
 
 /// Checkbox enum for different checkbox types
-enum CheckboxType {
-  /// No checkbox
+enum LeadingStyle {
+  /// No Leading
   none,
 
   /// Circular checkbox
-  rounded,
+  checkbox,
 
   /// Square checkbox
-  square
+  radio
 }
 
 /// Class for [ZetaDropdownItem]
@@ -163,7 +163,7 @@ class ZetaDropdownItem extends StatefulWidget {
     this.leadingIcon,
   })  : rounded = true,
         selected = false,
-        checkBoxType = CheckboxType.none,
+        leadingType = LeadingStyle.none,
         itemKey = null,
         onPress = null;
 
@@ -174,7 +174,7 @@ class ZetaDropdownItem extends StatefulWidget {
     required this.value,
     this.leadingIcon,
     this.onPress,
-    this.checkBoxType,
+    this.leadingType,
     this.itemKey,
   });
 
@@ -194,7 +194,7 @@ class ZetaDropdownItem extends StatefulWidget {
   final VoidCallback? onPress;
 
   /// If checkbox is to be shown, the type of it.
-  final CheckboxType? checkBoxType;
+  final LeadingStyle? leadingType;
 
   /// Key for item
   final GlobalKey? itemKey;
@@ -203,7 +203,7 @@ class ZetaDropdownItem extends StatefulWidget {
   ZetaDropdownItem copyWith({
     bool? round,
     bool? focus,
-    CheckboxType? boxType,
+    LeadingStyle? boxType,
     VoidCallback? press,
     GlobalKey? inputKey,
   }) {
@@ -211,7 +211,7 @@ class ZetaDropdownItem extends StatefulWidget {
       rounded: round ?? rounded,
       selected: focus ?? selected,
       onPress: press ?? onPress,
-      checkBoxType: boxType ?? checkBoxType,
+      leadingType: boxType ?? leadingType,
       itemKey: inputKey ?? itemKey,
       value: value,
       leadingIcon: leadingIcon,
@@ -229,7 +229,7 @@ class ZetaDropdownItem extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('selected', selected))
       ..add(StringProperty('value', value))
       ..add(ObjectFlagProperty<VoidCallback?>.has('onPress', onPress))
-      ..add(EnumProperty<CheckboxType?>('checkBoxType', checkBoxType))
+      ..add(EnumProperty<LeadingStyle?>('leadingType', leadingType))
       ..add(
         DiagnosticsProperty<GlobalKey<State<StatefulWidget>>?>(
           'itemKey',
@@ -267,23 +267,7 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
         child: Row(
           children: [
             const SizedBox(width: ZetaSpacing.x3),
-            if (widget.checkBoxType != CheckboxType.none)
-              Checkbox(
-                value: widget.selected,
-                shape: RoundedRectangleBorder(
-                  borderRadius: widget.checkBoxType == CheckboxType.square
-                      ? ZetaRadius.none
-                      : ZetaRadius.full,
-                ),
-                onChanged: (val) {
-                  widget.onPress!.call();
-                },
-              )
-            else
-              widget.leadingIcon ??
-                  const SizedBox(
-                    width: 24,
-                  ),
+            _getLeadingWidget(),
             const SizedBox(width: ZetaSpacing.x3),
             Text(
               widget.value,
@@ -292,6 +276,31 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
         ).paddingVertical(ZetaSpacing.x2_5),
       ),
     );
+  }
+
+  Widget _getLeadingWidget() {
+    switch (widget.leadingType!) {
+      case LeadingStyle.checkbox:
+        return Checkbox(
+          value: widget.selected,
+          onChanged: (val) {
+            widget.onPress!.call();
+          },
+        );
+      case LeadingStyle.radio:
+        return Radio(
+          value: widget.selected,
+          groupValue: true,
+          onChanged: (val) {
+            widget.onPress!.call();
+          },
+        );
+      case LeadingStyle.none:
+        return widget.leadingIcon ??
+            const SizedBox(
+              width: 24,
+            );
+    }
   }
 
   ButtonStyle _getStyle(ZetaColors colors) {
@@ -373,7 +382,7 @@ class ZetaDropDownMenu extends StatefulWidget {
   final double? width;
 
   /// If items have checkboxes, the type of that checkbox.
-  final CheckboxType? boxType;
+  final LeadingStyle? boxType;
 
   @override
   State<ZetaDropDownMenu> createState() => _ZetaDropDownMenuState();
@@ -389,7 +398,7 @@ class ZetaDropDownMenu extends StatefulWidget {
       )
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DoubleProperty('width', width))
-      ..add(EnumProperty<CheckboxType?>('boxType', boxType))
+      ..add(EnumProperty<LeadingStyle?>('boxType', boxType))
       ..add(StringProperty('selected', selected));
   }
 }

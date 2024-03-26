@@ -45,12 +45,12 @@ class _DropdownExampleState extends State<DropdownExample> {
           width: double.infinity,
           child: Column(children: [
             ZetaDropdown(
-              checkBoxType: widget.c.knobs.list(
+              leadingType: widget.c.knobs.list(
                 label: "Checkbox type",
                 options: [
-                  CheckboxType.none,
-                  CheckboxType.rounded,
-                  CheckboxType.square,
+                  LeadingStyle.none,
+                  LeadingStyle.checkbox,
+                  LeadingStyle.radio,
                 ],
               ),
               onChange: (value) {
