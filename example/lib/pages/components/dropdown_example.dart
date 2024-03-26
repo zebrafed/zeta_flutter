@@ -25,8 +25,8 @@ class _DropdownExampleState extends State<DropdownExample> {
           child: SizedBox(
               width: 320,
               child: Column(children: [
-                ZetaDropDown(
-                  checkBoxType: CheckBoxType.square,
+                ZetaDropdown(
+                  checkBoxType: CheckboxType.square,
                   onChange: (value) {
                     setState(() {
                       selectedItem = value;

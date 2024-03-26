@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../../../zeta_flutter.dart';
 
-/// Class for [ZetaDropDown]
-class ZetaDropDown extends StatefulWidget {
-  ///Constructor of [ZetaDropDown]
-  const ZetaDropDown({
+/// Class for [ZetaDropdown]
+class ZetaDropdown extends StatefulWidget {
+  ///Constructor of [ZetaDropdown]
+  const ZetaDropdown({
     super.key,
     required this.items,
     required this.onChange,
     required this.selectedItem,
     this.rounded = true,
-    this.checkBoxType = CheckBoxType.none,
+    this.checkBoxType = CheckboxType.none,
     this.isLarge = false,
   });
 
@@ -29,18 +29,18 @@ class ZetaDropDown extends StatefulWidget {
   final bool rounded;
 
   /// If checkbox is to be shown and if its circular or square
-  final CheckBoxType checkBoxType;
+  final CheckboxType checkBoxType;
 
   /// If menu is large or minimised.
   final bool isLarge;
 
   @override
-  State<ZetaDropDown> createState() => _ZetaDropDownState();
+  State<ZetaDropdown> createState() => _ZetaDropDownState();
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<CheckBoxType>('checkBoxType', checkBoxType))
+      ..add(EnumProperty<CheckboxType>('checkBoxType', checkBoxType))
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(
         ObjectFlagProperty<ValueSetter<ZetaDropdownItem>>.has(
@@ -52,20 +52,13 @@ class ZetaDropDown extends StatefulWidget {
   }
 }
 
-class _ZetaDropDownState extends State<ZetaDropDown> {
+class _ZetaDropDownState extends State<ZetaDropdown> {
   final OverlayPortalController _tooltipController = OverlayPortalController();
   final _link = LayerLink();
-  bool opened = false;
-
-  GlobalKey menuKey = GlobalKey(); // declare a global key
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final _menuKey = GlobalKey(); // declare a global key
 
   /// Returns if click event position is within the header.
-  bool isInHeader(
+  bool _isInHeader(
     Offset headerPosition,
     Size headerSize,
     Offset clickPosition,
@@ -93,12 +86,12 @@ class _ZetaDropDownState extends State<ZetaDropDown> {
                 alignment: AlignmentDirectional.topStart,
                 child: TapRegion(
                   onTapOutside: (event) {
-                    final headerBox = menuKey.currentContext!
+                    final headerBox = _menuKey.currentContext!
                         .findRenderObject()! as RenderBox;
 
                     final headerPosition = headerBox.localToGlobal(Offset.zero);
 
-                    if (!isInHeader(
+                    if (!_isInHeader(
                       headerPosition,
                       headerBox.size,
                       event.position,
@@ -124,7 +117,7 @@ class _ZetaDropDownState extends State<ZetaDropDown> {
             round: widget.rounded,
             focus: _tooltipController.isShowing,
             press: onTap,
-            itemKey: menuKey,
+            inputKey: _menuKey,
           ),
         ),
       ),
@@ -134,27 +127,23 @@ class _ZetaDropDownState extends State<ZetaDropDown> {
   double get _size => widget.isLarge ? 320 : 120;
 
   void onTap() {
-    if (!opened) {
-      _tooltipController.toggle();
-    }
+    _tooltipController.toggle();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty<bool>('opened', opened))
-      ..add(
-        DiagnosticsProperty<GlobalKey<State<StatefulWidget>>>(
-          'menuKey',
-          menuKey,
-        ),
-      );
+    properties.add(
+      DiagnosticsProperty<GlobalKey<State<StatefulWidget>>>(
+        'menuKey',
+        _menuKey,
+      ),
+    );
   }
 }
 
 /// Checkbox enum for different checkbox types
-enum CheckBoxType {
+enum CheckboxType {
   /// No checkbox
   none,
 
@@ -174,7 +163,8 @@ class ZetaDropdownItem extends StatefulWidget {
     this.leadingIcon,
   })  : rounded = true,
         selected = false,
-        checkBoxType = CheckBoxType.none,
+        checkBoxType = CheckboxType.none,
+        itemKey = null,
         onPress = null;
 
   const ZetaDropdownItem._({
@@ -185,6 +175,7 @@ class ZetaDropdownItem extends StatefulWidget {
     this.leadingIcon,
     this.onPress,
     this.checkBoxType,
+    this.itemKey,
   });
 
   /// {@macro zeta-component-rounded}
@@ -203,24 +194,28 @@ class ZetaDropdownItem extends StatefulWidget {
   final VoidCallback? onPress;
 
   /// If checkbox is to be shown, the type of it.
-  final CheckBoxType? checkBoxType;
+  final CheckboxType? checkBoxType;
+
+  /// Key for item
+  final GlobalKey? itemKey;
 
   /// Returns copy of [ZetaDropdownItem] with those private variables included
   ZetaDropdownItem copyWith({
     bool? round,
     bool? focus,
-    CheckBoxType? boxType,
+    CheckboxType? boxType,
     VoidCallback? press,
-    GlobalKey? itemKey,
+    GlobalKey? inputKey,
   }) {
     return ZetaDropdownItem._(
       rounded: round ?? rounded,
       selected: focus ?? selected,
       onPress: press ?? onPress,
       checkBoxType: boxType ?? checkBoxType,
+      itemKey: inputKey ?? itemKey,
       value: value,
       leadingIcon: leadingIcon,
-      key: itemKey ?? key,
+      key: key,
     );
   }
 
@@ -234,7 +229,13 @@ class ZetaDropdownItem extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('selected', selected))
       ..add(StringProperty('value', value))
       ..add(ObjectFlagProperty<VoidCallback?>.has('onPress', onPress))
-      ..add(EnumProperty<CheckBoxType?>('checkBoxType', checkBoxType));
+      ..add(EnumProperty<CheckboxType?>('checkBoxType', checkBoxType))
+      ..add(
+        DiagnosticsProperty<GlobalKey<State<StatefulWidget>>?>(
+          'itemKey',
+          itemKey,
+        ),
+      );
   }
 }
 
@@ -260,17 +261,17 @@ class _ZetaDropdownMenuItemState extends State<ZetaDropdownItem> {
     return DefaultTextStyle(
       style: ZetaTextStyles.bodyMedium,
       child: OutlinedButton(
-        key: widget.key,
+        key: widget.itemKey,
         onPressed: widget.onPress,
         style: _getStyle(colors),
         child: Row(
           children: [
             const SizedBox(width: ZetaSpacing.x3),
-            if (widget.checkBoxType != CheckBoxType.none)
+            if (widget.checkBoxType != CheckboxType.none)
               Checkbox(
                 value: widget.selected,
                 shape: RoundedRectangleBorder(
-                  borderRadius: widget.checkBoxType == CheckBoxType.square
+                  borderRadius: widget.checkBoxType == CheckboxType.square
                       ? ZetaRadius.none
                       : ZetaRadius.full,
                 ),
@@ -372,7 +373,7 @@ class ZetaDropDownMenu extends StatefulWidget {
   final double? width;
 
   /// If items have checkboxes, the type of that checkbox.
-  final CheckBoxType? boxType;
+  final CheckboxType? boxType;
 
   @override
   State<ZetaDropDownMenu> createState() => _ZetaDropDownMenuState();
@@ -388,7 +389,7 @@ class ZetaDropDownMenu extends StatefulWidget {
       )
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DoubleProperty('width', width))
-      ..add(EnumProperty<CheckBoxType?>('boxType', boxType))
+      ..add(EnumProperty<CheckboxType?>('boxType', boxType))
       ..add(StringProperty('selected', selected));
   }
 }
