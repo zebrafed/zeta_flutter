@@ -99,9 +99,7 @@ class ZetaSnackBar extends SnackBar {
       ZetaSnackBarType.positive => colors.green.shade10,
       ZetaSnackBarType.info => colors.purple.shade10,
       ZetaSnackBarType.warning => colors.orange.shade10,
-      ZetaSnackBarType.deletion ||
-      ZetaSnackBarType.error =>
-        colors.purple.shade10,
+      ZetaSnackBarType.deletion || ZetaSnackBarType.error => colors.purple.shade10,
       ZetaSnackBarType.view => colors.blue.shade10,
       _ => colors.warm.shade100,
     };
@@ -183,8 +181,7 @@ class _Action extends StatelessWidget {
 
     return switch (type) {
       ZetaSnackBarType.defaultType => _IconButton(
-          onPressed: () =>
-              ScaffoldMessenger.of(context).removeCurrentSnackBar(),
+          onPressed: () => ScaffoldMessenger.of(context).removeCurrentSnackBar(),
           color: colors.iconInverse,
         ),
       ZetaSnackBarType.action => _ActionButton(
@@ -197,8 +194,7 @@ class _Action extends StatelessWidget {
       ZetaSnackBarType.warning ||
       ZetaSnackBarType.error =>
         _IconButton(
-          onPressed: () =>
-              ScaffoldMessenger.of(context).removeCurrentSnackBar(),
+          onPressed: () => ScaffoldMessenger.of(context).removeCurrentSnackBar(),
           color: colors.cool.shade90,
         ),
       ZetaSnackBarType.deletion => _ActionButton(
@@ -342,9 +338,7 @@ class _LeadingIcon extends StatelessWidget {
     final colors = Zeta.of(context).colors;
 
     return Padding(
-      padding: type != null || icon != null
-          ? const EdgeInsets.only(left: ZetaSpacing.s)
-          : EdgeInsets.zero,
+      padding: type != null || icon != null ? const EdgeInsets.only(left: ZetaSpacing.s) : EdgeInsets.zero,
       child: IconTheme(
         data: IconThemeData(
           color: _getIconColor(colors, type),

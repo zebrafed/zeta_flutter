@@ -29,8 +29,7 @@ class SnackBarExample extends StatelessWidget {
                             ZetaSnackBar(
                               context: context,
                               onPressed: () {
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                               },
                               actionLabel: "Action",
                               content: Text('This is a snackbar'),
