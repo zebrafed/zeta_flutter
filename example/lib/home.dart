@@ -9,6 +9,7 @@ import 'package:zeta_example/pages/components/breadcrumbs_example.dart';
 import 'package:zeta_example/pages/components/button_example.dart';
 import 'package:zeta_example/pages/components/checkbox_example.dart';
 import 'package:zeta_example/pages/components/chip_example.dart';
+import 'package:zeta_example/pages/components/date_input_example.dart';
 import 'package:zeta_example/pages/components/dialpad_example.dart';
 import 'package:zeta_example/pages/components/dropdown_example.dart';
 import 'package:zeta_example/pages/components/list_item_example.dart';
@@ -46,6 +47,7 @@ final List<Component> components = [
   Component(DropdownExample.name, (context) => const DropdownExample()),
   Component(ProgressExample.name, (context) => const ProgressExample()),
   Component(DialPadExample.name, (context) => const DialPadExample()),
+  Component(DateInputExample.name, (context) => const DateInputExample()),
 ];
 
 final List<Component> theme = [
