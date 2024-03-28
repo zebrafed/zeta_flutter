@@ -328,6 +328,7 @@ class _LeadingIcon extends StatelessWidget {
       ZetaSnackBarType.warning => const Icon(ZetaIcons.warning_round),
       ZetaSnackBarType.error => const Icon(ZetaIcons.error_round),
       ZetaSnackBarType.deletion => const Icon(ZetaIcons.delete_round),
+      ZetaSnackBarType.view => const Icon(ZetaIcons.open_in_new_window_round),
       _ => const SizedBox(),
     };
   }
