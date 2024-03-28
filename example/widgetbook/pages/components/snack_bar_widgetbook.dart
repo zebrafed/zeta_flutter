@@ -32,8 +32,7 @@ Widget snackBarUseCase(BuildContext context) {
           nullable: true,
         );
 
-        final rounded =
-            context.knobs.boolean(label: 'Rounded', initialValue: true);
+        final rounded = context.knobs.boolean(label: 'Rounded', initialValue: true);
 
         return ZetaButton.primary(
             label: "Show Snackbar",
