@@ -3,6 +3,7 @@ import 'package:widgetbook/widgetbook.dart';
 import 'package:zeta_flutter/zeta_flutter.dart';
 
 import '../../test/test_components.dart';
+import '../../utils/utils.dart';
 
 Widget snackBarUseCase(BuildContext context) {
   return WidgetbookTestWidget(
@@ -24,18 +25,15 @@ Widget snackBarUseCase(BuildContext context) {
           labelBuilder: (type) => type?.name ?? '',
         );
 
-        final leadingIcon = context.knobs.listOrNull<Icon>(
-          label: 'Leading Icon',
-          options: [
-            null,
-            Icon(Icons.mood_rounded),
-            Icon(ZetaIcons.alarm_round),
-          ],
-          labelBuilder: (icon) => icon?.icon?.fontFamily ?? '',
-          initialOption: null,
+        final leadingIcon = iconKnob(
+          context,
+          name: "Leading Icon",
+          initial: Icons.mood_rounded,
+          nullable: true,
         );
 
-        final rounded = context.knobs.boolean(label: 'Rounded', initialValue: true);
+        final rounded =
+            context.knobs.boolean(label: 'Rounded', initialValue: true);
 
         return ZetaButton.primary(
             label: "Show Snackbar",
@@ -46,7 +44,7 @@ Widget snackBarUseCase(BuildContext context) {
                 onPressed: () {},
                 actionLabel: actionLabel,
                 type: type,
-                leadingIcon: leadingIcon,
+                leadingIcon: leadingIcon != null ? Icon(leadingIcon) : null,
                 rounded: rounded,
                 content: Text(text),
               );
