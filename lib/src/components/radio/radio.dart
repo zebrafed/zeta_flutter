@@ -88,7 +88,7 @@ class _ZetaRadioState<T> extends State<ZetaRadio<T>> with TickerProviderStateMix
             child: DefaultTextStyle(
               style: ZetaTextStyles.bodyLarge.copyWith(
                 color: states.contains(MaterialState.disabled) ? zetaColors.textDisabled : zetaColors.textDefault,
-                height: 1,
+                height: 1.33,
               ),
               child: widget.label!,
             ),
