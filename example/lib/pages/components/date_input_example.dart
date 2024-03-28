@@ -16,16 +16,74 @@ class _DateInputExampleState extends State<DateInputExample> {
   Widget build(BuildContext context) {
     return ExampleScaffold(
       name: 'Date Input',
-      child: Center(
+      child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text('Rounded', style: ZetaTextStyles.titleSmall),
+            ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: ZetaDateInput(
                 label: 'Label',
                 hint: 'Default hint text',
                 errorText: 'Oops! Error hint text',
+              ),
+            ),
+            Divider(color: Colors.grey[200]),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text('Sharp', style: ZetaTextStyles.titleSmall),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ZetaDateInput(
+                label: 'Label',
+                hint: 'Default hint text',
+                errorText: 'Oops! Error hint text',
+                rounded: false,
+              ),
+            ),
+            Divider(color: Colors.grey[200]),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text('Disabled', style: ZetaTextStyles.titleSmall),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ZetaDateInput(
+                label: 'Label',
+                hint: 'Default hint text',
+                enabled: false,
+              ),
+            ),
+            Divider(color: Colors.grey[200]),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text('Medium', style: ZetaTextStyles.titleSmall),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ZetaDateInput(
+                label: 'Label',
+                hint: 'Default hint text',
+                errorText: 'Oops! Error hint text',
+                size: ZetaDateInputSize.medium,
+              ),
+            ),
+            Divider(color: Colors.grey[200]),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text('Small', style: ZetaTextStyles.titleSmall),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ZetaDateInput(
+                label: 'Label',
+                hint: 'Default hint text',
+                errorText: 'Oops! Error hint text',
+                size: ZetaDateInputSize.small,
               ),
             ),
           ],
