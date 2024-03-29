@@ -25,6 +25,7 @@ class ZetaDateInput extends StatefulWidget {
     this.errorText,
     this.enabled = true,
     this.rounded = true,
+    this.hasError = false,
     this.size = ZetaDateInputSize.large,
   });
 
@@ -33,6 +34,7 @@ class ZetaDateInput extends StatefulWidget {
   final String? errorText;
   final bool enabled;
   final bool rounded;
+  final bool hasError;
   final ZetaDateInputSize size;
 
   @override
@@ -41,7 +43,7 @@ class ZetaDateInput extends StatefulWidget {
 
 class _ZetaDateInputState extends State<ZetaDateInput> {
   final _controller = TextEditingController();
-  bool _hasError = false;
+  bool _invalidDate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,10 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
             padding: const EdgeInsets.only(bottom: 5),
             child: Text(
               widget.label!,
-              style: ZetaTextStyles.bodyLarge.copyWith(height: 1.4),
+              style: ZetaTextStyles.bodyLarge.copyWith(
+                height: 1.33,
+                color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+              ),
             ),
           ),
         TextFormField(
@@ -95,7 +100,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
                   padding: const EdgeInsets.only(left: 6, right: 10),
                   child: Icon(
                     widget.rounded ? ZetaIcons.calendar_3_day_round : ZetaIcons.calendar_3_day_sharp,
-                    color: zeta.colors.textDefault,
+                    color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
                     size: _iconSize(widget.size),
                   ),
                 ),
@@ -106,19 +111,27 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
               minWidth: 24,
             ),
             hintStyle: ZetaTextStyles.bodyLarge.copyWith(
-              color: zeta.colors.cool.shade70,
+              color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
               height: 1.5,
             ),
-            filled: widget.enabled ? null : true,
-            fillColor: widget.enabled ? null : zeta.colors.cool.shade30,
-            enabledBorder: _defaultInputBorder(zeta, rounded: widget.rounded),
-            focusedBorder: _focusedInputBorder(zeta, rounded: widget.rounded),
+            filled: !widget.enabled || _invalidDate || widget.hasError ? true : null,
+            fillColor: widget.enabled
+                ? _invalidDate || widget.hasError
+                    ? zeta.colors.red.shade10
+                    : null
+                : zeta.colors.cool.shade30,
+            enabledBorder: _invalidDate || widget.hasError
+                ? _errorInputBorder(zeta, rounded: widget.rounded)
+                : _defaultInputBorder(zeta, rounded: widget.rounded),
+            focusedBorder: _invalidDate || widget.hasError
+                ? _errorInputBorder(zeta, rounded: widget.rounded)
+                : _focusedInputBorder(zeta, rounded: widget.rounded),
             disabledBorder: _defaultInputBorder(zeta, rounded: widget.rounded),
             errorBorder: _errorInputBorder(zeta, rounded: widget.rounded),
             focusedErrorBorder: _errorInputBorder(zeta, rounded: widget.rounded),
           ),
         ),
-        if (widget.hint != null || (_hasError && widget.errorText != null))
+        if (widget.hint != null || ((_invalidDate || widget.hasError) && widget.errorText != null))
           Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Row(
@@ -126,16 +139,26 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: Icon(
-                    Icons.info_rounded,
+                    (_invalidDate || widget.hasError) && widget.enabled
+                        ? (widget.rounded ? ZetaIcons.error_round : ZetaIcons.error_sharp)
+                        : (widget.rounded ? ZetaIcons.info_round : ZetaIcons.info_sharp),
                     size: 16,
-                    color: _hasError ? zeta.colors.red : zeta.colors.cool.shade70,
+                    color: widget.enabled
+                        ? (_invalidDate || widget.hasError)
+                            ? zeta.colors.red
+                            : zeta.colors.cool.shade70
+                        : zeta.colors.cool.shade50,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    _hasError ? widget.errorText! : widget.hint!,
+                    (_invalidDate || widget.hasError) && widget.enabled ? widget.errorText ?? '' : widget.hint!,
                     style: ZetaTextStyles.bodySmall.copyWith(
-                      color: _hasError ? zeta.colors.red : zeta.colors.cool.shade70,
+                      color: widget.enabled
+                          ? (_invalidDate || widget.hasError) && widget.enabled
+                              ? zeta.colors.red
+                              : zeta.colors.cool.shade70
+                          : zeta.colors.cool.shade50,
                     ),
                   ),
                 ),
