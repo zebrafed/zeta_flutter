@@ -99,7 +99,7 @@ class ZetaSnackBar extends SnackBar {
       ZetaSnackBarType.positive => colors.green.shade10,
       ZetaSnackBarType.info => colors.purple.shade10,
       ZetaSnackBarType.warning => colors.orange.shade10,
-      ZetaSnackBarType.deletion || ZetaSnackBarType.error => colors.purple.shade10,
+      ZetaSnackBarType.deletion || ZetaSnackBarType.error => colors.red.shade10,
       ZetaSnackBarType.view => colors.blue.shade10,
       _ => colors.warm.shade100,
     };
