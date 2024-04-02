@@ -12,6 +12,8 @@ class DateInputExample extends StatefulWidget {
 }
 
 class _DateInputExampleState extends State<DateInputExample> {
+  String? _errorText;
+
   @override
   Widget build(BuildContext context) {
     return ExampleScaffold(
@@ -26,9 +28,15 @@ class _DateInputExampleState extends State<DateInputExample> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: ZetaDateInput(
-                label: 'Label',
-                hint: 'Default hint text',
-                errorText: 'Oops! Error hint text',
+                label: 'Birthdate',
+                hint: 'Enter birthdate',
+                hasError: _errorText != null,
+                errorText: _errorText ?? 'Invalid date',
+                onChanged: (value) {
+                  if (value == null) return setState(() => _errorText = null);
+                  setState(() => _errorText =
+                      value.difference(DateTime.now()).inDays > 0 ? 'Birthdate cannot be in the future' : null);
+                },
               ),
             ),
             Divider(color: Colors.grey[200]),

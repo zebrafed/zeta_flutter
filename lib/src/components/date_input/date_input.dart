@@ -1,53 +1,157 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../../zeta_flutter.dart';
+
+/// `_datePattern` is needed for the date format validation as described here:
+///  https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
+const _datePattern = 'MM/dd/yyyy';
+
+/// `_dateMask` is needed to initialize [MaskTextInputFormatter] in order to
+/// facilitate the date input in the proper format.
+const _dateMask = '##/##/####';
 
 /// [ZetaDateInput] size
 enum ZetaDateInputSize {
-  /// [large] 48 pixels height of the input field
+  /// [large] 48 pixels height of the input field.
   large,
 
-  /// [medium] 40 pixels height of the input field
+  /// [medium] 40 pixels height of the input field.
   medium,
 
-  /// [small] 32 pixels height of the input field
+  /// [small] 32 pixels height of the input field.
   small,
 }
 
-/// Zeta Date Input.
-///
-/// Date Input allows entering date.
+/// ZetaDateInput allows entering date in a pre-defined format.
+/// Validation is performed to make sure the date is valid
+/// and is in the proper format.
 class ZetaDateInput extends StatefulWidget {
   /// Constructor for [ZetaDateInput].
+  ///
+  /// Example usage how to provide custom validanions
+  /// via `onChanged`, `hasError` and `errorText`:
+  /// ```dart
+  /// ZetaDateInput(
+  ///   label: 'Birthdate',
+  ///   hint: 'Enter birthdate',
+  ///   hasError: _errorText != null,
+  ///   errorText: _errorText ?? 'Invalid date',
+  ///   onChanged: (value) {
+  ///     if (value == null) return setState(() => _errorText = null);
+  ///     setState(() => _errorText =
+  ///         value.difference(DateTime.now()).inDays > 0 ? 'Birthdate cannot be in the future' : null);
+  ///   },
+  /// )
+  /// ```
   const ZetaDateInput({
     super.key,
+    this.size = ZetaDateInputSize.large,
     this.label,
     this.hint,
-    this.errorText,
     this.enabled = true,
     this.rounded = true,
     this.hasError = false,
-    this.size = ZetaDateInputSize.large,
+    this.errorText,
+    this.onChanged,
   });
 
-  final String? label;
-  final String? hint;
-  final String? errorText;
-  final bool enabled;
-  final bool rounded;
-  final bool hasError;
+  /// Determines the size of the input field.
+  /// Default is `ZetaDateInputSize.large`
   final ZetaDateInputSize size;
+
+  /// If provided, displays a label above the input field.
+  final String? label;
+
+  /// If provided, displays a hint below the input field.
+  final String? hint;
+
+  /// Determines if the input field should be enabled (default) or disabled.
+  final bool enabled;
+
+  /// Determines if the input field corners are rounded (default) or sharp.
+  final bool rounded;
+
+  /// Determines if the input field should be displayed in error style.
+  /// Default is `false`.
+  /// If `enabled` is `false`, this has no effect.
+  final bool hasError;
+
+  /// In combination with `hasError: true`, provides the error message
+  /// to be displayed below the input field.
+  ///
+  /// If `hasError` is false, then `errorText` should provide
+  /// date validation error message.
+  ///
+  /// See the example in the [ZetaDateInput] documentation.
+  final String? errorText;
+
+  /// A callback, which provides the entered date, or `null`, if invalid.
+  ///
+  /// See the example in the [ZetaDateInput] documentation
+  /// how to provide custom validations
+  /// in combination with `hasError` and `errorText`.
+  final void Function(DateTime?)? onChanged;
 
   @override
   State<ZetaDateInput> createState() => _ZetaDateInputState();
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(EnumProperty<ZetaDateInputSize>('size', size))
+      ..add(StringProperty('label', label))
+      ..add(StringProperty('hint', hint))
+      ..add(DiagnosticsProperty<bool>('enabled', enabled))
+      ..add(DiagnosticsProperty<bool>('rounded', rounded))
+      ..add(DiagnosticsProperty<bool>('hasError', hasError))
+      ..add(StringProperty('errorText', errorText))
+      ..add(ObjectFlagProperty<void Function(DateTime? p1)?>.has('onChanged', onChanged));
+  }
 }
 
 class _ZetaDateInputState extends State<ZetaDateInput> {
   final _controller = TextEditingController();
+  final _hintText = _datePattern.toLowerCase();
   bool _invalidDate = false;
+
+  final _dateFormatter = MaskTextInputFormatter(
+    mask: _dateMask,
+    filter: {'#': RegExp('[0-9]')},
+    type: MaskAutoCompletionType.eager,
+  );
+
+  void _onChanged() {
+    final value = _dateFormatter.getMaskedText().trim();
+    final date = DateFormat(_datePattern).tryParseStrict(value);
+    _invalidDate = value.isNotEmpty && date == null;
+    widget.onChanged?.call(date);
+    setState(() {});
+  }
+
+  void _clear() {
+    _controller.clear();
+    _invalidDate = false;
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);
+    final hasError = _invalidDate || widget.hasError;
+    final showError = hasError && widget.errorText != null;
+    final hintErrorColor = widget.enabled
+        ? showError
+            ? zeta.colors.red
+            : zeta.colors.cool.shade70
+        : zeta.colors.cool.shade50;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,19 +168,19 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
             ),
           ),
         TextFormField(
-          controller: _controller,
           enabled: widget.enabled,
+          controller: _controller,
+          inputFormatters: [_dateFormatter],
+          keyboardType: TextInputType.number,
+          onChanged: (_) => _onChanged(),
           style: ZetaTextStyles.bodyLarge.copyWith(height: 1.5),
-          onChanged: (value) {
-            setState(() {});
-          },
           decoration: InputDecoration(
             isDense: true,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 10,
               vertical: _inputVerticalPadding(widget.size),
             ),
-            hintText: 'mm/dd/yyyy',
+            hintText: _hintText,
             suffixIcon: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -86,10 +190,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
                       horizontal: -4,
                       vertical: -4,
                     ),
-                    onPressed: () {
-                      _controller.clear();
-                      setState(() {});
-                    },
+                    onPressed: _clear,
                     icon: Icon(
                       widget.rounded ? ZetaIcons.cancel_round : ZetaIcons.cancel_sharp,
                       color: zeta.colors.cool.shade70,
@@ -114,16 +215,16 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
               color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
               height: 1.5,
             ),
-            filled: !widget.enabled || _invalidDate || widget.hasError ? true : null,
+            filled: !widget.enabled || hasError ? true : null,
             fillColor: widget.enabled
-                ? _invalidDate || widget.hasError
+                ? hasError
                     ? zeta.colors.red.shade10
                     : null
                 : zeta.colors.cool.shade30,
-            enabledBorder: _invalidDate || widget.hasError
+            enabledBorder: hasError
                 ? _errorInputBorder(zeta, rounded: widget.rounded)
                 : _defaultInputBorder(zeta, rounded: widget.rounded),
-            focusedBorder: _invalidDate || widget.hasError
+            focusedBorder: hasError
                 ? _errorInputBorder(zeta, rounded: widget.rounded)
                 : _focusedInputBorder(zeta, rounded: widget.rounded),
             disabledBorder: _defaultInputBorder(zeta, rounded: widget.rounded),
@@ -131,7 +232,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
             focusedErrorBorder: _errorInputBorder(zeta, rounded: widget.rounded),
           ),
         ),
-        if (widget.hint != null || ((_invalidDate || widget.hasError) && widget.errorText != null))
+        if (widget.hint != null || showError)
           Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Row(
@@ -139,26 +240,18 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: Icon(
-                    (_invalidDate || widget.hasError) && widget.enabled
+                    showError && widget.enabled
                         ? (widget.rounded ? ZetaIcons.error_round : ZetaIcons.error_sharp)
                         : (widget.rounded ? ZetaIcons.info_round : ZetaIcons.info_sharp),
                     size: 16,
-                    color: widget.enabled
-                        ? (_invalidDate || widget.hasError)
-                            ? zeta.colors.red
-                            : zeta.colors.cool.shade70
-                        : zeta.colors.cool.shade50,
+                    color: hintErrorColor,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    (_invalidDate || widget.hasError) && widget.enabled ? widget.errorText ?? '' : widget.hint!,
+                    showError && widget.enabled ? widget.errorText! : widget.hint!,
                     style: ZetaTextStyles.bodySmall.copyWith(
-                      color: widget.enabled
-                          ? (_invalidDate || widget.hasError) && widget.enabled
-                              ? zeta.colors.red
-                              : zeta.colors.cool.shade70
-                          : zeta.colors.cool.shade50,
+                      color: hintErrorColor,
                     ),
                   ),
                 ),
