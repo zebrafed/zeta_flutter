@@ -45,8 +45,9 @@ class MaterialSwitch extends StatefulWidget {
     this.focusNode,
     this.onFocusChange,
     this.autofocus = false,
-    // Zeta change: added optional parameter `showHover`.
+    // Zeta change: added optional parameter `showHover` and `thumbSize`.
     this.showHover = false,
+    this.thumbSize,
   })  : assert(activeThumbImage != null || onActiveThumbImageError == null),
         assert(inactiveThumbImage != null || onInactiveThumbImageError == null);
 
@@ -78,6 +79,8 @@ class MaterialSwitch extends StatefulWidget {
   // Zeta change: added optional parameter `showHover`.
   final bool showHover;
   final Size size;
+  // Zeta change: added optional parameter `thumbSize`.
+  final Size? thumbSize;
 
   @override
   State<StatefulWidget> createState() => _MaterialSwitchState();
@@ -369,7 +372,8 @@ class _MaterialSwitchState extends State<MaterialSwitch> with TickerProviderStat
             ..inactiveIcon = effectiveInactiveIcon
             ..iconTheme = IconTheme.of(context)
             ..thumbShadow = _switchConfig.thumbShadow
-            ..positionController = positionController,
+            ..positionController = positionController
+            .._thumbSize = widget.thumbSize,
         ),
       ),
     );
@@ -686,6 +690,8 @@ class _SwitchPainter extends ToggleablePainter {
   ImageErrorListener? _cachedThumbErrorListener;
   BoxPainter? _cachedThumbPainter;
 
+  Size? _thumbSize;
+
   ShapeDecoration _createDefaultThumbDecoration(Color color, ImageProvider? image, ImageErrorListener? errorListener) {
     return ShapeDecoration(
       color: color,
@@ -730,7 +736,7 @@ class _SwitchPainter extends ToggleablePainter {
       _pressedThumbExtension = 0;
     }
 
-    Size? thumbSize = Size.fromRadius(pressedThumbRadius);
+    Size? thumbSize = _thumbSize ?? Size.fromRadius(pressedThumbRadius);
 
     // The thumb contracts slightly during the animation in Material 2.
     final double inset = thumbOffset == null ? 0 : 1.0 - (currentValue - thumbOffset!).abs() * 2.0;
