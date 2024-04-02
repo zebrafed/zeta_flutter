@@ -98,8 +98,7 @@ class HotReload extends StatelessWidget {
               name: 'Snack Bar',
               builder: (context) => snackBarUseCase(context),
             ),
-            WidgetbookUseCase(
-                name: 'Tabs', builder: (context) => tabsUseCase(context)),
+            WidgetbookUseCase(name: 'Tabs', builder: (context) => tabsUseCase(context)),
           ]..sort((a, b) => a.name.compareTo(b.name)),
         ),
         WidgetbookCategory(

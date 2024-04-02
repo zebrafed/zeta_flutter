@@ -16,9 +16,7 @@ class ZetaTabBar extends TabBar {
     super.onTap,
     super.key,
   }) : super(
-          indicatorSize: isScrollable
-              ? TabBarIndicatorSize.label
-              : TabBarIndicatorSize.tab,
+          indicatorSize: isScrollable ? TabBarIndicatorSize.label : TabBarIndicatorSize.tab,
           labelPadding: isScrollable ? null : EdgeInsets.zero,
           indicator: UnderlineTabIndicator(
             borderSide: BorderSide(
@@ -28,14 +26,10 @@ class ZetaTabBar extends TabBar {
             borderRadius: ZetaRadius.none,
           ),
           labelStyle: ZetaTextStyles.labelLarge.copyWith(
-            color: enabled
-                ? Zeta.of(context).colors.textDefault
-                : Zeta.of(context).colors.textDisabled,
+            color: enabled ? Zeta.of(context).colors.textDefault : Zeta.of(context).colors.textDisabled,
           ),
           unselectedLabelStyle: ZetaTextStyles.labelLarge.copyWith(
-            color: enabled
-                ? Zeta.of(context).colors.textSubtle
-                : Zeta.of(context).colors.textDisabled,
+            color: enabled ? Zeta.of(context).colors.textSubtle : Zeta.of(context).colors.textDisabled,
           ),
         );
 }

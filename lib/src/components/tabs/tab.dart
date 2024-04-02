@@ -19,9 +19,7 @@ class ZetaTab extends Tab {
               ],
               if (text != null)
                 Padding(
-                  padding: icon != null
-                      ? const EdgeInsets.only(left: ZetaSpacing.x2)
-                      : EdgeInsets.zero,
+                  padding: icon != null ? const EdgeInsets.only(left: ZetaSpacing.x2) : EdgeInsets.zero,
                   child: Text(text),
                 ),
               if (icon != null) const SizedBox(width: ZetaSpacing.s),
