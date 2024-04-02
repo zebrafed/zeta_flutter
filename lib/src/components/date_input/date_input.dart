@@ -47,7 +47,7 @@ class ZetaDateInput extends StatefulWidget {
   /// ```
   const ZetaDateInput({
     super.key,
-    this.size = ZetaDateInputSize.large,
+    this.size,
     this.label,
     this.hint,
     this.enabled = true,
@@ -59,7 +59,7 @@ class ZetaDateInput extends StatefulWidget {
 
   /// Determines the size of the input field.
   /// Default is `ZetaDateInputSize.large`
-  final ZetaDateInputSize size;
+  final ZetaDateInputSize? size;
 
   /// If provided, displays a label above the input field.
   final String? label;
@@ -114,13 +114,32 @@ class ZetaDateInput extends StatefulWidget {
 class _ZetaDateInputState extends State<ZetaDateInput> {
   final _controller = TextEditingController();
   final _hintText = _datePattern.toLowerCase();
+  late ZetaDateInputSize _size;
   bool _invalidDate = false;
+  bool _hasError = false;
 
   final _dateFormatter = MaskTextInputFormatter(
     mask: _dateMask,
     filter: {'#': RegExp('[0-9]')},
     type: MaskAutoCompletionType.eager,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _setParams();
+  }
+
+  @override
+  void didUpdateWidget(ZetaDateInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _setParams();
+  }
+
+  void _setParams() {
+    _size = widget.size ?? ZetaDateInputSize.large;
+    _hasError = widget.hasError;
+  }
 
   void _onChanged() {
     final value = _dateFormatter.getMaskedText().trim();
@@ -132,8 +151,10 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
 
   void _clear() {
     _controller.clear();
-    _invalidDate = false;
-    setState(() {});
+    setState(() {
+      _invalidDate = false;
+      _hasError = false;
+    });
   }
 
   @override
@@ -145,7 +166,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
   @override
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);
-    final hasError = _invalidDate || widget.hasError;
+    final hasError = _invalidDate || _hasError;
     final showError = hasError && widget.errorText != null;
     final hintErrorColor = widget.enabled
         ? showError
@@ -178,7 +199,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
             isDense: true,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 10,
-              vertical: _inputVerticalPadding(widget.size),
+              vertical: _inputVerticalPadding(_size),
             ),
             hintText: _hintText,
             suffixIcon: Row(
@@ -194,7 +215,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
                     icon: Icon(
                       widget.rounded ? ZetaIcons.cancel_round : ZetaIcons.cancel_sharp,
                       color: zeta.colors.cool.shade70,
-                      size: _iconSize(widget.size),
+                      size: _iconSize(_size),
                     ),
                   ),
                 Padding(
@@ -202,7 +223,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
                   child: Icon(
                     widget.rounded ? ZetaIcons.calendar_3_day_round : ZetaIcons.calendar_3_day_sharp,
                     color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
-                    size: _iconSize(widget.size),
+                    size: _iconSize(_size),
                   ),
                 ),
               ],
