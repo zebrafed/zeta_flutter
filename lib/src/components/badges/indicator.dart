@@ -126,7 +126,7 @@ class ZetaIndicator extends StatelessWidget {
             style: ZetaTextStyles.labelIndicator.copyWith(
               color: foregroundColor,
               fontSize: size == ZetaWidgetSize.large ? null : 11,
-            ), //TODO: Awaiting updated design.
+            ), // TODO(thelukwalton): Awaiting updated design.
           ),
         );
     }
