@@ -5,6 +5,31 @@
 - [`ed1210d`](https://github.com/zebratechnologies/zeta-flutter/commit/ed1210d6cbc173aef8b1adf0d20ee91d3e87f2c3) - Update Widgetbook to correct functionality _(PR [#52](https://github.com/zebratechnologies/zeta-flutter/pull/52) by [@thelukewalton](https://github.com/thelukewalton))_
 - [`c627d7a`](https://github.com/zebratechnologies/zeta-flutter/commit/c627d7ab19d3f33e30c406441702ff6134557f14) - Tidy up example app _(PR [#53](https://github.com/zebratechnologies/zeta-flutter/pull/53) by [@thelukewalton](https://github.com/thelukewalton))_
 
+## [0.6.0](https://github.com/zebrafed/zeta_flutter/compare/v0.5.0...v0.6.0) (2024-04-02)
+
+
+### Features
+
+* Add List Item ([#5](https://github.com/zebrafed/zeta_flutter/issues/5)) ([4d618c1](https://github.com/zebrafed/zeta_flutter/commit/4d618c1b31bf4af67804744d7d506c5b44296994))
+* Dial Pad ([#30](https://github.com/zebrafed/zeta_flutter/issues/30)) ([f16df26](https://github.com/zebrafed/zeta_flutter/commit/f16df261feb703b20147c4ba406ed1fa3450348b))
+* Icon button ([#26](https://github.com/zebrafed/zeta_flutter/issues/26)) ([88cd90a](https://github.com/zebrafed/zeta_flutter/commit/88cd90a8180df39e3e44c168ca028055333643a6))
+* **main:** SnackBar ([#10](https://github.com/zebrafed/zeta_flutter/issues/10)) ([da18813](https://github.com/zebrafed/zeta_flutter/commit/da18813fad2f9364e4aa6c9c9cb1c30a70cbe646))
+* Navigation bar ([#32](https://github.com/zebrafed/zeta_flutter/issues/32)) ([36a60e7](https://github.com/zebrafed/zeta_flutter/commit/36a60e7087af7d38bfd64578009056d85b0f1e56))
+* Progress Bar ([#29](https://github.com/zebrafed/zeta_flutter/issues/29)) ([d18dbd2](https://github.com/zebrafed/zeta_flutter/commit/d18dbd276177c368e5d5cf80e482ea11564270a9))
+* **type:** Add xSmall and conform to latest figma designs. ([17b2299](https://github.com/zebrafed/zeta_flutter/commit/17b22994ae27d0abd1da7f756f49b46248b8b4b7))
+* update icons/0.1.65 ([#24](https://github.com/zebrafed/zeta_flutter/issues/24)) ([9f0e7f2](https://github.com/zebrafed/zeta_flutter/commit/9f0e7f286470c99722e928e726b5a9eb1b0b7b8b))
+* Widgetbook hot reload ([#33](https://github.com/zebrafed/zeta_flutter/issues/33)) ([44b8f98](https://github.com/zebrafed/zeta_flutter/commit/44b8f989850aaa1a6d862526bad26a01ffad361a))
+
+
+### Bug Fixes
+
+* **actions:** Updated actions to push changelog to zeta. ([#6](https://github.com/zebrafed/zeta_flutter/issues/6)) ([f7a8d9a](https://github.com/zebrafed/zeta_flutter/commit/f7a8d9a2ba078bf08fe80de07f6e9c871af9e451))
+* Fix button group immutability ([#1](https://github.com/zebrafed/zeta_flutter/issues/1)) ([20d3c68](https://github.com/zebrafed/zeta_flutter/commit/20d3c68721890617cefab10605a3a0a7179986fd))
+* **main:** ListItem disabled color ([#8](https://github.com/zebrafed/zeta_flutter/issues/8)) ([2a94e04](https://github.com/zebrafed/zeta_flutter/commit/2a94e04597e540f074b418377b09b912e294e7d0))
+* Widgetbook icons and reusable snippets ([#35](https://github.com/zebrafed/zeta_flutter/issues/35)) ([0d23f7c](https://github.com/zebrafed/zeta_flutter/commit/0d23f7cbb9fdbb6114b47837b99b83829e74c79a))
+* Widgetbook run / build ([#15](https://github.com/zebrafed/zeta_flutter/issues/15)) ([a2347ad](https://github.com/zebrafed/zeta_flutter/commit/a2347ad7a43a77e398571f3be26948585e22c068))
+* WIdgetbook theme ([#16](https://github.com/zebrafed/zeta_flutter/issues/16)) ([5e1c48a](https://github.com/zebrafed/zeta_flutter/commit/5e1c48aca84bbe49233deca10f64dcd6e8b8eb59))
+
 ## [0.5.0](https://github.com/ZebraDevs/zeta_flutter/compare/v0.4.0...v0.5.0) (2024-03-05)
 
 
