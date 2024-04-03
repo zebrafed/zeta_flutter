@@ -15,10 +15,10 @@ enum ZetaSwitchType {
   /// 64 x 32
   web,
 
-  /// 56 x 32
+  /// 48 x 24
   android,
 
-  /// 48 x 24
+  /// 56 x 32
   ios,
 }
 
