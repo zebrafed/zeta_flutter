@@ -10,12 +10,21 @@ Widget dateInputUseCase(BuildContext context) {
   return WidgetbookTestWidget(
     widget: StatefulBuilder(
       builder: (context, setState) {
+        final errorText = context.knobs.string(
+          label: 'Error message for invalid date',
+          initialValue: 'Invalid date',
+        );
         final rounded = context.knobs.boolean(label: 'Rounded', initialValue: true);
         final enabled = context.knobs.boolean(label: 'Enabled', initialValue: true);
-        final size = context.knobs.listOrNull<ZetaDateInputSize>(
+        final size = context.knobs.list<ZetaDateInputSize>(
           label: 'Size',
           options: ZetaDateInputSize.values,
-          labelBuilder: (type) => type?.name ?? '',
+          labelBuilder: (size) => size.name,
+        );
+        final datePattern = context.knobs.list<String>(
+          label: 'Date pattern',
+          options: ['MM/dd/yyyy', 'dd/MM/yyyy', 'dd.MM.yyyy', 'yyyy-MM-dd'],
+          labelBuilder: (pattern) => pattern,
         );
 
         return Padding(
@@ -26,12 +35,17 @@ Widget dateInputUseCase(BuildContext context) {
             enabled: enabled,
             label: 'Birthdate',
             hint: 'Enter birthdate',
+            datePattern: datePattern,
             hasError: _errorText != null,
-            errorText: _errorText ?? 'Invalid date',
+            errorText: _errorText ?? errorText,
             onChanged: (value) {
               if (value == null) return setState(() => _errorText = null);
-              setState(() => _errorText =
-                  value.difference(DateTime.now()).inDays > 0 ? 'Birthdate cannot be in the future' : null);
+              final now = DateTime.now();
+              setState(
+                () => _errorText = value.difference(DateTime(now.year, now.month, now.day)).inDays > 0
+                    ? 'Birthdate cannot be in the future'
+                    : null,
+              );
             },
           ),
         );

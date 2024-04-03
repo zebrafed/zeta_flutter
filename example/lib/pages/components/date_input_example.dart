@@ -34,8 +34,12 @@ class _DateInputExampleState extends State<DateInputExample> {
                 errorText: _errorText ?? 'Invalid date',
                 onChanged: (value) {
                   if (value == null) return setState(() => _errorText = null);
-                  setState(() => _errorText =
-                      value.difference(DateTime.now()).inDays > 0 ? 'Birthdate cannot be in the future' : null);
+                  final now = DateTime.now();
+                  setState(
+                    () => _errorText = value.difference(DateTime(now.year, now.month, now.day)).inDays > 0
+                        ? 'Birthdate cannot be in the future'
+                        : null,
+                  );
                 },
               ),
             ),
@@ -51,6 +55,7 @@ class _DateInputExampleState extends State<DateInputExample> {
                 hint: 'Default hint text',
                 errorText: 'Oops! Error hint text',
                 rounded: false,
+                datePattern: 'yyyy-MM-dd',
               ),
             ),
             Divider(color: Colors.grey[200]),
