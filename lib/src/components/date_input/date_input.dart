@@ -186,7 +186,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
             padding: const EdgeInsets.only(bottom: 5),
             child: Text(
               widget.label!,
-              style: ZetaTextStyles.bodyLarge.copyWith(
+              style: ZetaTextStyles.bodyMedium.copyWith(
                 height: 1.33,
                 color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
               ),
@@ -198,7 +198,9 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
           inputFormatters: [_dateFormatter],
           keyboardType: TextInputType.number,
           onChanged: (_) => _onChanged(),
-          style: ZetaTextStyles.bodyLarge.copyWith(height: 1.5),
+          style: _size == ZetaDateInputSize.small
+              ? ZetaTextStyles.bodyXSmall.copyWith(height: 1.5)
+              : ZetaTextStyles.bodyMedium.copyWith(height: 1.5),
           decoration: InputDecoration(
             isDense: true,
             contentPadding: EdgeInsets.symmetric(
@@ -236,10 +238,15 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
               minHeight: ZetaSpacing.m,
               minWidth: ZetaSpacing.m,
             ),
-            hintStyle: ZetaTextStyles.bodyLarge.copyWith(
-              color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
-              height: 1.5,
-            ),
+            hintStyle: _size == ZetaDateInputSize.small
+                ? ZetaTextStyles.bodyXSmall.copyWith(
+                    color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+                    height: 1.5,
+                  )
+                : ZetaTextStyles.bodyMedium.copyWith(
+                    color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+                    height: 1.5,
+                  ),
             filled: !widget.enabled || hasError ? true : null,
             fillColor: widget.enabled
                 ? hasError
@@ -275,7 +282,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
                 Expanded(
                   child: Text(
                     showError && widget.enabled ? widget.errorText! : widget.hint!,
-                    style: ZetaTextStyles.bodySmall.copyWith(
+                    style: ZetaTextStyles.bodyXSmall.copyWith(
                       color: hintErrorColor,
                     ),
                   ),
@@ -290,7 +297,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
   double _inputVerticalPadding(ZetaDateInputSize size) => switch (size) {
         ZetaDateInputSize.large => ZetaSpacing.x3,
         ZetaDateInputSize.medium => ZetaSpacing.x2,
-        ZetaDateInputSize.small => ZetaSpacing.x1,
+        ZetaDateInputSize.small => ZetaSpacing.x2,
       };
 
   double _iconSize(ZetaDateInputSize size) => switch (size) {
