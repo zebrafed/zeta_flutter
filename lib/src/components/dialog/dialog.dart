@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../zeta_flutter.dart';
 
-enum ZetaDialogSize {
-  small,
-  large,
-}
-
 enum ZetaDialogHeaderAlignment {
   left,
   center,
@@ -13,7 +8,6 @@ enum ZetaDialogHeaderAlignment {
 
 Future<bool?> showZetaDialog<T>(
   BuildContext context, {
-  ZetaDialogSize size = ZetaDialogSize.small,
   ZetaDialogHeaderAlignment headerAlignment = ZetaDialogHeaderAlignment.center,
   Widget? icon,
   String? title,
@@ -24,6 +18,7 @@ Future<bool?> showZetaDialog<T>(
   VoidCallback? onSecondaryButtonPressed,
   String? tertiaryButtonLabel,
   VoidCallback? onTertiaryButtonPressed,
+  bool rounded = true,
   bool barrierDismissible = true,
 }) {
   final zeta = Zeta.of(context);
@@ -32,6 +27,7 @@ Future<bool?> showZetaDialog<T>(
     barrierDismissible: barrierDismissible,
     builder: (context) => AlertDialog(
       surfaceTintColor: zeta.colors.surfacePrimary,
+      shape: const RoundedRectangleBorder(borderRadius: ZetaRadius.large),
       title: icon != null || title != null
           ? Column(
               mainAxisSize: MainAxisSize.min,
@@ -40,7 +36,11 @@ Future<bool?> showZetaDialog<T>(
                 ZetaDialogHeaderAlignment.center => CrossAxisAlignment.center,
               },
               children: [
-                if (icon != null) icon,
+                if (icon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: ZetaSpacing.s),
+                    child: icon,
+                  ),
                 if (title != null)
                   Text(
                     title,
@@ -56,10 +56,69 @@ Future<bool?> showZetaDialog<T>(
         color: zeta.colors.textDefault,
       ),
       content: Text(message),
-      contentTextStyle: zetaTextTheme.bodyMedium?.copyWith(
-        color: zeta.colors.textDefault,
-      ),
-      // actions: [],
+      contentTextStyle: context.deviceType == DeviceType.mobilePortrait
+          ? zetaTextTheme.bodySmall?.copyWith(
+              color: zeta.colors.textDefault,
+            )
+          : zetaTextTheme.bodyMedium?.copyWith(
+              color: zeta.colors.textDefault,
+            ),
+      actions: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (tertiaryButtonLabel == null)
+              Row(
+                children: [
+                  if (secondaryButtonLabel != null)
+                    Expanded(
+                      child: ZetaButton(
+                        type: ZetaButtonType.outlineSubtle,
+                        label: secondaryButtonLabel,
+                        onPressed: onSecondaryButtonPressed ?? () => Navigator.of(context).pop(false),
+                        borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+                      ),
+                    ),
+                  if (primaryButtonLabel != null && secondaryButtonLabel != null) const SizedBox(width: ZetaSpacing.m),
+                  if (primaryButtonLabel != null)
+                    Expanded(
+                      child: ZetaButton(
+                        label: primaryButtonLabel,
+                        onPressed: onPrimaryButtonPressed ?? () => Navigator.of(context).pop(true),
+                        borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+                      ),
+                    ),
+                ],
+              ),
+            if (tertiaryButtonLabel != null) ...[
+              if (primaryButtonLabel != null)
+                ZetaButton(
+                  label: primaryButtonLabel,
+                  onPressed: onPrimaryButtonPressed ?? () => Navigator.of(context).pop(true),
+                  borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+                ),
+              if (primaryButtonLabel != null && secondaryButtonLabel != null) const SizedBox(height: ZetaSpacing.s),
+              if (secondaryButtonLabel != null)
+                ZetaButton(
+                  type: ZetaButtonType.outlineSubtle,
+                  label: secondaryButtonLabel,
+                  onPressed: onSecondaryButtonPressed ?? () => Navigator.of(context).pop(false),
+                  borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+                ),
+              if (primaryButtonLabel != null || secondaryButtonLabel != null) const SizedBox(height: ZetaSpacing.xs),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: onTertiaryButtonPressed,
+                    child: Text(tertiaryButtonLabel),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ],
     ),
   );
 }
