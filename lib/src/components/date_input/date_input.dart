@@ -187,7 +187,6 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
             child: Text(
               widget.label!,
               style: ZetaTextStyles.bodyMedium.copyWith(
-                height: 1.33,
                 color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
               ),
             ),
@@ -198,9 +197,7 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
           inputFormatters: [_dateFormatter],
           keyboardType: TextInputType.number,
           onChanged: (_) => _onChanged(),
-          style: _size == ZetaDateInputSize.small
-              ? ZetaTextStyles.bodyXSmall.copyWith(height: 1.5)
-              : ZetaTextStyles.bodyMedium.copyWith(height: 1.5),
+          style: _size == ZetaDateInputSize.small ? ZetaTextStyles.bodyXSmall : ZetaTextStyles.bodyMedium,
           decoration: InputDecoration(
             isDense: true,
             contentPadding: EdgeInsets.symmetric(
@@ -241,11 +238,9 @@ class _ZetaDateInputState extends State<ZetaDateInput> {
             hintStyle: _size == ZetaDateInputSize.small
                 ? ZetaTextStyles.bodyXSmall.copyWith(
                     color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
-                    height: 1.5,
                   )
                 : ZetaTextStyles.bodyMedium.copyWith(
                     color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
-                    height: 1.5,
                   ),
             filled: !widget.enabled || hasError ? true : null,
             fillColor: widget.enabled
