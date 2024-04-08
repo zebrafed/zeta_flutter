@@ -22,6 +22,28 @@ Future<bool?> showZetaDialog<T>(
   bool barrierDismissible = true,
 }) {
   final zeta = Zeta.of(context);
+  final primaryButton = primaryButtonLabel == null
+      ? null
+      : ZetaButton(
+          label: primaryButtonLabel,
+          onPressed: onPrimaryButtonPressed ?? () => Navigator.of(context).pop(true),
+          borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+        );
+  final secondaryButton = secondaryButtonLabel == null
+      ? null
+      : ZetaButton(
+          type: ZetaButtonType.outlineSubtle,
+          label: secondaryButtonLabel,
+          onPressed: onSecondaryButtonPressed ?? () => Navigator.of(context).pop(false),
+          borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+        );
+  final tertiaryButton = tertiaryButtonLabel == null
+      ? null
+      : TextButton(
+          onPressed: onTertiaryButtonPressed,
+          child: Text(tertiaryButtonLabel),
+        );
+  final hasButton = primaryButton != null || secondaryButton != null || tertiaryButton != null;
   return showDialog<bool?>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -52,73 +74,81 @@ Future<bool?> showZetaDialog<T>(
               ],
             )
           : null,
+      titlePadding: context.deviceType == DeviceType.mobilePortrait
+          ? null
+          : const EdgeInsets.only(
+              left: ZetaSpacing.x10,
+              right: ZetaSpacing.x10,
+              top: ZetaSpacing.m,
+            ),
       titleTextStyle: zetaTextTheme.headlineSmall?.copyWith(
         color: zeta.colors.textDefault,
       ),
       content: Text(message),
-      contentTextStyle: context.deviceType == DeviceType.mobilePortrait
-          ? zetaTextTheme.bodySmall?.copyWith(
-              color: zeta.colors.textDefault,
-            )
-          : zetaTextTheme.bodyMedium?.copyWith(
-              color: zeta.colors.textDefault,
+      contentPadding: context.deviceType == DeviceType.mobilePortrait
+          ? null
+          : const EdgeInsets.only(
+              left: ZetaSpacing.x10,
+              right: ZetaSpacing.x10,
+              top: ZetaSpacing.s,
+              bottom: ZetaSpacing.m,
             ),
+      contentTextStyle: context.deviceType == DeviceType.mobilePortrait
+          ? zetaTextTheme.bodySmall?.copyWith(color: zeta.colors.textDefault)
+          : zetaTextTheme.bodyMedium?.copyWith(color: zeta.colors.textDefault),
       actions: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (tertiaryButtonLabel == null)
-              Row(
-                children: [
-                  if (secondaryButtonLabel != null)
-                    Expanded(
-                      child: ZetaButton(
-                        type: ZetaButtonType.outlineSubtle,
-                        label: secondaryButtonLabel,
-                        onPressed: onSecondaryButtonPressed ?? () => Navigator.of(context).pop(false),
-                        borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
-                      ),
-                    ),
-                  if (primaryButtonLabel != null && secondaryButtonLabel != null) const SizedBox(width: ZetaSpacing.m),
-                  if (primaryButtonLabel != null)
-                    Expanded(
-                      child: ZetaButton(
-                        label: primaryButtonLabel,
-                        onPressed: onPrimaryButtonPressed ?? () => Navigator.of(context).pop(true),
-                        borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
-                      ),
-                    ),
-                ],
-              ),
-            if (tertiaryButtonLabel != null) ...[
-              if (primaryButtonLabel != null)
-                ZetaButton(
-                  label: primaryButtonLabel,
-                  onPressed: onPrimaryButtonPressed ?? () => Navigator.of(context).pop(true),
-                  borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+        if (context.deviceType == DeviceType.mobilePortrait)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (hasButton) const SizedBox(height: ZetaSpacing.m),
+              if (tertiaryButton == null)
+                Row(
+                  children: [
+                    if (secondaryButton != null) Expanded(child: secondaryButton),
+                    if (primaryButton != null && secondaryButton != null) const SizedBox(width: ZetaSpacing.b),
+                    if (primaryButton != null) Expanded(child: primaryButton),
+                  ],
+                )
+              else ...[
+                if (primaryButton != null) primaryButton,
+                if (primaryButton != null && secondaryButton != null) const SizedBox(height: ZetaSpacing.s),
+                if (secondaryButton != null) secondaryButton,
+                if (primaryButton != null || secondaryButton != null) const SizedBox(height: ZetaSpacing.xs),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [tertiaryButton],
                 ),
-              if (primaryButtonLabel != null && secondaryButtonLabel != null) const SizedBox(height: ZetaSpacing.s),
-              if (secondaryButtonLabel != null)
-                ZetaButton(
-                  type: ZetaButtonType.outlineSubtle,
-                  label: secondaryButtonLabel,
-                  onPressed: onSecondaryButtonPressed ?? () => Navigator.of(context).pop(false),
-                  borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
-                ),
-              if (primaryButtonLabel != null || secondaryButtonLabel != null) const SizedBox(height: ZetaSpacing.xs),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: onTertiaryButtonPressed,
-                    child: Text(tertiaryButtonLabel),
-                  ),
-                ],
-              ),
+              ],
             ],
-          ],
-        ),
+          )
+        else
+          Row(
+            children: [
+              if (tertiaryButton != null) tertiaryButton,
+              if (primaryButton != null || secondaryButton != null) ...[
+                const SizedBox(width: ZetaSpacing.m),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (secondaryButton != null) secondaryButton,
+                      if (primaryButton != null && secondaryButton != null) const SizedBox(width: ZetaSpacing.b),
+                      if (primaryButton != null) primaryButton,
+                      // const SizedBox(width: ZetaSpacing.s),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
       ],
+      actionsPadding: context.deviceType == DeviceType.mobilePortrait
+          ? null
+          : const EdgeInsets.symmetric(
+              horizontal: ZetaSpacing.x10,
+              vertical: ZetaSpacing.m,
+            ),
     ),
   );
 }
