@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:zeta_example/widgets.dart';
 import 'package:zeta_flutter/zeta_flutter.dart';
 
-class DialogExample extends StatefulWidget {
+class DialogExample extends StatelessWidget {
   static const String name = 'Dialog';
 
   const DialogExample({Key? key}) : super(key: key);
 
-  @override
-  State<DialogExample> createState() => _DialogExampleState();
-}
-
-class _DialogExampleState extends State<DialogExample> {
   @override
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);

@@ -1,13 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../zeta_flutter.dart';
 
+/// [ZetaDialogHeaderAlignment]
 enum ZetaDialogHeaderAlignment {
+  /// [left]
   left,
+
+  /// [center]
   center,
 }
 
-Future<bool?> showZetaDialog<T>(
+/// [showZetaDialog]
+Future<bool?> showZetaDialog(
   BuildContext context, {
+  Zeta? zeta,
   ZetaDialogHeaderAlignment headerAlignment = ZetaDialogHeaderAlignment.center,
   Widget? icon,
   String? title,
@@ -20,34 +27,83 @@ Future<bool?> showZetaDialog<T>(
   VoidCallback? onTertiaryButtonPressed,
   bool rounded = true,
   bool barrierDismissible = true,
-}) {
-  final zeta = Zeta.of(context);
-  final primaryButton = primaryButtonLabel == null
-      ? null
-      : ZetaButton(
-          label: primaryButtonLabel,
-          onPressed: onPrimaryButtonPressed ?? () => Navigator.of(context).pop(true),
-          borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
-        );
-  final secondaryButton = secondaryButtonLabel == null
-      ? null
-      : ZetaButton(
-          type: ZetaButtonType.outlineSubtle,
-          label: secondaryButtonLabel,
-          onPressed: onSecondaryButtonPressed ?? () => Navigator.of(context).pop(false),
-          borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
-        );
-  final tertiaryButton = tertiaryButtonLabel == null
-      ? null
-      : TextButton(
-          onPressed: onTertiaryButtonPressed,
-          child: Text(tertiaryButtonLabel),
-        );
-  final hasButton = primaryButton != null || secondaryButton != null || tertiaryButton != null;
-  return showDialog<bool?>(
-    context: context,
-    barrierDismissible: barrierDismissible,
-    builder: (context) => AlertDialog(
+}) =>
+    showDialog<bool?>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (_) => _ZetaDialog(
+        zeta: zeta,
+        headerAlignment: headerAlignment,
+        icon: icon,
+        title: title,
+        message: message,
+        primaryButtonLabel: primaryButtonLabel,
+        onPrimaryButtonPressed: onPrimaryButtonPressed,
+        secondaryButtonLabel: secondaryButtonLabel,
+        onSecondaryButtonPressed: onSecondaryButtonPressed,
+        tertiaryButtonLabel: tertiaryButtonLabel,
+        onTertiaryButtonPressed: onTertiaryButtonPressed,
+        rounded: rounded,
+      ),
+    );
+
+class _ZetaDialog extends StatelessWidget {
+  const _ZetaDialog({
+    this.headerAlignment = ZetaDialogHeaderAlignment.center,
+    this.icon,
+    this.title,
+    required this.message,
+    this.primaryButtonLabel,
+    this.onPrimaryButtonPressed,
+    this.secondaryButtonLabel,
+    this.onSecondaryButtonPressed,
+    this.tertiaryButtonLabel,
+    this.onTertiaryButtonPressed,
+    this.rounded = true,
+    this.zeta,
+  });
+
+  final ZetaDialogHeaderAlignment headerAlignment;
+  final Widget? icon;
+  final String? title;
+  final String message;
+  final String? primaryButtonLabel;
+  final VoidCallback? onPrimaryButtonPressed;
+  final String? secondaryButtonLabel;
+  final VoidCallback? onSecondaryButtonPressed;
+  final String? tertiaryButtonLabel;
+  final VoidCallback? onTertiaryButtonPressed;
+  final bool rounded;
+  final Zeta? zeta;
+
+  @override
+  Widget build(BuildContext context) {
+    final zeta = this.zeta ?? Zeta.of(context);
+    final primaryButton = primaryButtonLabel == null
+        ? null
+        : ZetaButton(
+            zeta: zeta,
+            label: primaryButtonLabel!,
+            onPressed: onPrimaryButtonPressed ?? () => Navigator.of(context).pop(true),
+            borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+          );
+    final secondaryButton = secondaryButtonLabel == null
+        ? null
+        : ZetaButton.outlineSubtle(
+            zeta: zeta,
+            label: secondaryButtonLabel!,
+            onPressed: onSecondaryButtonPressed ?? () => Navigator.of(context).pop(false),
+            borderType: rounded ? ZetaWidgetBorder.rounded : ZetaWidgetBorder.sharp,
+          );
+    final tertiaryButton = tertiaryButtonLabel == null
+        ? null
+        : TextButton(
+            onPressed: onTertiaryButtonPressed,
+            child: Text(tertiaryButtonLabel!),
+          );
+    final hasButton = primaryButton != null || secondaryButton != null || tertiaryButton != null;
+
+    return AlertDialog(
       surfaceTintColor: zeta.colors.surfacePrimary,
       shape: const RoundedRectangleBorder(borderRadius: ZetaRadius.large),
       title: icon != null || title != null
@@ -65,7 +121,7 @@ Future<bool?> showZetaDialog<T>(
                   ),
                 if (title != null)
                   Text(
-                    title,
+                    title!,
                     textAlign: switch (headerAlignment) {
                       ZetaDialogHeaderAlignment.left => TextAlign.left,
                       ZetaDialogHeaderAlignment.center => TextAlign.center,
@@ -135,7 +191,6 @@ Future<bool?> showZetaDialog<T>(
                       if (secondaryButton != null) secondaryButton,
                       if (primaryButton != null && secondaryButton != null) const SizedBox(width: ZetaSpacing.b),
                       if (primaryButton != null) primaryButton,
-                      // const SizedBox(width: ZetaSpacing.s),
                     ],
                   ),
                 ),
@@ -149,6 +204,22 @@ Future<bool?> showZetaDialog<T>(
               horizontal: ZetaSpacing.x10,
               vertical: ZetaSpacing.m,
             ),
-    ),
-  );
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(EnumProperty<ZetaDialogHeaderAlignment>('headerAlignment', headerAlignment))
+      ..add(StringProperty('title', title))
+      ..add(StringProperty('message', message))
+      ..add(StringProperty('primaryButtonLabel', primaryButtonLabel))
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onPrimaryButtonPressed', onPrimaryButtonPressed))
+      ..add(StringProperty('secondaryButtonLabel', secondaryButtonLabel))
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onSecondaryButtonPressed', onSecondaryButtonPressed))
+      ..add(StringProperty('tertiaryButtonLabel', tertiaryButtonLabel))
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onTertiaryButtonPressed', onTertiaryButtonPressed))
+      ..add(DiagnosticsProperty<bool>('rounded', rounded));
+  }
 }
