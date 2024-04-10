@@ -62,8 +62,7 @@ class ZetaStepper extends StatefulWidget {
   }
 }
 
-class _ZetaStepperState extends State<ZetaStepper>
-    with TickerProviderStateMixin {
+class _ZetaStepperState extends State<ZetaStepper> with TickerProviderStateMixin {
   late List<GlobalKey> _keys;
 
   @override
@@ -103,9 +102,7 @@ class _ZetaStepperState extends State<ZetaStepper>
         child: Center(
           child: switch (widget.steps[index].type) {
             ZetaStepType.complete => Icon(
-                widget.rounded
-                    ? ZetaIcons.check_mark_round
-                    : ZetaIcons.check_mark_sharp,
+                widget.rounded ? ZetaIcons.check_mark_round : ZetaIcons.check_mark_sharp,
                 color: _colors.textInverse,
               ),
             ZetaStepType.enabled || ZetaStepType.disabled => Text(
@@ -134,9 +131,7 @@ class _ZetaStepperState extends State<ZetaStepper>
         child: Center(
           child: switch (widget.steps[index].type) {
             ZetaStepType.complete => Icon(
-                widget.rounded
-                    ? ZetaIcons.check_mark_round
-                    : ZetaIcons.check_mark_sharp,
+                widget.rounded ? ZetaIcons.check_mark_round : ZetaIcons.check_mark_sharp,
                 color: _colors.textInverse,
               ),
             ZetaStepType.enabled || ZetaStepType.disabled => Text(
@@ -158,9 +153,7 @@ class _ZetaStepperState extends State<ZetaStepper>
       children: [
         AnimatedDefaultTextStyle(
           style: switch (widget.steps[index].type) {
-            ZetaStepType.enabled ||
-            ZetaStepType.complete =>
-              ZetaTextStyles.bodySmall.copyWith(
+            ZetaStepType.enabled || ZetaStepType.complete => ZetaTextStyles.bodySmall.copyWith(
                 color: _colors.textDefault,
               ),
             ZetaStepType.disabled => ZetaTextStyles.bodySmall.copyWith(
@@ -221,13 +214,10 @@ class _ZetaStepperState extends State<ZetaStepper>
                     ),
                   AnimatedDefaultTextStyle(
                     style: switch (widget.steps[index].type) {
-                      ZetaStepType.enabled ||
-                      ZetaStepType.complete =>
-                        ZetaTextStyles.titleLarge.copyWith(
+                      ZetaStepType.enabled || ZetaStepType.complete => ZetaTextStyles.titleLarge.copyWith(
                           color: _colors.textDefault,
                         ),
-                      ZetaStepType.disabled =>
-                        ZetaTextStyles.titleLarge.copyWith(
+                      ZetaStepType.disabled => ZetaTextStyles.titleLarge.copyWith(
                           color: _colors.textDisabled,
                         ),
                     },
@@ -254,9 +244,7 @@ class _ZetaStepperState extends State<ZetaStepper>
           firstCurve: const Interval(0, 0.6, curve: Curves.fastOutSlowIn),
           secondCurve: const Interval(0.4, 1, curve: Curves.fastOutSlowIn),
           sizeCurve: Curves.fastOutSlowIn,
-          crossFadeState: _isCurrent(index)
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
+          crossFadeState: _isCurrent(index) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: kThemeAnimationDuration,
         ),
       ],
@@ -284,11 +272,8 @@ class _ZetaStepperState extends State<ZetaStepper>
                   InkResponse(
                     containedInkWell: true,
                     borderRadius: ZetaRadius.minimal,
-                    onTap: widget.onStepTapped != null
-                        ? () => widget.onStepTapped?.call(index)
-                        : null,
-                    canRequestFocus:
-                        widget.steps[index].type != ZetaStepType.disabled,
+                    onTap: widget.onStepTapped != null ? () => widget.onStepTapped?.call(index) : null,
+                    canRequestFocus: widget.steps[index].type != ZetaStepType.disabled,
                     child: _getVerticalHeader(index),
                   ),
                   _getVerticalBody(index),
@@ -301,11 +286,8 @@ class _ZetaStepperState extends State<ZetaStepper>
             final children = [
               for (int index = 0; index < widget.steps.length; index += 1) ...[
                 InkResponse(
-                  onTap: widget.onStepTapped != null
-                      ? () => widget.onStepTapped?.call(index)
-                      : null,
-                  canRequestFocus:
-                      widget.steps[index].type != ZetaStepType.disabled,
+                  onTap: widget.onStepTapped != null ? () => widget.onStepTapped?.call(index) : null,
+                  canRequestFocus: widget.steps[index].type != ZetaStepType.disabled,
                   child: Column(
                     children: [
                       Center(
@@ -359,8 +341,7 @@ class _ZetaStepperState extends State<ZetaStepper>
                 Material(
                   color: Colors.transparent,
                   child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: ZetaSpacing.m),
+                    margin: const EdgeInsets.symmetric(horizontal: ZetaSpacing.m),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: children,

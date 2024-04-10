@@ -26,8 +26,7 @@ Widget stepperUseCase(BuildContext context) {
 
   final rounded = context.knobs.boolean(label: 'Rounded', initialValue: true);
 
-  final enabledContent =
-      context.knobs.boolean(label: 'Enabled Content', initialValue: true);
+  final enabledContent = context.knobs.boolean(label: 'Enabled Content', initialValue: true);
 
   return WidgetbookTestWidget(
     widget: StatefulBuilder(

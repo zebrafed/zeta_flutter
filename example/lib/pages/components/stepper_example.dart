@@ -37,8 +37,7 @@ class _StepperExampleState extends State<StepperExample> {
               height: 150,
               child: ZetaStepper(
                 currentStep: _roundedHorizontalStep,
-                onStepTapped: (index) =>
-                    setState(() => _roundedHorizontalStep = index),
+                onStepTapped: (index) => setState(() => _roundedHorizontalStep = index),
                 steps: [
                   ZetaStep(
                     type: _getForStepIndex(
@@ -71,8 +70,7 @@ class _StepperExampleState extends State<StepperExample> {
               child: ZetaStepper(
                 rounded: false,
                 currentStep: _sharpHorizontalStep,
-                onStepTapped: (index) =>
-                    setState(() => _sharpHorizontalStep = index),
+                onStepTapped: (index) => setState(() => _sharpHorizontalStep = index),
                 steps: [
                   ZetaStep(
                     type: _getForStepIndex(
