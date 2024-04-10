@@ -15,20 +15,11 @@ class ZetaStepper extends StatefulWidget {
   const ZetaStepper({
     required this.steps,
     required this.currentStep,
-    this.controller,
-    this.physics,
     this.type = ZetaStepperType.horizontal,
     this.onStepTapped,
     this.rounded = true,
     super.key,
   });
-
-  /// An object that can be used to control the position to which this scroll
-  /// view is scrolled.
-  ///
-  /// To control the initial scroll offset of the scroll view, provide a
-  /// [controller] with its [ScrollController.initialScrollOffset] property set.
-  final ScrollController? controller;
 
   /// The index into [steps] of the current step whose content is displayed.
   final int currentStep;
@@ -36,15 +27,6 @@ class ZetaStepper extends StatefulWidget {
   /// The callback called when a step is tapped, with its index passed as
   /// an argument.
   final ValueChanged<int>? onStepTapped;
-
-  /// How the stepper's scroll view should respond to user input.
-  ///
-  /// For example, determines how the scroll view continues to
-  /// animate after the user stops dragging the scroll view.
-  ///
-  /// If the stepper is contained within another scrollable it
-  /// can be helpful to set this property to [ClampingScrollPhysics].
-  final ScrollPhysics? physics;
 
   /// Whether the icons of the horizontal stepper to be rounded or square.
   final bool rounded;
@@ -69,8 +51,6 @@ class ZetaStepper extends StatefulWidget {
     properties
       ..add(IterableProperty<ZetaStep>('steps', steps))
       ..properties.add(IntProperty('currentStep', currentStep))
-      ..add(DiagnosticsProperty<ScrollController?>('controller', controller))
-      ..add(DiagnosticsProperty<ScrollPhysics?>('physics', physics))
       ..add(EnumProperty<ZetaStepperType>('type', type))
       ..add(
         ObjectFlagProperty<ValueChanged<int>?>.has(
@@ -270,11 +250,7 @@ class _ZetaStepperState extends State<ZetaStepper>
       children: <Widget>[
         AnimatedCrossFade(
           firstChild: Container(height: 0),
-          secondChild: Column(
-            children: [
-              widget.steps[index].content,
-            ],
-          ),
+          secondChild: widget.steps[index].content ?? const SizedBox(),
           firstCurve: const Interval(0, 0.6, curve: Curves.fastOutSlowIn),
           secondCurve: const Interval(0.4, 1, curve: Curves.fastOutSlowIn),
           sizeCurve: Curves.fastOutSlowIn,
@@ -298,16 +274,16 @@ class _ZetaStepperState extends State<ZetaStepper>
   @override
   Widget build(BuildContext context) {
     return switch (widget.type) {
-      ZetaStepperType.vertical => ListView(
-          controller: widget.controller,
-          shrinkWrap: true,
-          physics: widget.physics,
+      ZetaStepperType.vertical => Column(
           children: [
             for (int index = 0; index < widget.steps.length; index += 1)
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 key: _keys[index],
-                children: <Widget>[
+                children: [
                   InkResponse(
+                    containedInkWell: true,
+                    borderRadius: ZetaRadius.minimal,
                     onTap: widget.onStepTapped != null
                         ? () => widget.onStepTapped?.call(index)
                         : null,
@@ -373,7 +349,7 @@ class _ZetaStepperState extends State<ZetaStepper>
                 Visibility(
                   maintainState: true,
                   visible: i == widget.currentStep,
-                  child: widget.steps[i].content,
+                  child: widget.steps[i].content ?? const SizedBox(),
                 ),
               );
             }
@@ -392,19 +368,13 @@ class _ZetaStepperState extends State<ZetaStepper>
                   ),
                 ),
                 Expanded(
-                  child: ListView(
-                    controller: widget.controller,
-                    physics: widget.physics,
-                    children: <Widget>[
-                      AnimatedSize(
-                        curve: Curves.fastOutSlowIn,
-                        duration: kThemeAnimationDuration,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: stepPanels,
-                        ),
-                      ),
-                    ],
+                  child: AnimatedSize(
+                    curve: Curves.fastOutSlowIn,
+                    duration: kThemeAnimationDuration,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: stepPanels,
+                    ),
                   ),
                 ),
               ],
@@ -422,13 +392,13 @@ class ZetaStep {
   /// Creates a step for a [ZetaStepper].
   const ZetaStep({
     required this.title,
-    required this.content,
+    this.content,
     this.subtitle,
     this.type = ZetaStepType.disabled,
   });
 
   /// The content of the step that appears below the [title] and [subtitle].
-  final Widget content;
+  final Widget? content;
 
   /// The subtitle of the step that appears above the title.
   final Widget? subtitle;

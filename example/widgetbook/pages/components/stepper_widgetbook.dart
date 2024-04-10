@@ -26,6 +26,9 @@ Widget stepperUseCase(BuildContext context) {
 
   final rounded = context.knobs.boolean(label: 'Rounded', initialValue: true);
 
+  final enabledContent =
+      context.knobs.boolean(label: 'Enabled Content', initialValue: true);
+
   return WidgetbookTestWidget(
     widget: StatefulBuilder(
       builder: (context, setState) {
@@ -43,17 +46,17 @@ Widget stepperUseCase(BuildContext context) {
               ZetaStep(
                 type: getForStepIndex(0),
                 title: Text("Title"),
-                content: Text("Content"),
+                content: enabledContent ? Text("Content") : null,
               ),
               ZetaStep(
                 type: getForStepIndex(1),
                 title: Text("Title 2"),
-                content: Text("Content 2"),
+                content: enabledContent ? Text("Content 2") : null,
               ),
               ZetaStep(
                 type: getForStepIndex(2),
                 title: Text("Title 3"),
-                content: Text("Content 3"),
+                content: enabledContent ? Text("Content 3") : null,
               ),
             ],
           ),

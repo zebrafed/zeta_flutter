@@ -54,7 +54,6 @@ class _StepperExampleState extends State<StepperExample> {
                       stepIndex: 1,
                     ),
                     title: Text("Title 2"),
-                    content: Text("Content 2"),
                   ),
                   ZetaStep(
                     type: _getForStepIndex(
