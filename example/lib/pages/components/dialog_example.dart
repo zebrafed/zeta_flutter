@@ -18,6 +18,7 @@ class DialogExample extends StatelessWidget {
             TextButton(
               onPressed: () => showZetaDialog(
                 context,
+                useRootNavigator: false,
                 title: 'Dialog Title',
                 icon: Icon(
                   ZetaIcons.warning_round,
@@ -32,6 +33,7 @@ class DialogExample extends StatelessWidget {
             TextButton(
               onPressed: () => showZetaDialog(
                 context,
+                useRootNavigator: false,
                 title: 'Dialog Title',
                 icon: Icon(
                   ZetaIcons.warning_round,
@@ -47,6 +49,7 @@ class DialogExample extends StatelessWidget {
             TextButton(
               onPressed: () => showZetaDialog(
                 context,
+                useRootNavigator: false,
                 title: 'Dialog Title',
                 icon: Icon(
                   ZetaIcons.warning_round,
@@ -64,6 +67,7 @@ class DialogExample extends StatelessWidget {
             TextButton(
               onPressed: () => showZetaDialog(
                 context,
+                useRootNavigator: false,
                 title: 'Dialog Title',
                 icon: Icon(
                   ZetaIcons.warning_round,

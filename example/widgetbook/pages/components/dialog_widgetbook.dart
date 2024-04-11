@@ -31,6 +31,7 @@ Widget dialogUseCase(BuildContext context) {
             TextButton(
               onPressed: () => showZetaDialog(
                 context,
+                useRootNavigator: false,
                 zeta: zeta,
                 rounded: rounded,
                 barrierDismissible: barrierDismissible,
@@ -48,6 +49,7 @@ Widget dialogUseCase(BuildContext context) {
             TextButton(
               onPressed: () => showZetaDialog(
                 context,
+                useRootNavigator: false,
                 zeta: zeta,
                 rounded: rounded,
                 barrierDismissible: barrierDismissible,
@@ -66,6 +68,7 @@ Widget dialogUseCase(BuildContext context) {
             TextButton(
               onPressed: () => showZetaDialog(
                 context,
+                useRootNavigator: false,
                 zeta: zeta,
                 rounded: rounded,
                 barrierDismissible: barrierDismissible,

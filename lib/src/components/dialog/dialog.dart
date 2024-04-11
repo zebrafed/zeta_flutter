@@ -27,10 +27,12 @@ Future<bool?> showZetaDialog(
   VoidCallback? onTertiaryButtonPressed,
   bool rounded = true,
   bool barrierDismissible = true,
+  bool useRootNavigator = true,
 }) =>
     showDialog<bool?>(
       context: context,
       barrierDismissible: barrierDismissible,
+      useRootNavigator: useRootNavigator,
       builder: (_) => _ZetaDialog(
         zeta: zeta,
         headerAlignment: headerAlignment,
