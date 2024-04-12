@@ -10,12 +10,14 @@ import 'package:zeta_example/pages/components/button_example.dart';
 import 'package:zeta_example/pages/components/checkbox_example.dart';
 import 'package:zeta_example/pages/components/chip_example.dart';
 import 'package:zeta_example/pages/components/date_input_example.dart';
+import 'package:zeta_example/pages/components/dialog_example.dart';
 import 'package:zeta_example/pages/components/dialpad_example.dart';
 import 'package:zeta_example/pages/components/dropdown_example.dart';
 import 'package:zeta_example/pages/components/list_item_example.dart';
 import 'package:zeta_example/pages/components/navigation_bar_example.dart';
 import 'package:zeta_example/pages/components/phone_input_example.dart';
 import 'package:zeta_example/pages/components/radio_example.dart';
+import 'package:zeta_example/pages/components/stepper_example.dart';
 import 'package:zeta_example/pages/components/switch_example.dart';
 import 'package:zeta_example/pages/components/snackbar_example.dart';
 import 'package:zeta_example/pages/components/tabs_example.dart';
@@ -52,12 +54,14 @@ final List<Component> components = [
   Component(DropdownExample.name, (context) => const DropdownExample()),
   Component(ProgressExample.name, (context) => const ProgressExample()),
   Component(SnackBarExample.name, (context) => const SnackBarExample()),
+  Component(StepperExample.name, (context) => const StepperExample()),
   Component(TabsExample.name, (context) => const TabsExample()),
   Component(DialPadExample.name, (context) => const DialPadExample()),
   Component(RadioButtonExample.name, (context) => const RadioButtonExample()),
   Component(SwitchExample.name, (context) => const SwitchExample()),
   Component(DateInputExample.name, (context) => const DateInputExample()),
   Component(PhoneInputExample.name, (context) => const PhoneInputExample()),
+  Component(DialogExample.name, (context) => const DialogExample()),
 ];
 
 final List<Component> theme = [

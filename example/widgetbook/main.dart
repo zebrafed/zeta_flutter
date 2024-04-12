@@ -4,6 +4,7 @@ import 'package:zeta_flutter/zeta_flutter.dart';
 
 import 'pages/assets/icon_widgetbook.dart';
 import 'pages/components/accordion_widgetbook.dart';
+import 'pages/components/app_bar_widgetbook.dart';
 import 'pages/components/avatar_widgetbook.dart';
 import 'pages/components/badges_widgetbook.dart';
 import 'pages/components/banner_widgetbook.dart';
@@ -14,6 +15,7 @@ import 'pages/components/checkbox_widgetbook.dart';
 import 'pages/components/chip_widgetbook.dart';
 import 'pages/components/date_input_widgetbook.dart';
 import 'pages/components/dial_pad_widgetbook.dart';
+import 'pages/components/dialog_widgetbook.dart';
 import 'pages/components/dropdown_widgetbook.dart';
 import 'pages/components/in_page_banner_widgetbook.dart';
 import 'pages/components/list_item_widgetbook.dart';
@@ -22,6 +24,7 @@ import 'pages/components/password_input_widgetbook.dart';
 import 'pages/components/phone_input_widgetbook.dart';
 import 'pages/components/progress_widgetbook.dart';
 import 'pages/components/radio_widgetbook.dart';
+import 'pages/components/stepper_widgetbook.dart';
 import 'pages/components/switch_widgetbook.dart';
 import 'pages/components/snack_bar_widgetbook.dart';
 import 'pages/components/tabs_widgetbook.dart';
@@ -45,6 +48,19 @@ class HotReload extends StatelessWidget {
           name: 'Components',
           isInitiallyExpanded: false,
           children: [
+            WidgetbookComponent(
+              name: 'App Bar',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Default',
+                  builder: (context) => defaultAppBarUseCase(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Search',
+                  builder: (context) => searchAppBarUseCase(context),
+                ),
+              ],
+            ),
             WidgetbookComponent(
               name: 'Badge',
               useCases: [
@@ -103,6 +119,11 @@ class HotReload extends StatelessWidget {
             WidgetbookUseCase(name: 'Date Input', builder: (context) => dateInputUseCase(context)),
             WidgetbookUseCase(name: 'Tabs', builder: (context) => tabsUseCase(context)),
             WidgetbookUseCase(name: 'Phone Input', builder: (context) => phoneInputUseCase(context)),
+            WidgetbookUseCase(
+              name: 'Stepper',
+              builder: (context) => stepperUseCase(context),
+            ),
+            WidgetbookUseCase(name: 'Dialog', builder: (context) => dialogUseCase(context)),
           ]..sort((a, b) => a.name.compareTo(b.name)),
         ),
         WidgetbookCategory(
