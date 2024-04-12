@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../zeta_flutter.dart';
+import 'countries.dart';
+import 'countries_dropdown.dart';
 
 /// ZetaPhoneInput allows entering phone numbers.
 class ZetaPhoneInput extends StatefulWidget {
@@ -17,6 +19,7 @@ class ZetaPhoneInput extends StatefulWidget {
     this.onChanged,
     this.countryDialCode,
     this.phoneNumber,
+    this.countries,
   });
 
   /// If provided, displays a label above the input field.
@@ -25,7 +28,7 @@ class ZetaPhoneInput extends StatefulWidget {
   /// If provided, displays a hint below the input field.
   final String? hint;
 
-  /// Determines if the input field should be enabled (default) or disabled.
+  /// Determines if the inputs should be enabled (default) or disabled.
   final bool enabled;
 
   /// Determines if the input field corners are rounded (default) or sharp.
@@ -41,13 +44,16 @@ class ZetaPhoneInput extends StatefulWidget {
   final String? errorText;
 
   /// A callback, which provides the entered phone number.
-  final void Function(String?)? onChanged;
+  final void Function(Map<String, String>?)? onChanged;
 
   /// The initial value for the country dial code including leading +
   final String? countryDialCode;
 
   /// The initial value for the phone number
   final String? phoneNumber;
+
+  /// List of countries ISO 3166-1 alpha-2 codes
+  final List<String>? countries;
 
   @override
   State<ZetaPhoneInput> createState() => _ZetaPhoneInputState();
@@ -61,32 +67,34 @@ class ZetaPhoneInput extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DiagnosticsProperty<bool>('hasError', hasError))
       ..add(StringProperty('errorText', errorText))
-      ..add(ObjectFlagProperty<void Function(String? p1)?>.has('onChanged', onChanged))
+      ..add(ObjectFlagProperty<void Function(Map<String, String>? p1)?>.has('onChanged', onChanged))
       ..add(StringProperty('countryDialCode', countryDialCode))
-      ..add(StringProperty('phoneNumber', phoneNumber));
+      ..add(StringProperty('phoneNumber', phoneNumber))
+      ..add(IterableProperty<String>('countries', countries));
   }
 }
 
 class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
-  final _controller = TextEditingController();
   bool _hasError = false;
-  late final List<ZetaDropdownItem> _countries;
-  final _separator = ' ' * 12;
-  late ZetaDropdownItem _selectedCountry;
+  late final List<Country> _countries;
+  late Country _selectedCountry;
   late String _phoneNumber;
-
-  String _getCountryDialCode(ZetaDropdownItem item) => item.value.split(RegExp(r'\s+')).first;
 
   @override
   void initState() {
     super.initState();
-    _countries = _allCountries.keys
-        .map(
-          (key) => ZetaDropdownItem(value: '$key$_separator${_allCountries[key]}'),
-        )
-        .toList();
+    _countries = widget.countries?.isEmpty ?? true
+        ? Countries.list
+        : Countries.list.where((country) => widget.countries!.contains(country.isoCode)).toList();
+    if (widget.countries?.isNotEmpty ?? false) {
+      _countries.sort(
+        (a, b) => widget.countries!.indexOf(a.isoCode).compareTo(
+              widget.countries!.indexOf(b.isoCode),
+            ),
+      );
+    }
     _selectedCountry = _countries.firstWhereOrNull(
-          (item) => _getCountryDialCode(item) == widget.countryDialCode,
+          (country) => country.dialCode == widget.countryDialCode,
         ) ??
         _countries.first;
     _phoneNumber = widget.phoneNumber ?? '';
@@ -99,20 +107,19 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
     _hasError = widget.hasError;
   }
 
-  void _onChanged({ZetaDropdownItem? selectedCountry, String? phoneNumber}) {
+  void _onChanged({Country? selectedCountry, String? phoneNumber}) {
     setState(() {
       if (selectedCountry != null) _selectedCountry = selectedCountry;
       if (phoneNumber != null) _phoneNumber = phoneNumber;
     });
     widget.onChanged?.call(
-      _phoneNumber.isEmpty ? '' : '${_getCountryDialCode(_selectedCountry)} $_phoneNumber',
+      _phoneNumber.isEmpty
+          ? {}
+          : {
+              'countryDialCode': _selectedCountry.dialCode,
+              'phoneNumber': _phoneNumber,
+            },
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -140,53 +147,128 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
           ),
         SizedBox(
           width: double.infinity,
-          child: Stack(
+          child: Row(
             children: [
-              ZetaDropdown(
-                items: _countries,
-                selectedItem: _selectedCountry,
-                onChange: (value) => _onChanged(selectedCountry: value),
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 63),
-                  Expanded(
-                    child: TextFormField(
-                      initialValue: widget.phoneNumber,
-                      enabled: widget.enabled,
-                      controller: _controller,
-                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\d\s\-]'))],
-                      keyboardType: TextInputType.phone,
-                      onChanged: (value) => _onChanged(phoneNumber: value),
-                      style: ZetaTextStyles.bodyMedium,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 10,
-                        ),
-                        hintStyle: ZetaTextStyles.bodyMedium.copyWith(
-                          color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
-                        ),
-                        filled: true,
-                        fillColor: widget.enabled
-                            ? _hasError
-                                ? zeta.colors.red.shade10
-                                : zeta.colors.surfacePrimary
-                            : zeta.colors.cool.shade30,
-                        enabledBorder: _hasError
-                            ? _errorInputBorder(zeta, rounded: widget.rounded)
-                            : _defaultInputBorder(zeta, rounded: widget.rounded),
-                        focusedBorder: _hasError
-                            ? _errorInputBorder(zeta, rounded: widget.rounded)
-                            : _focusedInputBorder(zeta, rounded: widget.rounded),
-                        disabledBorder: _defaultInputBorder(zeta, rounded: widget.rounded),
-                        errorBorder: _errorInputBorder(zeta, rounded: widget.rounded),
-                        focusedErrorBorder: _errorInputBorder(zeta, rounded: widget.rounded),
-                      ),
+              SizedBox(
+                width: 64,
+                height: 48,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: widget.enabled ? zeta.colors.surfacePrimary : zeta.colors.cool.shade30,
+                    borderRadius: widget.rounded
+                        ? const BorderRadius.only(
+                            topLeft: Radius.circular(ZetaSpacing.xxs),
+                            bottomLeft: Radius.circular(ZetaSpacing.xxs),
+                          )
+                        : ZetaRadius.none,
+                    border: Border(
+                      top: BorderSide(color: zeta.colors.cool.shade40),
+                      bottom: BorderSide(color: zeta.colors.cool.shade40),
+                      left: BorderSide(color: zeta.colors.cool.shade40),
                     ),
                   ),
-                ],
+                  child: CountriesDropdown<Country>(
+                    enabled: widget.enabled,
+                    button: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: ZetaSpacing.x2_5,
+                          ),
+                          child: Image.asset(
+                            _selectedCountry.flagUri,
+                            package: 'zeta_flutter',
+                            width: 26,
+                            height: 18,
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                        Icon(
+                          widget.rounded ? ZetaIcons.expand_more_round : ZetaIcons.expand_more_sharp,
+                          color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+                          size: ZetaSpacing.x5,
+                        ),
+                      ],
+                    ),
+                    items: _countries
+                        .map(
+                          (country) => DropdownMenuItem<Country>(
+                            value: country,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(country.dialCode),
+                                ),
+                                Expanded(
+                                  child: Text(country.name),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) => _onChanged(selectedCountry: value),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TextFormField(
+                  maxLength: 20,
+                  initialValue: widget.phoneNumber,
+                  enabled: widget.enabled,
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\d\s\-]'))],
+                  keyboardType: TextInputType.phone,
+                  onChanged: (value) => _onChanged(phoneNumber: value),
+                  style: ZetaTextStyles.bodyMedium.copyWith(
+                    color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+                  ),
+                  decoration: InputDecoration(
+                    counterText: '',
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
+                    hintStyle: ZetaTextStyles.bodyMedium.copyWith(
+                      color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+                    ),
+                    prefixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: ZetaSpacing.xs),
+                          child: Text(
+                            _selectedCountry.dialCode,
+                            style: ZetaTextStyles.bodyMedium.copyWith(
+                              color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    prefixIconConstraints: const BoxConstraints(
+                      minHeight: ZetaSpacing.x12,
+                      minWidth: ZetaSpacing.x10,
+                    ),
+                    filled: true,
+                    fillColor: widget.enabled
+                        ? _hasError
+                            ? zeta.colors.red.shade10
+                            : zeta.colors.surfacePrimary
+                        : zeta.colors.cool.shade30,
+                    enabledBorder: _hasError
+                        ? _errorInputBorder(zeta, rounded: widget.rounded)
+                        : _defaultInputBorder(zeta, rounded: widget.rounded),
+                    focusedBorder: _hasError
+                        ? _errorInputBorder(zeta, rounded: widget.rounded)
+                        : _focusedInputBorder(zeta, rounded: widget.rounded),
+                    disabledBorder: _defaultInputBorder(zeta, rounded: widget.rounded),
+                    errorBorder: _errorInputBorder(zeta, rounded: widget.rounded),
+                    focusedErrorBorder: _errorInputBorder(zeta, rounded: widget.rounded),
+                  ),
+                ),
               ),
             ],
           ),
@@ -263,8 +345,3 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
         borderSide: BorderSide(color: zeta.colors.red.shade50),
       );
 }
-
-final _allCountries = {
-  '+1': 'USA',
-  '+359': 'Bulgaria',
-};

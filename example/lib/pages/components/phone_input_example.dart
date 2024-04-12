@@ -36,6 +36,7 @@ class _PhoneInputExampleState extends State<PhoneInputExample> {
                   if (value?.isEmpty ?? true) setState(() => _errorText = null);
                   print(value);
                 },
+                countries: ['US', 'GB', 'DE', 'AT', 'FR', 'IT', 'BG'],
               ),
             ),
             Divider(color: Colors.grey[200]),
@@ -48,6 +49,8 @@ class _PhoneInputExampleState extends State<PhoneInputExample> {
               child: ZetaPhoneInput(
                 label: 'Phone number',
                 hint: 'Enter your phone number',
+                countryDialCode: '+44',
+                phoneNumber: '987654321',
                 hasError: _errorText != null,
                 errorText: _errorText,
                 onChanged: (value) {
