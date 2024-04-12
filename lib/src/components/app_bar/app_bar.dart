@@ -249,7 +249,8 @@ class _SearchField extends StatefulWidget {
   }
 }
 
-class _SearchFieldState extends State<_SearchField> with SingleTickerProviderStateMixin {
+class _SearchFieldState extends State<_SearchField>
+    with SingleTickerProviderStateMixin {
   late final _animationController = AnimationController(
     vsync: this,
     duration: kThemeAnimationDuration,
@@ -269,7 +270,8 @@ class _SearchFieldState extends State<_SearchField> with SingleTickerProviderSta
 
   void _onFocusChanged() {
     final text = widget.searchController?.text ?? '';
-    final shouldCloseSearch = _isSearching && text.isEmpty && !_textFocusNode.hasFocus;
+    final shouldCloseSearch =
+        _isSearching && text.isEmpty && !_textFocusNode.hasFocus;
 
     if (shouldCloseSearch) _closeSearch();
   }
@@ -342,8 +344,9 @@ class _SearchFieldState extends State<_SearchField> with SingleTickerProviderSta
       clipBehavior: Clip.none,
       children: [
         Row(
-          mainAxisAlignment:
-              widget.type == ZetaAppBarType.centeredTitle ? MainAxisAlignment.center : MainAxisAlignment.start,
+          mainAxisAlignment: widget.type == ZetaAppBarType.centeredTitle
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.start,
           children: [
             widget.child ?? const SizedBox(),
           ],

@@ -17,7 +17,9 @@ class _AppBarExampleState extends State<AppBarExample> {
   late final _searchController = AppBarSearchController();
 
   void _showHideSearch() {
-    _searchController.isEnabled ? _searchController.closeSearch() : _searchController.startSearch();
+    _searchController.isEnabled
+        ? _searchController.closeSearch()
+        : _searchController.startSearch();
   }
 
   @override
@@ -135,7 +137,8 @@ class _AppBarExampleState extends State<AppBarExample> {
                         'Example'
                       ];
 
-                      var generatedText = sampleTexts[Random().nextInt(sampleTexts.length)];
+                      var generatedText =
+                          sampleTexts[Random().nextInt(sampleTexts.length)];
 
                       _searchController.text = generatedText;
                     },
