@@ -10,8 +10,7 @@ Widget defaultAppBarUseCase(BuildContext context) {
   return WidgetbookTestWidget(
     widget: StatefulBuilder(
       builder: (context, setState) {
-        final title =
-            context.knobs.string(label: "Title", initialValue: "Title");
+        final title = context.knobs.string(label: "Title", initialValue: "Title");
 
         final type = context.knobs.list(
           label: "Type",
@@ -146,15 +145,9 @@ class _SearchUseCaseState extends State<_SearchUseCase> {
       searchController: searchController,
       onSearchMicrophoneIconPressed: enabledSpeechRecognition
           ? () {
-              var sampleTexts = [
-                'This is a sample text',
-                'Another sample',
-                'Speech recognition text',
-                'Example'
-              ];
+              var sampleTexts = ['This is a sample text', 'Another sample', 'Speech recognition text', 'Example'];
 
-              var generatedText =
-                  sampleTexts[Random().nextInt(sampleTexts.length)];
+              var generatedText = sampleTexts[Random().nextInt(sampleTexts.length)];
 
               searchController.text = generatedText;
             }
@@ -162,9 +155,7 @@ class _SearchUseCaseState extends State<_SearchUseCase> {
       actions: [
         IconButton(
             onPressed: () {
-              searchController.isEnabled
-                  ? searchController.closeSearch()
-                  : searchController.startSearch();
+              searchController.isEnabled ? searchController.closeSearch() : searchController.startSearch();
             },
             icon: Icon(ZetaIcons.search_round)),
       ],
