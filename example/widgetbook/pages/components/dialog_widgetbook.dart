@@ -3,6 +3,7 @@ import 'package:widgetbook/widgetbook.dart';
 import 'package:zeta_flutter/zeta_flutter.dart';
 
 import '../../test/test_components.dart';
+import '../../utils/utils.dart';
 
 Widget dialogUseCase(BuildContext context) {
   final zeta = Zeta.of(context);
@@ -38,7 +39,7 @@ Widget dialogUseCase(BuildContext context) {
                 headerAlignment: headerAlignment,
                 title: title,
                 icon: Icon(
-                  ZetaIcons.warning_round,
+                  iconKnob(context, rounded: rounded),
                   color: zeta.colors.warning,
                 ),
                 message: message,
