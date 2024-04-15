@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../zeta_flutter.dart';
 import 'countries.dart';
-import 'countries_dropdown.dart';
+import 'countries_dialog.dart';
 
 /// ZetaPhoneInput allows entering phone numbers.
 class ZetaPhoneInput extends StatefulWidget {
@@ -76,7 +76,7 @@ class ZetaPhoneInput extends StatefulWidget {
 
 class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
   bool _hasError = false;
-  late final List<Country> _countries;
+  late List<Country> _countries;
   late Country _selectedCountry;
   late String _phoneNumber;
 
@@ -86,13 +86,14 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
     _countries = widget.countries?.isEmpty ?? true
         ? Countries.list
         : Countries.list.where((country) => widget.countries!.contains(country.isoCode)).toList();
-    if (widget.countries?.isNotEmpty ?? false) {
+    if (_countries.isNotEmpty && (widget.countries?.isNotEmpty ?? false)) {
       _countries.sort(
         (a, b) => widget.countries!.indexOf(a.isoCode).compareTo(
               widget.countries!.indexOf(b.isoCode),
             ),
       );
     }
+    if (_countries.isEmpty) _countries = Countries.list;
     _selectedCountry = _countries.firstWhereOrNull(
           (country) => country.dialCode == widget.countryDialCode,
         ) ??
@@ -167,7 +168,8 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
                       left: BorderSide(color: zeta.colors.cool.shade40),
                     ),
                   ),
-                  child: CountriesDropdown<Country>(
+                  child: CountriesDialog<Country>(
+                    zeta: zeta,
                     enabled: widget.enabled,
                     button: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
