@@ -12,17 +12,38 @@ class NavigationRailExample extends StatefulWidget {
 }
 
 class _NavigationRailExampleState extends State<NavigationRailExample> {
+  int? _selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return ExampleScaffold(
       name: 'Navigation Rail',
-      child: ZetaNavigationRail(
-        items: [
-          ZetaNavigationRailItem(
-            label: Text('Label'),
-            icon: Icon(ZetaIcons.star_round),
-            onTap: () {},
-          )
+      child: Row(
+        children: [
+          ZetaNavigationRail(
+            selectedIndex: _selectedIndex,
+            onSelect: (index) => setState(() => _selectedIndex = index),
+            items: [
+              ZetaNavigationRailItem(
+                label: Text('Label'),
+                icon: Icon(ZetaIcons.star_round),
+              ),
+              ZetaNavigationRailItem(
+                label: Text('Account\nSettings'),
+                icon: Icon(ZetaIcons.star_round),
+              ),
+              ZetaNavigationRailItem(
+                label: Text('Account Settings'),
+                icon: Icon(ZetaIcons.star_round),
+              ),
+              ZetaNavigationRailItem(
+                label: Text('Label'),
+                icon: Icon(ZetaIcons.star_round),
+                disabled: true,
+              ),
+            ],
+          ),
+          Expanded(child: const SizedBox()),
         ],
       ),
     );
