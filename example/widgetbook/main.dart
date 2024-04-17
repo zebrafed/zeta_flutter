@@ -113,9 +113,7 @@ class HotReload extends StatelessWidget {
                 WidgetbookUseCase(name: 'Circle', builder: (context) => progressCircleUseCase(context))
               ],
             ),
-            WidgetbookUseCase(
-                name: 'Radio Button',
-                builder: (context) => radioButtonUseCase(context)), 
+            WidgetbookUseCase(name: 'Radio Button', builder: (context) => radioButtonUseCase(context)),
             WidgetbookUseCase(
               name: 'Segmented Control',
               builder: (context) => segmentedControlUseCase(context),

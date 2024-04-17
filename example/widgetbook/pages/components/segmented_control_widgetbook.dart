@@ -10,8 +10,7 @@ Widget segmentedControlUseCase(BuildContext context) {
   int selectedIconSegment = iconsSegments.first;
 
   final rounded = context.knobs.boolean(label: "Rounded", initialValue: true);
-  final icon =
-      iconKnob(context, rounded: rounded, initial: ZetaIcons.star_round);
+  final icon = iconKnob(context, rounded: rounded, initial: ZetaIcons.star_round);
 
   final text = context.knobs.string(label: 'Text', initialValue: "Item");
 

@@ -8,8 +8,7 @@ class SegmentedControlExample extends StatefulWidget {
   static const String name = 'SegmentedControl';
 
   @override
-  State<SegmentedControlExample> createState() =>
-      _SegmentedControlExampleState();
+  State<SegmentedControlExample> createState() => _SegmentedControlExampleState();
 }
 
 class _SegmentedControlExampleState extends State<SegmentedControlExample> {
