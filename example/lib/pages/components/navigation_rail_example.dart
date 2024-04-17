@@ -12,38 +12,62 @@ class NavigationRailExample extends StatefulWidget {
 }
 
 class _NavigationRailExampleState extends State<NavigationRailExample> {
+  List<String> _titles = [
+    'Label',
+    'User Preferences',
+    'Account Settings',
+    'Label',
+  ];
   int? _selectedIndex;
 
   @override
   Widget build(BuildContext context) {
+    final zeta = Zeta.of(context);
+
     return ExampleScaffold(
       name: 'Navigation Rail',
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ZetaNavigationRail(
             selectedIndex: _selectedIndex,
             onSelect: (index) => setState(() => _selectedIndex = index),
+            splitLabels: false,
             items: [
               ZetaNavigationRailItem(
-                label: Text('Label'),
+                label: 'Label',
                 icon: Icon(ZetaIcons.star_round),
               ),
               ZetaNavigationRailItem(
-                label: Text('Account\nSettings'),
+                label: 'User\nPreferences',
                 icon: Icon(ZetaIcons.star_round),
               ),
               ZetaNavigationRailItem(
-                label: Text('Account Settings'),
+                label: 'Account Settings',
                 icon: Icon(ZetaIcons.star_round),
               ),
               ZetaNavigationRailItem(
-                label: Text('Label'),
+                label: 'Label',
                 icon: Icon(ZetaIcons.star_round),
                 disabled: true,
               ),
             ],
           ),
-          Expanded(child: const SizedBox()),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(ZetaSpacing.x5),
+              child: _selectedIndex == null
+                  ? const SizedBox()
+                  : Text(
+                      _titles[_selectedIndex!],
+                      textAlign: TextAlign.center,
+                      style: ZetaTextStyles.titleMedium.copyWith(
+                        color: zeta.colors.textDefault,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+            ),
+          ),
         ],
       ),
     );
