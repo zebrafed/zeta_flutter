@@ -19,45 +19,47 @@ Widget navigationRailUseCase(BuildContext context) {
     rounded: rounded,
     initial: rounded ? ZetaIcons.star_round : ZetaIcons.star_sharp,
   );
-  final splitLabels = context.knobs.boolean(label: 'Split labels', initialValue: true);
+  final wordWrap = context.knobs.boolean(label: 'Word wrap', initialValue: true);
   final disabled = context.knobs.boolean(label: 'Disabled', initialValue: false);
   final itemsList = items.split(',').where((element) => element.trim().isNotEmpty).toList();
-  return WidgetbookTestWidget(
-    widget: StatefulBuilder(
-      builder: (context, setState) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ZetaNavigationRail(
-              selectedIndex: selectedIndex,
-              onSelect: (index) => setState(() => selectedIndex = index),
-              splitLabels: splitLabels,
-              items: itemsList
-                  .map((item) => ZetaNavigationRailItem(
-                        label: item,
-                        icon: Icon(iconData),
-                        disabled: disabled,
-                      ))
-                  .toList(),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(ZetaSpacing.x5),
-                child: selectedIndex == null
-                    ? const SizedBox()
-                    : Text(
-                        itemsList[selectedIndex!],
-                        textAlign: TextAlign.center,
-                        style: ZetaTextStyles.titleMedium.copyWith(
-                          color: zeta.colors.textDefault,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+  return SafeArea(
+    child: WidgetbookTestWidget(
+      widget: StatefulBuilder(
+        builder: (context, setState) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ZetaNavigationRail(
+                selectedIndex: selectedIndex,
+                onSelect: (index) => setState(() => selectedIndex = index),
+                wordWrap: wordWrap,
+                items: itemsList
+                    .map((item) => ZetaNavigationRailItem(
+                          label: item,
+                          icon: Icon(iconData),
+                          disabled: disabled,
+                        ))
+                    .toList(),
               ),
-            ),
-          ],
-        );
-      },
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(ZetaSpacing.x5),
+                  child: selectedIndex == null
+                      ? const SizedBox()
+                      : Text(
+                          itemsList[selectedIndex!],
+                          textAlign: TextAlign.center,
+                          style: ZetaTextStyles.titleMedium.copyWith(
+                            color: zeta.colors.textDefault,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     ),
   );
 }

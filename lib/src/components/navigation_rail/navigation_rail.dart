@@ -15,7 +15,7 @@ class ZetaNavigationRail extends StatefulWidget {
     this.margin = const EdgeInsets.all(ZetaSpacing.x5),
     this.itemSpacing = const EdgeInsets.only(bottom: ZetaSpacing.xxs),
     this.itemPadding,
-    this.splitLabels,
+    this.wordWrap,
   });
 
   /// Required list of navigation items.
@@ -54,9 +54,9 @@ class ZetaNavigationRail extends StatefulWidget {
   /// ```
   final EdgeInsets? itemPadding;
 
-  /// Determines if items' labels should be split each word on separate line.
+  /// Determines if words in items' labels should be wrapped on separate lines.
   /// Default is `true`.
-  final bool? splitLabels;
+  final bool? wordWrap;
 
   @override
   State<ZetaNavigationRail> createState() => _ZetaNavigationRailState();
@@ -71,7 +71,7 @@ class ZetaNavigationRail extends StatefulWidget {
       ..add(DiagnosticsProperty<EdgeInsets>('margin', margin))
       ..add(DiagnosticsProperty<EdgeInsets>('itemSpacing', itemSpacing))
       ..add(DiagnosticsProperty<EdgeInsets?>('itemPadding', itemPadding))
-      ..add(DiagnosticsProperty<bool>('splitLabels', splitLabels));
+      ..add(DiagnosticsProperty<bool>('wordWrap', wordWrap));
   }
 }
 
@@ -97,7 +97,7 @@ class _ZetaNavigationRailState extends State<ZetaNavigationRail> {
                         onTap: () => widget.onSelect?.call(i),
                         rounded: widget.rounded,
                         padding: widget.itemPadding,
-                        splitLabel: widget.splitLabels,
+                        wordWrap: widget.wordWrap,
                       ),
                     ),
                   ),
@@ -119,7 +119,7 @@ class _ZetaNavigationRailItemContent extends StatelessWidget {
     this.onTap,
     this.rounded = true,
     this.padding,
-    this.splitLabel,
+    this.wordWrap,
   });
 
   final String label;
@@ -129,7 +129,7 @@ class _ZetaNavigationRailItemContent extends StatelessWidget {
   final VoidCallback? onTap;
   final bool rounded;
   final EdgeInsets? padding;
-  final bool? splitLabel;
+  final bool? wordWrap;
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +173,7 @@ class _ZetaNavigationRailItemContent extends StatelessWidget {
                     child: icon!,
                   ),
                 Text(
-                  (splitLabel ?? true) ? label.replaceAll(' ', '\n') : label,
+                  (wordWrap ?? true) ? label.replaceAll(' ', '\n') : label,
                   textAlign: TextAlign.center,
                   style: ZetaTextStyles.titleSmall.copyWith(
                     color: disabled
@@ -201,7 +201,7 @@ class _ZetaNavigationRailItemContent extends StatelessWidget {
       ..add(DiagnosticsProperty<bool>('selected', selected))
       ..add(DiagnosticsProperty<EdgeInsets?>('padding', padding))
       ..add(StringProperty('label', label))
-      ..add(DiagnosticsProperty<bool?>('splitLabel', splitLabel));
+      ..add(DiagnosticsProperty<bool?>('wordWrap', wordWrap));
   }
 }
 
