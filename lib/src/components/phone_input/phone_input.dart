@@ -173,7 +173,7 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
                       left: BorderSide(color: zeta.colors.cool.shade40),
                     ),
                   ),
-                  child: CountriesDialog<Country>(
+                  child: CountriesDialog(
                     zeta: zeta,
                     useRootNavigator: widget.useRootNavigator,
                     enabled: widget.enabled,
@@ -201,7 +201,7 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
                     ),
                     items: _countries
                         .map(
-                          (country) => DropdownMenuItem<Country>(
+                          (country) => CountriesMenuItem(
                             value: country,
                             child: Row(
                               children: [
