@@ -25,6 +25,7 @@ import 'pages/components/password_input_widgetbook.dart';
 import 'pages/components/phone_input_widgetbook.dart';
 import 'pages/components/progress_widgetbook.dart';
 import 'pages/components/radio_widgetbook.dart';
+import 'pages/components/search_bar_widgetbook.dart';
 import 'pages/components/stepper_widgetbook.dart';
 import 'pages/components/switch_widgetbook.dart';
 import 'pages/components/snack_bar_widgetbook.dart';
@@ -126,6 +127,7 @@ class HotReload extends StatelessWidget {
               builder: (context) => stepperUseCase(context),
             ),
             WidgetbookUseCase(name: 'Dialog', builder: (context) => dialogUseCase(context)),
+            WidgetbookUseCase(name: 'Search Bar', builder: (context) => searchBarUseCase(context)),
           ]..sort((a, b) => a.name.compareTo(b.name)),
         ),
         WidgetbookCategory(

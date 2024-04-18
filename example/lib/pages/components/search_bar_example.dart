@@ -39,7 +39,7 @@ class _SearchBarExampleState extends State<SearchBarExample> {
               child: ZetaSearchBar(
                 hint: 'Search',
                 shape: ZetaSearchBarShape.stadium,
-                onStartSpeak: () => 'Please take my words',
+                onStartSpeak: () async => 'Please take my words',
               ),
             ),
             Padding(
