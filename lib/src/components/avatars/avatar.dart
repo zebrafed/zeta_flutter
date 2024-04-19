@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../../../zeta_flutter.dart';
 
 /// [ZetaAvatar] size
@@ -305,10 +305,10 @@ class ZetaAvatarBadge extends StatelessWidget {
   const ZetaAvatarBadge.notification({
     super.key,
     required this.value,
-    this.color = Colors.red,
   })  : size = ZetaAvatarSize.xxxl,
         icon = null,
         iconColor = null,
+        color = Colors.transparent,
         type = ZetaAvatarBadgeType.notification;
 
   /// Size of badge
@@ -327,7 +327,7 @@ class ZetaAvatarBadge extends StatelessWidget {
   final Color? iconColor;
 
   /// Notification value for badge
-  final double? value;
+  final int? value;
 
   /// Returns copy of [ZetaAvatarBadge]
   ZetaAvatarBadge copyWith({
@@ -335,7 +335,7 @@ class ZetaAvatarBadge extends StatelessWidget {
     ZetaAvatarSize? size,
     IconData? icon,
     Color? iconColor,
-    double? value,
+    int? value,
     ZetaAvatarBadgeType? type,
   }) {
     return ZetaAvatarBadge._(
@@ -351,19 +351,25 @@ class ZetaAvatarBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Zeta.of(context).colors;
+    final backgroundColor =
+        type == ZetaAvatarBadgeType.notification ? colors.negative : color;
     final badgeSize = _getContainerSize();
     final borderSize = _getBorderSize();
 
     final innerContent = value != null
         ? Text(
-            '$value+',
-            style: TextStyle(color: color.onColor, fontSize: badgeSize / 2),
+            value! > 99 ? '99+' : '$value',
+            style: TextStyle(
+              color: backgroundColor.onColor,
+              fontSize: badgeSize / 2,
+            ),
           )
         : icon != null
             ? Icon(
                 icon,
                 size: badgeSize - borderSize,
-                color: iconColor ?? color.onColor,
+                color: iconColor ?? backgroundColor.onColor,
               )
             : null;
 
@@ -371,7 +377,7 @@ class ZetaAvatarBadge extends StatelessWidget {
       width: badgeSize + ZetaSpacing.x1,
       height: badgeSize + ZetaSpacing.x1,
       decoration: BoxDecoration(
-        color: color,
+        color: backgroundColor,
         borderRadius: ZetaRadius.full,
         border: Border.all(
           width: borderSize,
@@ -399,6 +405,6 @@ class ZetaAvatarBadge extends StatelessWidget {
       ..add(EnumProperty<ZetaAvatarBadgeType>('type', type))
       ..add(DiagnosticsProperty<IconData?>('icon', icon))
       ..add(ColorProperty('iconColor', iconColor))
-      ..add(DoubleProperty('value', value));
+      ..add(IntProperty('value', value));
   }
 }

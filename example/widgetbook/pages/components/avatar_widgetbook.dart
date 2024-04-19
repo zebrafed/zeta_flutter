@@ -16,22 +16,24 @@ Widget avatarUseCase(BuildContext context) {
         options: ZetaAvatarSize.values,
         labelBuilder: (value) => value.name.split('.').last.toUpperCase(),
       ),
-      upperBadge:
-          context.knobs.boolean(label: 'Status Badge', initialValue: false)
-              ? ZetaAvatarBadge.icon(
-                  icon: ZetaIcons.close_round,
-                  iconColor: Colors.white,
-                  color: Color.fromRGBO(141, 149, 163, 1),
-                )
-              : null,
+      upperBadge: context.knobs
+              .boolean(label: 'Status Badge', initialValue: false)
+          ? ZetaAvatarBadge.icon(
+              icon: ZetaIcons.close_round,
+              iconColor: context.knobs.colorOrNull(label: "Badge Icon Color"),
+              color: context.knobs.colorOrNull(
+                      label: "Upper Badge Color", initialValue: colors.green) ??
+                  colors.iconDefault,
+            )
+          : null,
       borderColor: context.knobs.colorOrNull(
         label: 'Outline',
       ),
       lowerBadge: context.knobs
               .boolean(label: 'Notification Badge', initialValue: false)
           ? ZetaAvatarBadge.notification(
-              value: 99,
-              color: colors.negative,
+              value: context.knobs.intOrNull
+                  .input(label: "Value", initialValue: 1),
             )
           : null,
       initials:
