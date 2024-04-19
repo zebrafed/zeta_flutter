@@ -32,13 +32,13 @@ class _SearchBarExampleState extends State<SearchBarExample> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: Text('Stadium', style: ZetaTextStyles.titleMedium),
+              child: Text('Full', style: ZetaTextStyles.titleMedium),
             ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: ZetaSearchBar(
                 hint: 'Search',
-                shape: ZetaSearchBarShape.stadium,
+                shape: ZetaSearchBarShape.full,
                 onSpeechToText: () async => 'I wanted to say...',
               ),
             ),

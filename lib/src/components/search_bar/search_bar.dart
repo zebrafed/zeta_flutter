@@ -19,8 +19,8 @@ enum ZetaSearchBarShape {
   /// [rounded]
   rounded,
 
-  /// [stadium]
-  stadium,
+  /// [full]
+  full,
 
   /// [sharp]
   sharp,
@@ -238,7 +238,7 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
 
   BorderRadius _borderRadius(ZetaSearchBarShape shape) => switch (shape) {
         ZetaSearchBarShape.rounded => ZetaRadius.minimal,
-        ZetaSearchBarShape.stadium => ZetaRadius.full,
+        ZetaSearchBarShape.full => ZetaRadius.full,
         _ => ZetaRadius.none,
       };
 }
