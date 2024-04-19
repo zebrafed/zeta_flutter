@@ -20,6 +20,7 @@ class ZetaPhoneInput extends StatefulWidget {
     this.countryDialCode,
     this.phoneNumber,
     this.countries,
+    this.countrySearchHint,
     this.useRootNavigator = true,
   });
 
@@ -56,6 +57,10 @@ class ZetaPhoneInput extends StatefulWidget {
   /// List of countries ISO 3166-1 alpha-2 codes
   final List<String>? countries;
 
+  /// If provided, displays a hint inside the country search input field.
+  /// Default is `Search by name or dial code`.
+  final String? countrySearchHint;
+
   /// Determines if the root navigator should be used in the [CountriesDialog].
   final bool useRootNavigator;
 
@@ -75,7 +80,8 @@ class ZetaPhoneInput extends StatefulWidget {
       ..add(StringProperty('countryDialCode', countryDialCode))
       ..add(StringProperty('phoneNumber', phoneNumber))
       ..add(IterableProperty<String>('countries', countries))
-      ..add(DiagnosticsProperty<bool>('useRootNavigator', useRootNavigator));
+      ..add(DiagnosticsProperty<bool>('useRootNavigator', useRootNavigator))
+      ..add(StringProperty('countrySearchHint', countrySearchHint));
   }
 }
 
@@ -177,6 +183,7 @@ class _ZetaPhoneInputState extends State<ZetaPhoneInput> {
                     zeta: zeta,
                     useRootNavigator: widget.useRootNavigator,
                     enabled: widget.enabled,
+                    searchHint: widget.countrySearchHint,
                     button: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

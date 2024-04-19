@@ -13,6 +13,7 @@ class CountriesDialog extends StatefulWidget {
     required this.items,
     required this.onChanged,
     this.enabled = true,
+    this.searchHint,
     this.useRootNavigator = true,
   });
 
@@ -31,6 +32,10 @@ class CountriesDialog extends StatefulWidget {
   /// Determines if the button should be enabled (default) or disabled.
   final bool enabled;
 
+  /// If provided, displays a hint inside the country search input field.
+  /// Default is `Search`.
+  final String? searchHint;
+
   /// Determines if the root navigator should be used.
   final bool useRootNavigator;
 
@@ -44,7 +49,8 @@ class CountriesDialog extends StatefulWidget {
       ..add(IterableProperty<CountriesMenuItem>('items', items))
       ..add(ObjectFlagProperty<ValueSetter<Country?>>.has('onChanged', onChanged))
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
-      ..add(DiagnosticsProperty<bool>('useRootNavigator', useRootNavigator));
+      ..add(DiagnosticsProperty<bool>('useRootNavigator', useRootNavigator))
+      ..add(StringProperty('searchHint', searchHint));
   }
 }
 
@@ -62,6 +68,7 @@ class _CountriesDialogState extends State<CountriesDialog> {
         useRootNavigator: useRootNavigator,
         builder: (_) => _CountriesList(
           items: items,
+          searchHint: widget.searchHint,
           zeta: zeta,
         ),
       );
@@ -88,11 +95,13 @@ class _CountriesDialogState extends State<CountriesDialog> {
 class _CountriesList extends StatefulWidget {
   const _CountriesList({
     required this.items,
+    this.searchHint,
     this.zeta,
   });
 
   final Zeta? zeta;
   final List<CountriesMenuItem> items;
+  final String? searchHint;
 
   @override
   State<_CountriesList> createState() => _CountriesListState();
@@ -100,7 +109,9 @@ class _CountriesList extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(IterableProperty<CountriesMenuItem>('items', items));
+    properties
+      ..add(IterableProperty<CountriesMenuItem>('items', items))
+      ..add(StringProperty('searchHint', searchHint));
   }
 }
 
@@ -156,7 +167,7 @@ class _CountriesListState extends State<_CountriesList> {
                   controller: _controller,
                   onChanged: _search,
                   decoration: InputDecoration(
-                    hintText: 'Search',
+                    hintText: widget.searchHint ?? 'Search by name or dial code',
                     prefixIcon: const Icon(ZetaIcons.search_round),
                     suffixIcon: _controller.text.isEmpty
                         ? null
