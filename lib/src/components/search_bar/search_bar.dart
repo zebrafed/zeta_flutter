@@ -50,7 +50,8 @@ class ZetaSearchBar extends StatefulWidget {
   /// Default is `ZetaSearchBarShape.rounded`
   final ZetaSearchBarShape? shape;
 
-  /// If provided, displays a hint below the input field.
+  /// If provided, displays a hint inside the input field.
+  /// Default is `Search`.
   final String? hint;
 
   /// The initial value.
