@@ -57,7 +57,7 @@ class ZetaPhoneInput extends StatefulWidget {
   /// List of countries ISO 3166-1 alpha-2 codes
   final List<String>? countries;
 
-  /// If provided, displays a hint inside the country search input field.
+  /// The hint to be shown inside the country search input field.
   /// Default is `Search by name or dial code`.
   final String? countrySearchHint;
 

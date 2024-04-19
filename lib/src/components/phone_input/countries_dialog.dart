@@ -32,8 +32,8 @@ class CountriesDialog extends StatefulWidget {
   /// Determines if the button should be enabled (default) or disabled.
   final bool enabled;
 
-  /// If provided, displays a hint inside the country search input field.
-  /// Default is `Search`.
+  /// The hint to be shown inside the country search input field.
+  /// Default is `Search by name or dial code`.
   final String? searchHint;
 
   /// Determines if the root navigator should be used.
