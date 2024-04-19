@@ -134,56 +134,60 @@ class _ZetaNavigationRailItemContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: disabled ? null : onTap,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: disabled
-              ? null
-              : selected
-                  ? zeta.colors.blue.shade10
-                  : null,
-          borderRadius: rounded ? ZetaRadius.rounded : null,
-        ),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minWidth: ZetaSpacing.x16,
-            minHeight: ZetaSpacing.x16,
+    return MouseRegion(
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: disabled ? null : onTap,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: disabled
+                ? null
+                : selected
+                    ? zeta.colors.blue.shade10
+                    : null,
+            borderRadius: rounded ? ZetaRadius.rounded : null,
           ),
-          child: Padding(
-            padding: padding ??
-                const EdgeInsets.symmetric(
-                  horizontal: ZetaSpacing.xs,
-                  vertical: ZetaSpacing.s,
-                ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (icon != null)
-                  IconTheme(
-                    data: IconThemeData(
-                      color: disabled
-                          ? zeta.colors.cool.shade50
-                          : selected
-                              ? zeta.colors.textDefault
-                              : zeta.colors.cool.shade70,
-                      size: 24,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: ZetaSpacing.x16,
+              minHeight: ZetaSpacing.x16,
+            ),
+            child: SelectionContainer.disabled(
+              child: Padding(
+                padding: padding ??
+                    const EdgeInsets.symmetric(
+                      horizontal: ZetaSpacing.xs,
+                      vertical: ZetaSpacing.s,
                     ),
-                    child: icon!,
-                  ),
-                Text(
-                  (wordWrap ?? true) ? label.replaceAll(' ', '\n') : label,
-                  textAlign: TextAlign.center,
-                  style: ZetaTextStyles.titleSmall.copyWith(
-                    color: disabled
-                        ? zeta.colors.cool.shade50
-                        : selected
-                            ? zeta.colors.textDefault
-                            : zeta.colors.cool.shade70,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (icon != null)
+                      IconTheme(
+                        data: IconThemeData(
+                          color: disabled
+                              ? zeta.colors.cool.shade50
+                              : selected
+                                  ? zeta.colors.textDefault
+                                  : zeta.colors.cool.shade70,
+                          size: 24,
+                        ),
+                        child: icon!,
+                      ),
+                    Text(
+                      (wordWrap ?? true) ? label.replaceAll(' ', '\n') : label,
+                      textAlign: TextAlign.center,
+                      style: ZetaTextStyles.titleSmall.copyWith(
+                        color: disabled
+                            ? zeta.colors.cool.shade50
+                            : selected
+                                ? zeta.colors.textDefault
+                                : zeta.colors.cool.shade70,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
