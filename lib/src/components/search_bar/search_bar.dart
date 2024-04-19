@@ -36,7 +36,7 @@ class ZetaSearchBar extends StatefulWidget {
     this.hint,
     this.initialValue,
     this.onChanged,
-    this.onStartSpeak,
+    this.onSpeechToText,
     this.enabled = true,
   });
 
@@ -58,7 +58,7 @@ class ZetaSearchBar extends StatefulWidget {
   final void Function(String?)? onChanged;
 
   /// A callback, which is invoked when the microphone button is pressed.
-  final Future<String?> Function()? onStartSpeak;
+  final Future<String?> Function()? onSpeechToText;
 
   /// Determines if the input field should be enabled (default) or disabled.
   final bool enabled;
@@ -75,7 +75,7 @@ class ZetaSearchBar extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
       ..add(ObjectFlagProperty<void Function(String? p1)?>.has('onChanged', onChanged))
       ..add(StringProperty('initialValue', initialValue))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('onStartSpeak', onStartSpeak));
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onSpeechToText', onSpeechToText));
   }
 }
 
@@ -175,10 +175,10 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
                     horizontal: -4,
                     vertical: -4,
                   ),
-                  onPressed: widget.onStartSpeak == null
+                  onPressed: widget.onSpeechToText == null
                       ? null
                       : () async {
-                          final text = await widget.onStartSpeak!.call();
+                          final text = await widget.onSpeechToText!.call();
                           if (text != null) {
                             setState(() => _controller.text = text);
                             widget.onChanged?.call(text);

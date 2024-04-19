@@ -50,7 +50,7 @@ Widget searchBarUseCase(BuildContext context) {
                         .toList(),
                   );
                 },
-                onStartSpeak: () async => 'Please take my words',
+                onSpeechToText: () async => 'I wanted to say...',
               ),
               const SizedBox(height: ZetaSpacing.x5),
               ...items.map((item) => Text(item)).toList(),
