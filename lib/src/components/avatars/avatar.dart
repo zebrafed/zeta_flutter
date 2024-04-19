@@ -118,6 +118,7 @@ class ZetaAvatar extends StatelessWidget {
         (initials != null
             ? Center(
                 child: Text(
+<<<<<<< HEAD
                   size == ZetaAvatarSize.xs
                       ? initials!.substring(0, 1)
                       : initials!,
@@ -125,6 +126,13 @@ class ZetaAvatar extends StatelessWidget {
                     fontSize: size.fontSize,
                     letterSpacing: -0.5,
                     color: backgroundColor!.onColor,
+=======
+                  size == ZetaAvatarSize.xs ? initials!.substring(0, 1) : initials!,
+                  style: TextStyle(
+                    fontSize: size.fontSize,
+                    letterSpacing: -0.5,
+                    color: backgroundColor?.onColor,
+>>>>>>> 6b894c286f5e6a062ab20e50e4605537123bfae2
                   ),
                 ),
               )
@@ -143,9 +151,13 @@ class ZetaAvatar extends StatelessWidget {
           width: sizePixels,
           height: sizePixels,
           decoration: BoxDecoration(
+<<<<<<< HEAD
             border: borderColor != null
                 ? Border.all(color: borderColor!, width: 0)
                 : null,
+=======
+            border: borderColor != null ? Border.all(color: borderColor!, width: 0) : null,
+>>>>>>> 6b894c286f5e6a062ab20e50e4605537123bfae2
             borderRadius: ZetaRadius.full,
             color: backgroundColor ??
                 (_showPlaceholder
