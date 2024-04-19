@@ -18,6 +18,10 @@ Widget searchBarUseCase(BuildContext context) {
   return WidgetbookTestWidget(
     widget: StatefulBuilder(
       builder: (context, setState) {
+        final hint = context.knobs.string(
+          label: 'Hint',
+          initialValue: 'Search',
+        );
         final enabled = context.knobs.boolean(label: 'Enabled', initialValue: true);
         final size = context.knobs.list<ZetaSearchBarSize>(
           label: 'Size',
@@ -39,7 +43,7 @@ Widget searchBarUseCase(BuildContext context) {
                 size: size,
                 shape: shape,
                 enabled: enabled,
-                hint: 'Search',
+                hint: hint,
                 onChanged: (value) {
                   if (value == null) return;
                   setState(

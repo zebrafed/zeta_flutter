@@ -123,7 +123,7 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
           horizontal: 10,
           vertical: _inputVerticalPadding(_size),
         ),
-        hintText: widget.hint,
+        hintText: widget.hint ?? 'Search',
         hintStyle: ZetaTextStyles.bodyMedium.copyWith(
           color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
         ),
