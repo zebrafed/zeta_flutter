@@ -38,6 +38,8 @@ class ZetaSearchBar extends StatefulWidget {
     this.onChanged,
     this.onSpeechToText,
     this.enabled = true,
+    this.showLeadingIcon = true,
+    this.showSpeechToText = true,
   });
 
   /// Determines the size of the input field.
@@ -63,6 +65,14 @@ class ZetaSearchBar extends StatefulWidget {
   /// Determines if the input field should be enabled (default) or disabled.
   final bool enabled;
 
+  /// Determines if there should be a leading icon.
+  /// Default is `true`.
+  final bool showLeadingIcon;
+
+  /// Determines if there should be a Speech-To-Text button.
+  /// Default is `true`.
+  final bool showSpeechToText;
+
   @override
   State<ZetaSearchBar> createState() => _ZetaSearchBarState();
   @override
@@ -75,7 +85,9 @@ class ZetaSearchBar extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
       ..add(ObjectFlagProperty<void Function(String? p1)?>.has('onChanged', onChanged))
       ..add(StringProperty('initialValue', initialValue))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('onSpeechToText', onSpeechToText));
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onSpeechToText', onSpeechToText))
+      ..add(DiagnosticsProperty<bool>('showLeadingIcon', showLeadingIcon))
+      ..add(DiagnosticsProperty<bool>('showSpeechToText', showSpeechToText));
   }
 }
 
@@ -127,14 +139,16 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
         hintStyle: ZetaTextStyles.bodyMedium.copyWith(
           color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
         ),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: ZetaSpacing.x2_5, right: ZetaSpacing.xs),
-          child: Icon(
-            sharp ? ZetaIcons.search_sharp : ZetaIcons.search_round,
-            color: widget.enabled ? zeta.colors.cool.shade70 : zeta.colors.cool.shade50,
-            size: iconSize,
-          ),
-        ),
+        prefixIcon: widget.showLeadingIcon
+            ? Padding(
+                padding: const EdgeInsets.only(left: ZetaSpacing.x2_5, right: ZetaSpacing.xs),
+                child: Icon(
+                  sharp ? ZetaIcons.search_sharp : ZetaIcons.search_round,
+                  color: widget.enabled ? zeta.colors.cool.shade70 : zeta.colors.cool.shade50,
+                  size: iconSize,
+                ),
+              )
+            : null,
         prefixIconConstraints: const BoxConstraints(
           minHeight: ZetaSpacing.m,
           minWidth: ZetaSpacing.m,
@@ -159,36 +173,39 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
                     size: iconSize,
                   ),
                 ),
-                SizedBox(
-                  height: iconSize,
-                  child: VerticalDivider(
-                    color: zeta.colors.cool.shade40,
-                    width: 5,
-                    thickness: 1,
+                if (widget.showSpeechToText)
+                  SizedBox(
+                    height: iconSize,
+                    child: VerticalDivider(
+                      color: zeta.colors.cool.shade40,
+                      width: 5,
+                      thickness: 1,
+                    ),
                   ),
-                ),
               ],
               Padding(
                 padding: const EdgeInsets.only(right: ZetaSpacing.xxs),
-                child: IconButton(
-                  visualDensity: const VisualDensity(
-                    horizontal: -4,
-                    vertical: -4,
-                  ),
-                  onPressed: widget.onSpeechToText == null
-                      ? null
-                      : () async {
-                          final text = await widget.onSpeechToText!.call();
-                          if (text != null) {
-                            setState(() => _controller.text = text);
-                            widget.onChanged?.call(text);
-                          }
-                        },
-                  icon: Icon(
-                    sharp ? ZetaIcons.microphone_sharp : ZetaIcons.microphone_round,
-                    size: iconSize,
-                  ),
-                ),
+                child: widget.showSpeechToText
+                    ? IconButton(
+                        visualDensity: const VisualDensity(
+                          horizontal: -4,
+                          vertical: -4,
+                        ),
+                        onPressed: widget.onSpeechToText == null
+                            ? null
+                            : () async {
+                                final text = await widget.onSpeechToText!.call();
+                                if (text != null) {
+                                  setState(() => _controller.text = text);
+                                  widget.onChanged?.call(text);
+                                }
+                              },
+                        icon: Icon(
+                          sharp ? ZetaIcons.microphone_sharp : ZetaIcons.microphone_round,
+                          size: iconSize,
+                        ),
+                      )
+                    : const SizedBox(),
               ),
             ],
           ),

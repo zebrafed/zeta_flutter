@@ -22,7 +22,10 @@ Widget searchBarUseCase(BuildContext context) {
           label: 'Hint',
           initialValue: 'Search',
         );
-        final enabled = context.knobs.boolean(label: 'Enabled', initialValue: true);
+        final enabled = context.knobs.boolean(
+          label: 'Enabled',
+          initialValue: true,
+        );
         final size = context.knobs.list<ZetaSearchBarSize>(
           label: 'Size',
           options: ZetaSearchBarSize.values,
@@ -32,6 +35,14 @@ Widget searchBarUseCase(BuildContext context) {
           label: 'Shape',
           options: ZetaSearchBarShape.values,
           labelBuilder: (shape) => shape.name,
+        );
+        final showLeadingIcon = context.knobs.boolean(
+          label: 'Show leading icon',
+          initialValue: true,
+        );
+        final showSpeechToText = context.knobs.boolean(
+          label: 'Show Speech-To-Text button',
+          initialValue: true,
         );
 
         return Padding(
@@ -44,6 +55,8 @@ Widget searchBarUseCase(BuildContext context) {
                 shape: shape,
                 enabled: enabled,
                 hint: hint,
+                showLeadingIcon: showLeadingIcon,
+                showSpeechToText: showSpeechToText,
                 onChanged: (value) {
                   if (value == null) return;
                   setState(
