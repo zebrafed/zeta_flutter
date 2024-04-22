@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../../zeta_flutter.dart';
 
@@ -29,7 +30,7 @@ class ZetaTooltip extends StatelessWidget {
     this.color,
     this.textStyle,
     this.arrowDirection = ZetaTooltipArrowDirection.down,
-    this.maxWidth = ZetaSpacing.x24,
+    this.maxWidth,
   });
 
   /// The content of the tooltip.
@@ -68,89 +69,92 @@ class ZetaTooltip extends StatelessWidget {
   final ZetaTooltipArrowDirection arrowDirection;
 
   /// The maximum width of the tooltip.
-  /// Default is `ZetaSpacing.x24`.
-  final double maxWidth;
+  final double? maxWidth;
 
   @override
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);
     final color = this.color ?? zeta.colors.textDefault;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (arrowDirection == ZetaTooltipArrowDirection.up)
-          Center(
-            child: CustomPaint(
-              painter: _FilledArrow(
-                color: color,
-                direction: arrowDirection,
-              ),
-              size: const Size(8, 4),
-            ),
-          ),
-        Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (arrowDirection == ZetaTooltipArrowDirection.left)
+            if (arrowDirection == ZetaTooltipArrowDirection.up)
               Center(
                 child: CustomPaint(
                   painter: _FilledArrow(
                     color: color,
                     direction: arrowDirection,
                   ),
-                  size: const Size(4, 8),
+                  size: const Size(8, 4),
                 ),
               ),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: maxWidth,
-              ),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: rounded ? ZetaRadius.minimal : null,
-                ),
-                child: Padding(
-                  padding: padding ??
-                      const EdgeInsets.symmetric(
-                        horizontal: ZetaSpacing.xs,
-                        vertical: ZetaSpacing.xxs,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (arrowDirection == ZetaTooltipArrowDirection.left)
+                  Center(
+                    child: CustomPaint(
+                      painter: _FilledArrow(
+                        color: color,
+                        direction: arrowDirection,
                       ),
-                  child: DefaultTextStyle(
-                    style: textStyle ??
-                        ZetaTextStyles.bodyXSmall.copyWith(
-                          color: zeta.colors.textInverse,
-                          fontWeight: FontWeight.w500,
-                        ),
-                    child: child,
+                      size: const Size(4, 8),
+                    ),
+                  ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: maxWidth ?? constraints.maxWidth,
+                  ),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: rounded ? ZetaRadius.minimal : null,
+                    ),
+                    child: Padding(
+                      padding: padding ??
+                          const EdgeInsets.symmetric(
+                            horizontal: ZetaSpacing.xs,
+                            vertical: ZetaSpacing.xxs,
+                          ),
+                      child: DefaultTextStyle(
+                        style: textStyle ??
+                            ZetaTextStyles.bodyXSmall.copyWith(
+                              color: zeta.colors.textInverse,
+                              fontWeight: FontWeight.w500,
+                            ),
+                        child: child,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                if (arrowDirection == ZetaTooltipArrowDirection.right)
+                  Center(
+                    child: CustomPaint(
+                      painter: _FilledArrow(
+                        color: color,
+                        direction: arrowDirection,
+                      ),
+                      size: const Size(4, 8),
+                    ),
+                  ),
+              ],
             ),
-            if (arrowDirection == ZetaTooltipArrowDirection.right)
+            if (arrowDirection == ZetaTooltipArrowDirection.down)
               Center(
                 child: CustomPaint(
                   painter: _FilledArrow(
                     color: color,
                     direction: arrowDirection,
                   ),
-                  size: const Size(4, 8),
+                  size: const Size(8, 4),
                 ),
               ),
           ],
-        ),
-        if (arrowDirection == ZetaTooltipArrowDirection.down)
-          Center(
-            child: CustomPaint(
-              painter: _FilledArrow(
-                color: color,
-                direction: arrowDirection,
-              ),
-              size: const Size(8, 4),
-            ),
-          ),
-      ],
+        );
+      },
     );
   }
 
