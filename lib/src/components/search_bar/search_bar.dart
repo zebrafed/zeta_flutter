@@ -2,30 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../zeta_flutter.dart';
 
-/// [ZetaSearchBar] size
-enum ZetaSearchBarSize {
-  /// [large] 48 pixels height of the input field.
-  large,
-
-  /// [medium] 40 pixels height of the input field.
-  medium,
-
-  /// [small] 32 pixels height of the input field.
-  small,
-}
-
-/// [ZetaSearchBar] shape
-enum ZetaSearchBarShape {
-  /// [rounded]
-  rounded,
-
-  /// [full]
-  full,
-
-  /// [sharp]
-  sharp,
-}
-
 /// ZetaSearchBar provides input field for searching.
 class ZetaSearchBar extends StatefulWidget {
   /// Constructor for [ZetaSearchBar].
@@ -44,11 +20,11 @@ class ZetaSearchBar extends StatefulWidget {
 
   /// Determines the size of the input field.
   /// Default is `ZetaSearchBarSize.large`
-  final ZetaSearchBarSize? size;
+  final ZetaWidgetSize? size;
 
   /// Determines the shape of the input field.
   /// Default is `ZetaSearchBarShape.rounded`
-  final ZetaSearchBarShape? shape;
+  final ZetaWidgetBorder? shape;
 
   /// If provided, displays a hint inside the input field.
   /// Default is `Search`.
@@ -80,8 +56,8 @@ class ZetaSearchBar extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<ZetaSearchBarSize>('size', size))
-      ..add(EnumProperty<ZetaSearchBarShape>('shape', shape))
+      ..add(EnumProperty<ZetaWidgetSize>('size', size))
+      ..add(EnumProperty<ZetaWidgetBorder>('shape', shape))
       ..add(StringProperty('hint', hint))
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
       ..add(ObjectFlagProperty<void Function(String? p1)?>.has('onChanged', onChanged))
@@ -94,22 +70,22 @@ class ZetaSearchBar extends StatefulWidget {
 
 class _ZetaSearchBarState extends State<ZetaSearchBar> {
   late final TextEditingController _controller;
-  late ZetaSearchBarSize _size;
-  late ZetaSearchBarShape _shape;
+  late ZetaWidgetSize _size;
+  late ZetaWidgetBorder _shape;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialValue ?? '');
-    _size = widget.size ?? ZetaSearchBarSize.large;
-    _shape = widget.shape ?? ZetaSearchBarShape.rounded;
+    _size = widget.size ?? ZetaWidgetSize.large;
+    _shape = widget.shape ?? ZetaWidgetBorder.rounded;
   }
 
   @override
   void didUpdateWidget(ZetaSearchBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _size = widget.size ?? ZetaSearchBarSize.large;
-    _shape = widget.shape ?? ZetaSearchBarShape.rounded;
+    _size = widget.size ?? ZetaWidgetSize.large;
+    _shape = widget.shape ?? ZetaWidgetBorder.rounded;
   }
 
   @override
@@ -121,7 +97,7 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
   @override
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);
-    final sharp = widget.shape == ZetaSearchBarShape.sharp;
+    final sharp = widget.shape == ZetaWidgetBorder.sharp;
     final iconSize = _iconSize(_size);
 
     return TextFormField(
@@ -224,21 +200,21 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
     );
   }
 
-  double _inputVerticalPadding(ZetaSearchBarSize size) => switch (size) {
-        ZetaSearchBarSize.large => ZetaSpacing.x3,
-        ZetaSearchBarSize.medium => ZetaSpacing.x2,
-        ZetaSearchBarSize.small => ZetaSpacing.x1,
+  double _inputVerticalPadding(ZetaWidgetSize size) => switch (size) {
+        ZetaWidgetSize.large => ZetaSpacing.x3,
+        ZetaWidgetSize.medium => ZetaSpacing.x2,
+        ZetaWidgetSize.small => ZetaSpacing.x1,
       };
 
-  double _iconSize(ZetaSearchBarSize size) => switch (size) {
-        ZetaSearchBarSize.large => ZetaSpacing.x6,
-        ZetaSearchBarSize.medium => ZetaSpacing.x5,
-        ZetaSearchBarSize.small => ZetaSpacing.x4,
+  double _iconSize(ZetaWidgetSize size) => switch (size) {
+        ZetaWidgetSize.large => ZetaSpacing.x6,
+        ZetaWidgetSize.medium => ZetaSpacing.x5,
+        ZetaWidgetSize.small => ZetaSpacing.x4,
       };
 
   OutlineInputBorder _defaultInputBorder(
     Zeta zeta, {
-    required ZetaSearchBarShape shape,
+    required ZetaWidgetBorder shape,
   }) =>
       OutlineInputBorder(
         borderRadius: _borderRadius(shape),
@@ -247,16 +223,16 @@ class _ZetaSearchBarState extends State<ZetaSearchBar> {
 
   OutlineInputBorder _focusedInputBorder(
     Zeta zeta, {
-    required ZetaSearchBarShape shape,
+    required ZetaWidgetBorder shape,
   }) =>
       OutlineInputBorder(
         borderRadius: _borderRadius(shape),
         borderSide: BorderSide(color: zeta.colors.blue.shade50),
       );
 
-  BorderRadius _borderRadius(ZetaSearchBarShape shape) => switch (shape) {
-        ZetaSearchBarShape.rounded => ZetaRadius.minimal,
-        ZetaSearchBarShape.full => ZetaRadius.full,
+  BorderRadius _borderRadius(ZetaWidgetBorder shape) => switch (shape) {
+        ZetaWidgetBorder.rounded => ZetaRadius.minimal,
+        ZetaWidgetBorder.full => ZetaRadius.full,
         _ => ZetaRadius.none,
       };
 }

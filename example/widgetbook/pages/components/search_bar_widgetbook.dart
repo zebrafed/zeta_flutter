@@ -26,14 +26,14 @@ Widget searchBarUseCase(BuildContext context) {
           label: 'Enabled',
           initialValue: true,
         );
-        final size = context.knobs.list<ZetaSearchBarSize>(
+        final size = context.knobs.list<ZetaWidgetSize>(
           label: 'Size',
-          options: ZetaSearchBarSize.values,
+          options: ZetaWidgetSize.values,
           labelBuilder: (size) => size.name,
         );
-        final shape = context.knobs.list<ZetaSearchBarShape>(
+        final shape = context.knobs.list<ZetaWidgetBorder>(
           label: 'Shape',
-          options: ZetaSearchBarShape.values,
+          options: ZetaWidgetBorder.values,
           labelBuilder: (shape) => shape.name,
         );
         final showLeadingIcon = context.knobs.boolean(
