@@ -20,6 +20,7 @@ import 'pages/components/dropdown_widgetbook.dart';
 import 'pages/components/in_page_banner_widgetbook.dart';
 import 'pages/components/list_item_widgetbook.dart';
 import 'pages/components/navigation_bar_widgetbook.dart';
+import 'pages/components/navigation_rail_widgetbook.dart';
 import 'pages/components/pagination_widgetbook.dart';
 import 'pages/components/password_input_widgetbook.dart';
 import 'pages/components/phone_input_widgetbook.dart';
@@ -29,6 +30,7 @@ import 'pages/components/stepper_widgetbook.dart';
 import 'pages/components/switch_widgetbook.dart';
 import 'pages/components/snack_bar_widgetbook.dart';
 import 'pages/components/tabs_widgetbook.dart';
+import 'pages/components/tooltip_widgetbook.dart';
 import 'pages/theme/color_widgetbook.dart';
 import 'pages/theme/radius_widgetbook.dart';
 import 'pages/theme/spacing_widgetbook.dart';
@@ -126,6 +128,8 @@ class HotReload extends StatelessWidget {
               builder: (context) => stepperUseCase(context),
             ),
             WidgetbookUseCase(name: 'Dialog', builder: (context) => dialogUseCase(context)),
+            WidgetbookUseCase(name: 'Navigation Rail', builder: (context) => navigationRailUseCase(context)),
+            WidgetbookUseCase(name: 'Tooltip', builder: (context) => tooltipUseCase(context)),
           ]..sort((a, b) => a.name.compareTo(b.name)),
         ),
         WidgetbookCategory(

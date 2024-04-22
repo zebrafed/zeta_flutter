@@ -103,8 +103,7 @@ class ZetaAvatar extends StatelessWidget {
   /// Notification Badge shown at top right corner of avatar.
   final ZetaAvatarBadge? upperBadge;
 
-  bool get _showPlaceholder =>
-      image == null && (initials == null || initials!.isEmpty);
+  bool get _showPlaceholder => image == null && (initials == null || initials!.isEmpty);
 
   @override
   Widget build(BuildContext context) {
@@ -118,51 +117,30 @@ class ZetaAvatar extends StatelessWidget {
         (initials != null
             ? Center(
                 child: Text(
-<<<<<<< HEAD
-                  size == ZetaAvatarSize.xs
-                      ? initials!.substring(0, 1)
-                      : initials!,
-                  style: TextStyle(
-                    fontSize: size.fontSize,
-                    letterSpacing: -0.5,
-                    color: backgroundColor!.onColor,
-=======
                   size == ZetaAvatarSize.xs ? initials!.substring(0, 1) : initials!,
                   style: TextStyle(
                     fontSize: size.fontSize,
-                    letterSpacing: -0.5,
+                    letterSpacing: 0,
                     color: backgroundColor?.onColor,
->>>>>>> 6b894c286f5e6a062ab20e50e4605537123bfae2
                   ),
                 ),
               )
             : null);
 
     final innerContent = ClipRRect(
-      borderRadius: BorderRadius.circular(64),
-      clipBehavior: Clip.hardEdge,
+      borderRadius: ZetaRadius.full,
       child: innerChild,
     );
 
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.all(3),
           width: sizePixels,
           height: sizePixels,
           decoration: BoxDecoration(
-<<<<<<< HEAD
-            border: borderColor != null
-                ? Border.all(color: borderColor!, width: 0)
-                : null,
-=======
             border: borderColor != null ? Border.all(color: borderColor!, width: 0) : null,
->>>>>>> 6b894c286f5e6a062ab20e50e4605537123bfae2
             borderRadius: ZetaRadius.full,
-            color: backgroundColor ??
-                (_showPlaceholder
-                    ? zetaColors.surfacePrimary
-                    : zetaColors.cool.shade20),
+            color: backgroundColor ?? (_showPlaceholder ? zetaColors.surfacePrimary : zetaColors.cool.shade20),
           ),
           child: borderColor != null
               ? Container(
@@ -175,7 +153,6 @@ class ZetaAvatar extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: ZetaRadius.full,
-                    clipBehavior: Clip.hardEdge,
                     child: innerContent,
                   ),
                 )
@@ -186,7 +163,6 @@ class ZetaAvatar extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: ZetaRadius.full,
-                    clipBehavior: Clip.hardEdge,
                     child: innerContent,
                   ),
                 ),
@@ -285,7 +261,7 @@ class ZetaAvatarBadge extends StatelessWidget {
   /// Constructor for [ZetaAvatarBadge]
   const ZetaAvatarBadge({
     super.key,
-    this.color = Colors.grey,
+    this.color,
     this.type = ZetaAvatarBadgeType.notification,
     this.icon,
     this.value,
@@ -305,7 +281,7 @@ class ZetaAvatarBadge extends StatelessWidget {
   /// Constructs [ZetaAvatarBadge] with icon
   const ZetaAvatarBadge.icon({
     super.key,
-    this.color = Colors.grey,
+    this.color,
     this.icon = ZetaIcons.star_round,
     this.iconColor,
   })  : value = null,
@@ -320,7 +296,7 @@ class ZetaAvatarBadge extends StatelessWidget {
   })  : size = ZetaAvatarSize.xxxl,
         icon = null,
         iconColor = null,
-        color = Colors.transparent,
+        color = null,
         type = ZetaAvatarBadgeType.notification;
 
   /// Size of badge
@@ -330,7 +306,7 @@ class ZetaAvatarBadge extends StatelessWidget {
   final ZetaAvatarBadgeType type;
 
   /// Background color for badge
-  final Color color;
+  final Color? color;
 
   /// Icon of badge
   final IconData? icon;
@@ -364,36 +340,43 @@ class ZetaAvatarBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
-    final backgroundColor =
-        type == ZetaAvatarBadgeType.notification ? colors.negative : color;
+    final backgroundColor = type == ZetaAvatarBadgeType.notification ? colors.negative : color;
     final badgeSize = _getContainerSize();
     final borderSize = _getBorderSize();
 
-    final innerContent = value != null
-        ? Text(
-            value! > 99 ? '99+' : '$value',
-            style: TextStyle(
-              color: backgroundColor.onColor,
-              fontSize: badgeSize / 2,
-            ),
-          )
-        : icon != null
-            ? Icon(
-                icon,
-                size: badgeSize - borderSize,
-                color: iconColor ?? backgroundColor.onColor,
-              )
-            : null;
+    final innerContent = Container(
+      margin: const EdgeInsets.all(0.01),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: ZetaRadius.full,
+      ),
+      child: value != null
+          ? Center(
+              child: Text(
+                value! > 99 ? '99+' : '$value',
+                style: TextStyle(
+                  color: backgroundColor?.onColor,
+                  fontSize: badgeSize / 2,
+                ),
+              ),
+            )
+          : icon != null
+              ? Icon(
+                  icon,
+                  size: badgeSize - borderSize,
+                  color: iconColor ?? backgroundColor?.onColor,
+                )
+              : null,
+    );
 
     return Container(
       width: badgeSize + ZetaSpacing.x1,
       height: badgeSize + ZetaSpacing.x1,
       decoration: BoxDecoration(
-        color: backgroundColor,
         borderRadius: ZetaRadius.full,
         border: Border.all(
           width: borderSize,
-          color: Colors.white,
+          color: Zeta.of(context).colors.surfacePrimary,
         ),
       ),
       child: Center(child: innerContent),
