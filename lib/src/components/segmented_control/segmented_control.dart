@@ -29,8 +29,7 @@ class ZetaSegmentedControl<T> extends StatefulWidget {
   final T selected;
 
   @override
-  State<ZetaSegmentedControl<T>> createState() =>
-      _ZetaSegmentedControlState<T>();
+  State<ZetaSegmentedControl<T>> createState() => _ZetaSegmentedControlState<T>();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -55,8 +54,7 @@ class _ZetaSegmentedControlState<T> extends State<ZetaSegmentedControl<T>>
     vsync: this,
   );
 
-  late final _thumbScaleAnimation =
-      _thumbScaleController.drive(Tween<double>(begin: 1));
+  late final _thumbScaleAnimation = _thumbScaleController.drive(Tween<double>(begin: 1));
 
   late final _thumbScaleController = AnimationController(
     duration: kThemeAnimationDuration,
@@ -193,8 +191,7 @@ class _Segment<T> extends StatefulWidget {
   }
 }
 
-class _SegmentState<T> extends State<_Segment<T>>
-    with TickerProviderStateMixin<_Segment<T>> {
+class _SegmentState<T> extends State<_Segment<T>> with TickerProviderStateMixin<_Segment<T>> {
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
@@ -280,15 +277,12 @@ class _SegmentedControlRenderWidget<T> extends MultiChildRenderObjectWidget {
   }
 }
 
-class _SegmentedControlContainerBoxParentData
-    extends ContainerBoxParentData<RenderBox> {}
+class _SegmentedControlContainerBoxParentData extends ContainerBoxParentData<RenderBox> {}
 
 class _RenderSegmentedControl<T> extends RenderBox
     with
-        ContainerRenderObjectMixin<RenderBox,
-            ContainerBoxParentData<RenderBox>>,
-        RenderBoxContainerDefaultsMixin<RenderBox,
-            ContainerBoxParentData<RenderBox>> {
+        ContainerRenderObjectMixin<RenderBox, ContainerBoxParentData<RenderBox>>,
+        RenderBoxContainerDefaultsMixin<RenderBox, ContainerBoxParentData<RenderBox>> {
   _RenderSegmentedControl({
     required int? highlightedIndex,
     required Color thumbColor,
@@ -375,8 +369,7 @@ class _RenderSegmentedControl<T> extends RenderBox
       maxMinChildWidth = math.max(maxMinChildWidth, childWidth);
       child = nonSeparatorChildAfter(child);
     }
-    return (maxMinChildWidth + 2 * ZetaSpacing.l) * childCount +
-        totalSeparatorWidth;
+    return (maxMinChildWidth + 2 * ZetaSpacing.l) * childCount + totalSeparatorWidth;
   }
 
   @override
@@ -441,17 +434,13 @@ class _RenderSegmentedControl<T> extends RenderBox
         final Animatable<Rect?>? thumbTween = state._thumbAnimatable;
         if (thumbTween == null) {
           // This is the first frame of the animation.
-          final Rect startingRect =
-              moveThumbRectInBound(currentThumbRect, children) ?? newThumbRect;
-          state._thumbAnimatable =
-              RectTween(begin: startingRect, end: newThumbRect);
+          final Rect startingRect = moveThumbRectInBound(currentThumbRect, children) ?? newThumbRect;
+          state._thumbAnimatable = RectTween(begin: startingRect, end: newThumbRect);
         } else if (newThumbRect != thumbTween.transform(1)) {
           // The thumbTween of the running sliding animation needs updating,
           // without restarting the animation.
-          final Rect startingRect =
-              moveThumbRectInBound(currentThumbRect, children) ?? newThumbRect;
-          state._thumbAnimatable =
-              RectTween(begin: startingRect, end: newThumbRect).chain(
+          final Rect startingRect = moveThumbRectInBound(currentThumbRect, children) ?? newThumbRect;
+          state._thumbAnimatable = RectTween(begin: startingRect, end: newThumbRect).chain(
             CurveTween(curve: Interval(state._thumbController.value, 1)),
           );
         }
@@ -459,9 +448,7 @@ class _RenderSegmentedControl<T> extends RenderBox
         state._thumbAnimatable = null;
       }
 
-      final Rect unscaledThumbRect =
-          state._thumbAnimatable?.evaluate(state._thumbController) ??
-              newThumbRect;
+      final Rect unscaledThumbRect = state._thumbAnimatable?.evaluate(state._thumbController) ?? newThumbRect;
       currentThumbRect = unscaledThumbRect;
       final Rect thumbRect = Rect.fromCenter(
         center: unscaledThumbRect.center,
@@ -484,8 +471,7 @@ class _RenderSegmentedControl<T> extends RenderBox
     final BoxConstraints constraints = this.constraints;
     final Size childSize = _calculateChildSize(constraints);
     final BoxConstraints childConstraints = BoxConstraints.tight(childSize);
-    final BoxConstraints separatorConstraints =
-        childConstraints.heightConstraints();
+    final BoxConstraints separatorConstraints = childConstraints.heightConstraints();
 
     RenderBox? child = firstChild;
     int index = 0;
@@ -555,15 +541,10 @@ class _RenderSegmentedControl<T> extends RenderBox
       return null;
     }
 
-    final Offset firstChildOffset =
-        (children.first.parentData! as _SegmentedControlContainerBoxParentData)
-            .offset;
+    final Offset firstChildOffset = (children.first.parentData! as _SegmentedControlContainerBoxParentData).offset;
     final double leftMost = firstChildOffset.dx;
     final double rightMost =
-        (children.last.parentData! as _SegmentedControlContainerBoxParentData)
-                .offset
-                .dx +
-            children.last.size.width;
+        (children.last.parentData! as _SegmentedControlContainerBoxParentData).offset.dx + children.last.size.width;
 
     // Ignore the horizontal position and the height of `thumbRect`, and
     // calculates them from `children`.
@@ -577,13 +558,11 @@ class _RenderSegmentedControl<T> extends RenderBox
 
   Size _calculateChildSize(BoxConstraints constraints) {
     final int childCount = this.childCount ~/ 2 + 1;
-    double childWidth =
-        (constraints.minWidth - totalSeparatorWidth) / childCount;
+    double childWidth = (constraints.minWidth - totalSeparatorWidth) / childCount;
     double maxHeight = ZetaSpacing.x7;
     RenderBox? child = firstChild;
     while (child != null) {
-      childWidth =
-          math.max(childWidth, child.getMaxIntrinsicWidth(double.infinity) + 2);
+      childWidth = math.max(childWidth, child.getMaxIntrinsicWidth(double.infinity) + 2);
       child = nonSeparatorChildAfter(child);
     }
     childWidth = math.min(
