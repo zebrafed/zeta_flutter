@@ -112,20 +112,16 @@ class ZetaRadius {
   static const BorderRadius none = BorderRadius.zero;
 
   /// Smallest amount of border radius; 4px radius.
-  static const BorderRadius minimal =
-      BorderRadius.all(Radius.circular(ZetaSpacing.xxs));
+  static const BorderRadius minimal = BorderRadius.all(Radius.circular(ZetaSpacing.xxs));
 
   /// Border radius used when rounded parameter is true; 8px radius.
-  static const BorderRadius rounded =
-      BorderRadius.all(Radius.circular(ZetaSpacing.xs));
+  static const BorderRadius rounded = BorderRadius.all(Radius.circular(ZetaSpacing.xs));
 
   /// Large border radius; 16px radius.
-  static const BorderRadius large =
-      BorderRadius.all(Radius.circular(ZetaSpacing.b));
+  static const BorderRadius large = BorderRadius.all(Radius.circular(ZetaSpacing.b));
 
   /// Wide border radius; 24px radius.
-  static const BorderRadius wide =
-      BorderRadius.all(Radius.circular(ZetaSpacing.m));
+  static const BorderRadius wide = BorderRadius.all(Radius.circular(ZetaSpacing.m));
 
   /// Largest amount of border radius; 360px radius.
   static const BorderRadius full = BorderRadius.all(Radius.circular(360));
