@@ -1,8 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../zeta_flutter.dart';
+
+const _horizontalArrowSize = Size(4, 8);
+const _verticalArrowSize = Size(8, 4);
 
 /// The direction of [ZetaTooltip]'s arrow
 enum ZetaTooltipArrowDirection {
@@ -75,6 +77,10 @@ class ZetaTooltip extends StatelessWidget {
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);
     final color = this.color ?? zeta.colors.textDefault;
+    final horizontalArrowWidth =
+        [ZetaTooltipArrowDirection.left, ZetaTooltipArrowDirection.right].contains(arrowDirection)
+            ? _horizontalArrowSize.width
+            : 0;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -88,7 +94,7 @@ class ZetaTooltip extends StatelessWidget {
                     color: color,
                     direction: arrowDirection,
                   ),
-                  size: const Size(8, 4),
+                  size: _verticalArrowSize,
                 ),
               ),
             Row(
@@ -101,12 +107,12 @@ class ZetaTooltip extends StatelessWidget {
                         color: color,
                         direction: arrowDirection,
                       ),
-                      size: const Size(4, 8),
+                      size: _horizontalArrowSize,
                     ),
                   ),
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxWidth: maxWidth ?? constraints.maxWidth,
+                    maxWidth: maxWidth ?? (constraints.maxWidth - horizontalArrowWidth),
                   ),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
@@ -137,7 +143,7 @@ class ZetaTooltip extends StatelessWidget {
                         color: color,
                         direction: arrowDirection,
                       ),
-                      size: const Size(4, 8),
+                      size: _horizontalArrowSize,
                     ),
                   ),
               ],
@@ -149,7 +155,7 @@ class ZetaTooltip extends StatelessWidget {
                     color: color,
                     direction: arrowDirection,
                   ),
-                  size: const Size(8, 4),
+                  size: _verticalArrowSize,
                 ),
               ),
           ],
