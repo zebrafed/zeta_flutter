@@ -9,26 +9,54 @@ class ZetaSelectInput extends StatefulWidget {
   const ZetaSelectInput({
     super.key,
     required this.items,
-    required this.onChange,
-    required this.selectedItem,
+    required this.onChanged,
+    this.selectedItem,
+    this.size,
+    this.label,
+    this.hint,
+    this.enabled = true,
+    this.required = false,
     this.rounded = true,
-    this.leadingType = LeadingStyle.none,
+    this.hasError = false,
+    this.errorText,
   });
 
   /// Input items as list of [ZetaSelectInputItem]
   final List<ZetaSelectInputItem> items;
 
   /// Currently selected item
-  final ZetaSelectInputItem selectedItem;
+  final ZetaSelectInputItem? selectedItem;
 
   /// Handles changes of select menu
-  final ValueSetter<ZetaSelectInputItem> onChange;
+  final ValueSetter<ZetaSelectInputItem> onChanged;
+
+  /// Determines the size of the input field.
+  /// Default is `ZetaDateInputSize.large`
+  final ZetaWidgetSize? size;
+
+  /// If provided, displays a label above the input field.
+  final String? label;
+
+  /// If provided, displays a hint below the input field.
+  final String? hint;
+
+  /// Determines if the input field should be enabled (default) or disabled.
+  final bool enabled;
+
+  /// Determines if the input field is required or not (default).
+  final bool required;
+
+  /// Determines if the input field should be displayed in error style.
+  /// Default is `false`.
+  /// If `enabled` is `false`, this has no effect.
+  final bool hasError;
+
+  /// In combination with `hasError: true`, provides the error message
+  /// to be displayed below the input field.
+  final String? errorText;
 
   /// {@macro zeta-component-rounded}
   final bool rounded;
-
-  /// The style for the leading widget. Can be a checkbox or radio button
-  final LeadingStyle leadingType;
 
   @override
   State<ZetaSelectInput> createState() => _ZetaSelectInputState();
@@ -36,62 +64,91 @@ class ZetaSelectInput extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<LeadingStyle>('leadingType', leadingType))
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(
         ObjectFlagProperty<ValueSetter<ZetaSelectInputItem>>.has(
-          'onChange',
-          onChange,
+          'onChanged',
+          onChanged,
         ),
-      );
+      )
+      ..add(EnumProperty<ZetaWidgetSize?>('size', size))
+      ..add(StringProperty('label', label))
+      ..add(StringProperty('hint', hint))
+      ..add(DiagnosticsProperty<bool>('enabled', enabled))
+      ..add(DiagnosticsProperty<bool>('hasError', hasError))
+      ..add(StringProperty('errorText', errorText))
+      ..add(DiagnosticsProperty<bool>('required', required));
   }
 }
 
 class _ZetaSelectInputState extends State<ZetaSelectInput> {
-  final OverlayPortalController _tooltipController = OverlayPortalController();
+  final OverlayPortalController _overlayController = OverlayPortalController();
   final _link = LayerLink();
-  final _menuKey = GlobalKey(); // declare a global key
+  late String? _selectedValue;
+  late List<ZetaSelectInputItem> _menuItems;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedValue = widget.selectedItem?.value;
+    _menuItems = List.from(widget.items);
+  }
 
   @override
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
       link: _link,
       child: OverlayPortal(
-        controller: _tooltipController,
+        controller: _overlayController,
         overlayChildBuilder: (BuildContext context) {
           return CompositedTransformFollower(
             link: _link,
             targetAnchor: Alignment.bottomLeft,
             child: Align(
               alignment: AlignmentDirectional.topStart,
-              child: ZetaSelectInputMenu(
-                items: widget.items,
-                selected: widget.selectedItem.value,
-                boxType: widget.leadingType,
-                onPress: (item) {
+              child: _ZetaSelectInputMenu(
+                items: _menuItems,
+                selected: _selectedValue,
+                onSelected: (item) {
                   if (item != null) {
-                    widget.onChange(item);
+                    _selectedValue = item.value;
+                    widget.onChanged(item);
                   }
-                  _tooltipController.hide();
+                  _overlayController.hide();
                 },
+                rounded: widget.rounded,
               ),
             ),
           );
         },
         child: _InputComponent(
-          onMenuOpen: widget.items.isEmpty ? null : _tooltipController.toggle,
+          size: widget.size,
+          label: widget.label,
+          hint: widget.hint,
+          enabled: widget.enabled,
+          required: widget.required,
+          rounded: widget.rounded,
+          hasError: widget.hasError,
+          errorText: widget.errorText,
+          initialValue: _selectedValue,
+          onToggleMenu: widget.items.isEmpty ? null : () => setState(_overlayController.toggle),
+          menuIsShowing: _overlayController.isShowing,
+          onChanged: (value) {
+            _selectedValue = value;
+            _menuItems = widget.items
+                .where(
+                  (item) => item.value.toLowerCase().contains(value.toLowerCase()),
+                )
+                .toList();
+            final item = widget.items.firstWhereOrNull(
+              (item) => item.value.toLowerCase() == value.toLowerCase(),
+            );
+            if (item != null) {
+              widget.onChanged(item);
+            }
+            setState(() {});
+          },
         ),
-      ),
-    );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<GlobalKey<State<StatefulWidget>>>(
-        'menuKey',
-        _menuKey,
       ),
     );
   }
@@ -103,43 +160,28 @@ class _InputComponent extends StatefulWidget {
     this.label,
     this.hint,
     this.enabled = true,
+    this.required = false,
     this.rounded = true,
     this.hasError = false,
     this.errorText,
+    this.initialValue,
     this.onChanged,
-    this.onMenuOpen,
+    this.onToggleMenu,
+    this.menuIsShowing = false,
   });
 
-  /// Determines the size of the input field.
-  /// Default is `ZetaInputComponentSize.large`
-  final ZetaInputComponentSize? size;
-
-  /// If provided, displays a label above the input field.
+  final ZetaWidgetSize? size;
   final String? label;
-
-  /// If provided, displays a hint below the input field.
   final String? hint;
-
-  /// Determines if the input field should be enabled (default) or disabled.
   final bool enabled;
-
-  /// Determines if the input field corners are rounded (default) or sharp.
+  final bool required;
   final bool rounded;
-
-  /// Determines if the input field should be displayed in error style.
-  /// Default is `false`.
-  /// If `enabled` is `false`, this has no effect.
   final bool hasError;
-
-  /// In combination with `hasError: true`, provides the error message
-  /// to be displayed below the input field.
   final String? errorText;
-
-  /// A callback, which provides the entered text.
+  final String? initialValue;
   final void Function(String)? onChanged;
-
-  /// A callback, which opens the menu.
-  final VoidCallback? onMenuOpen;
+  final VoidCallback? onToggleMenu;
+  final bool menuIsShowing;
 
   @override
   State<_InputComponent> createState() => _InputComponentState();
@@ -148,7 +190,7 @@ class _InputComponent extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<ZetaInputComponentSize>('size', size))
+      ..add(EnumProperty<ZetaWidgetSize>('size', size))
       ..add(StringProperty('label', label))
       ..add(StringProperty('hint', hint))
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
@@ -156,13 +198,16 @@ class _InputComponent extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('hasError', hasError))
       ..add(StringProperty('errorText', errorText))
       ..add(ObjectFlagProperty<void Function(String p1)?>.has('onChanged', onChanged))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('onMenuOpen', onMenuOpen));
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onToggleMenu', onToggleMenu))
+      ..add(DiagnosticsProperty<bool>('menuIsShowing', menuIsShowing))
+      ..add(StringProperty('initialValue', initialValue))
+      ..add(DiagnosticsProperty<bool>('required', required));
   }
 }
 
 class _InputComponentState extends State<_InputComponent> {
   final _controller = TextEditingController();
-  late ZetaInputComponentSize _size;
+  late ZetaWidgetSize _size;
   bool _hasError = false;
 
   @override
@@ -178,13 +223,9 @@ class _InputComponentState extends State<_InputComponent> {
   }
 
   void _setParams() {
-    _size = widget.size ?? ZetaInputComponentSize.large;
+    _controller.text = widget.initialValue ?? '';
+    _size = widget.size ?? ZetaWidgetSize.large;
     _hasError = widget.hasError;
-  }
-
-  void _onChanged() {
-    widget.onChanged?.call(_controller.text);
-    setState(() {});
   }
 
   @override
@@ -196,8 +237,7 @@ class _InputComponentState extends State<_InputComponent> {
   @override
   Widget build(BuildContext context) {
     final zeta = Zeta.of(context);
-    final hasError = _hasError;
-    final showError = hasError && widget.errorText != null;
+    final showError = _hasError && widget.errorText != null;
     final hintErrorColor = widget.enabled
         ? showError
             ? zeta.colors.red
@@ -220,20 +260,22 @@ class _InputComponentState extends State<_InputComponent> {
         TextFormField(
           enabled: widget.enabled,
           controller: _controller,
-          onChanged: (_) => _onChanged(),
-          style: _size == ZetaInputComponentSize.small ? ZetaTextStyles.bodyXSmall : ZetaTextStyles.bodyMedium,
+          onChanged: widget.onChanged,
+          style: _size == ZetaWidgetSize.small ? ZetaTextStyles.bodyXSmall : ZetaTextStyles.bodyMedium,
           decoration: InputDecoration(
             isDense: true,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 10,
               vertical: _inputVerticalPadding(_size),
             ),
-            suffixIcon: widget.onMenuOpen == null
+            suffixIcon: widget.onToggleMenu == null
                 ? null
                 : IconButton(
-                    onPressed: widget.onMenuOpen,
+                    onPressed: widget.onToggleMenu,
                     icon: Icon(
-                      widget.rounded ? ZetaIcons.expand_more_round : ZetaIcons.expand_more_sharp,
+                      widget.menuIsShowing
+                          ? (widget.rounded ? ZetaIcons.expand_less_round : ZetaIcons.expand_less_sharp)
+                          : (widget.rounded ? ZetaIcons.expand_more_round : ZetaIcons.expand_more_sharp),
                       color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
                       size: _iconSize(_size),
                     ),
@@ -242,23 +284,23 @@ class _InputComponentState extends State<_InputComponent> {
               minHeight: ZetaSpacing.m,
               minWidth: ZetaSpacing.m,
             ),
-            hintStyle: _size == ZetaInputComponentSize.small
+            hintStyle: _size == ZetaWidgetSize.small
                 ? ZetaTextStyles.bodyXSmall.copyWith(
                     color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
                   )
                 : ZetaTextStyles.bodyMedium.copyWith(
                     color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
                   ),
-            filled: !widget.enabled || hasError ? true : null,
+            filled: !widget.enabled || _hasError ? true : null,
             fillColor: widget.enabled
-                ? hasError
+                ? _hasError
                     ? zeta.colors.red.shade10
                     : null
                 : zeta.colors.cool.shade30,
-            enabledBorder: hasError
+            enabledBorder: _hasError
                 ? _errorInputBorder(zeta, rounded: widget.rounded)
                 : _defaultInputBorder(zeta, rounded: widget.rounded),
-            focusedBorder: hasError
+            focusedBorder: _hasError
                 ? _errorInputBorder(zeta, rounded: widget.rounded)
                 : _focusedInputBorder(zeta, rounded: widget.rounded),
             disabledBorder: _defaultInputBorder(zeta, rounded: widget.rounded),
@@ -296,16 +338,16 @@ class _InputComponentState extends State<_InputComponent> {
     );
   }
 
-  double _inputVerticalPadding(ZetaInputComponentSize size) => switch (size) {
-        ZetaInputComponentSize.large => ZetaSpacing.x3,
-        ZetaInputComponentSize.medium => ZetaSpacing.x2,
-        ZetaInputComponentSize.small => ZetaSpacing.x2,
+  double _inputVerticalPadding(ZetaWidgetSize size) => switch (size) {
+        ZetaWidgetSize.large => ZetaSpacing.x3,
+        ZetaWidgetSize.medium => ZetaSpacing.x2,
+        ZetaWidgetSize.small => ZetaSpacing.x2,
       };
 
-  double _iconSize(ZetaInputComponentSize size) => switch (size) {
-        ZetaInputComponentSize.large => ZetaSpacing.x6,
-        ZetaInputComponentSize.medium => ZetaSpacing.x5,
-        ZetaInputComponentSize.small => ZetaSpacing.x4,
+  double _iconSize(ZetaWidgetSize size) => switch (size) {
+        ZetaWidgetSize.large => ZetaSpacing.x6,
+        ZetaWidgetSize.medium => ZetaSpacing.x5,
+        ZetaWidgetSize.small => ZetaSpacing.x4,
       };
 
   OutlineInputBorder _defaultInputBorder(
@@ -336,38 +378,22 @@ class _InputComponentState extends State<_InputComponent> {
       );
 }
 
-/// [ZetaInputComponentSize] size
-enum ZetaInputComponentSize {
-  /// [large] 48 pixels height of the input field.
-  large,
-
-  /// [medium] 40 pixels height of the input field.
-  medium,
-
-  /// [small] 32 pixels height of the input field.
-  small,
-}
-
 /// Class for [ZetaSelectInputItem]
-class ZetaSelectInputItem extends StatefulWidget {
+class ZetaSelectInputItem extends StatelessWidget {
   ///Public constructor for [ZetaSelectInputItem]
   const ZetaSelectInputItem({
     super.key,
     required this.value,
-    this.leadingIcon,
   })  : rounded = true,
         selected = false,
-        itemKey = null,
-        onPress = null;
+        onPressed = null;
 
   const ZetaSelectInputItem._({
     super.key,
     required this.rounded,
     required this.selected,
     required this.value,
-    this.leadingIcon,
-    this.onPress,
-    this.itemKey,
+    this.onPressed,
   });
 
   /// {@macro zeta-component-rounded}
@@ -379,35 +405,24 @@ class ZetaSelectInputItem extends StatefulWidget {
   /// Value of [ZetaSelectInputItem]
   final String value;
 
-  /// Leading icon for [ZetaSelectInputItem]
-  final Icon? leadingIcon;
-
   /// Handles clicking for [ZetaSelectInputItem]
-  final VoidCallback? onPress;
-
-  /// Key for item
-  final GlobalKey? itemKey;
+  final VoidCallback? onPressed;
 
   /// Returns copy of [ZetaSelectInputItem] with those private variables included
   ZetaSelectInputItem copyWith({
-    bool? round,
-    bool? focus,
-    VoidCallback? press,
-    GlobalKey? inputKey,
+    bool? rounded,
+    bool? selected,
+    VoidCallback? onPressed,
   }) {
     return ZetaSelectInputItem._(
-      rounded: round ?? rounded,
-      selected: focus ?? selected,
-      onPress: press ?? onPress,
-      itemKey: inputKey ?? itemKey,
+      rounded: rounded ?? this.rounded,
+      selected: selected ?? this.selected,
+      onPressed: onPressed ?? this.onPressed,
       value: value,
-      leadingIcon: leadingIcon,
       key: key,
     );
   }
 
-  @override
-  State<ZetaSelectInputItem> createState() => _ZetaSelectInputItemState();
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -415,27 +430,7 @@ class ZetaSelectInputItem extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DiagnosticsProperty<bool>('selected', selected))
       ..add(StringProperty('value', value))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('onPress', onPress))
-      ..add(
-        DiagnosticsProperty<GlobalKey<State<StatefulWidget>>?>(
-          'itemKey',
-          itemKey,
-        ),
-      );
-  }
-}
-
-class _ZetaSelectInputItemState extends State<ZetaSelectInputItem> {
-  final controller = MaterialStatesController();
-
-  @override
-  void initState() {
-    super.initState();
-    controller.addListener(() {
-      if (context.mounted && mounted && !controller.value.contains(MaterialState.disabled)) {
-        setState(() {});
-      }
-    });
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onPressed', onPressed));
   }
 
   @override
@@ -445,10 +440,9 @@ class _ZetaSelectInputItemState extends State<ZetaSelectInputItem> {
     return DefaultTextStyle(
       style: ZetaTextStyles.bodyMedium,
       child: OutlinedButton(
-        key: widget.itemKey,
-        onPressed: widget.onPress,
+        onPressed: onPressed,
         style: _getStyle(colors),
-        child: Text(widget.value),
+        child: Text(value),
       ).paddingVertical(ZetaSpacing.x2_5),
     );
   }
@@ -464,7 +458,7 @@ class _ZetaSelectInputItemState extends State<ZetaSelectInputItem> {
           return colors.surfaceSelected;
         }
 
-        if (states.contains(MaterialState.disabled) || widget.onPress == null) {
+        if (states.contains(MaterialState.disabled) || onPressed == null) {
           return colors.surfaceDisabled;
         }
         return colors.surfacePrimary;
@@ -477,83 +471,60 @@ class _ZetaSelectInputItemState extends State<ZetaSelectInputItem> {
       }),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: widget.rounded ? ZetaRadius.minimal : ZetaRadius.none,
+          borderRadius: rounded ? ZetaRadius.minimal : ZetaRadius.none,
         ),
       ),
       side: MaterialStatePropertyAll(
-        widget.selected ? BorderSide(color: colors.primary.shade60) : BorderSide.none,
+        selected ? BorderSide(color: colors.primary.shade60) : BorderSide.none,
       ),
       padding: const MaterialStatePropertyAll(EdgeInsets.zero),
       elevation: const MaterialStatePropertyAll(0),
       overlayColor: const MaterialStatePropertyAll(Colors.transparent),
     );
   }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<MaterialStatesController>(
-        'controller',
-        controller,
-      ),
-    );
-  }
 }
 
-///Class for [ZetaSelectInputMenu]
-class ZetaSelectInputMenu extends StatefulWidget {
-  ///Constructor for [ZetaSelectInputMenu]
-  const ZetaSelectInputMenu({
-    super.key,
+class _ZetaSelectInputMenu extends StatelessWidget {
+  const _ZetaSelectInputMenu({
     required this.items,
-    required this.onPress,
-    required this.selected,
-    this.rounded = false,
-    this.boxType,
+    required this.onSelected,
+    this.selected,
+    this.rounded = true,
   });
 
   /// Input items for the menu
   final List<ZetaSelectInputItem> items;
 
-  ///Handles clicking of item in menu
-  final ValueSetter<ZetaSelectInputItem?> onPress;
+  /// Handles selecting an item from the menu
+  final ValueSetter<ZetaSelectInputItem?> onSelected;
 
-  /// If item in menu is the currently selected item
-  final String selected;
+  /// The value of the currently selected item
+  final String? selected;
 
   /// {@macro zeta-component-rounded}
   final bool rounded;
 
-  /// If items have checkboxes, the type of that checkbox.
-  final LeadingStyle? boxType;
-
-  @override
-  State<ZetaSelectInputMenu> createState() => _ZetaSelectInputMenuState();
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
       ..add(
         ObjectFlagProperty<ValueSetter<ZetaSelectInputItem?>>.has(
-          'onPress',
-          onPress,
+          'onSelected',
+          onSelected,
         ),
       )
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
-      ..add(EnumProperty<LeadingStyle?>('boxType', boxType))
       ..add(StringProperty('selected', selected));
   }
-}
 
-class _ZetaSelectInputMenuState extends State<ZetaSelectInputMenu> {
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surfacePrimary,
-        borderRadius: widget.rounded ? ZetaRadius.minimal : ZetaRadius.none,
+        borderRadius: rounded ? ZetaRadius.minimal : ZetaRadius.none,
         boxShadow: const [
           BoxShadow(blurRadius: 2, color: Color.fromRGBO(40, 51, 61, 0.04)),
           BoxShadow(
@@ -568,15 +539,15 @@ class _ZetaSelectInputMenuState extends State<ZetaSelectInputMenu> {
         builder: (BuildContext bcontext) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: widget.items.map((item) {
+            children: items.map((item) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   item.copyWith(
-                    round: widget.rounded,
-                    focus: widget.selected == item.value,
-                    press: () {
-                      widget.onPress(item);
+                    rounded: rounded,
+                    selected: selected == item.value,
+                    onPressed: () {
+                      onSelected(item);
                     },
                   ),
                   const SizedBox(height: ZetaSpacing.x1),

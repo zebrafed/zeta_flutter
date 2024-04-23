@@ -13,7 +13,6 @@ class SelectInputExample extends StatefulWidget {
 class _SelectInputExampleState extends State<SelectInputExample> {
   ZetaSelectInputItem selectedItem = ZetaSelectInputItem(
     value: "Item 1",
-    leadingIcon: Icon(ZetaIcons.star_round),
   );
 
   @override
@@ -27,8 +26,9 @@ class _SelectInputExampleState extends State<SelectInputExample> {
             child: Column(
               children: [
                 ZetaSelectInput(
-                  leadingType: LeadingStyle.checkbox,
-                  onChange: (value) {
+                  label: 'Label',
+                  hint: 'Default hint text',
+                  onChanged: (value) {
                     setState(() {
                       selectedItem = value;
                     });
@@ -37,11 +37,9 @@ class _SelectInputExampleState extends State<SelectInputExample> {
                   items: [
                     ZetaSelectInputItem(
                       value: "Item 1",
-                      leadingIcon: Icon(ZetaIcons.star_round),
                     ),
                     ZetaSelectInputItem(
                       value: "Item 2",
-                      leadingIcon: Icon(ZetaIcons.star_half_round),
                     ),
                     ZetaSelectInputItem(
                       value: "Item 3",
