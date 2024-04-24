@@ -9,13 +9,13 @@ class ZetaSelectInput extends StatefulWidget {
   const ZetaSelectInput({
     super.key,
     required this.items,
-    required this.onChanged,
+    this.onChanged,
     this.selectedItem,
     this.size,
+    this.leadingIcon,
     this.label,
     this.hint,
     this.enabled = true,
-    this.required = false,
     this.rounded = true,
     this.hasError = false,
     this.errorText,
@@ -28,23 +28,23 @@ class ZetaSelectInput extends StatefulWidget {
   final ZetaSelectInputItem? selectedItem;
 
   /// Handles changes of select menu
-  final ValueSetter<ZetaSelectInputItem> onChanged;
+  final ValueSetter<ZetaSelectInputItem?>? onChanged;
 
   /// Determines the size of the input field.
   /// Default is `ZetaDateInputSize.large`
   final ZetaWidgetSize? size;
 
+  /// The input's leading icon.
+  final Widget? leadingIcon;
+
   /// If provided, displays a label above the input field.
-  final String? label;
+  final Widget? label;
 
   /// If provided, displays a hint below the input field.
   final String? hint;
 
   /// Determines if the input field should be enabled (default) or disabled.
   final bool enabled;
-
-  /// Determines if the input field is required or not (default).
-  final bool required;
 
   /// Determines if the input field should be displayed in error style.
   /// Default is `false`.
@@ -66,18 +66,16 @@ class ZetaSelectInput extends StatefulWidget {
     properties
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(
-        ObjectFlagProperty<ValueSetter<ZetaSelectInputItem>>.has(
+        ObjectFlagProperty<ValueSetter<ZetaSelectInputItem?>?>.has(
           'onChanged',
           onChanged,
         ),
       )
       ..add(EnumProperty<ZetaWidgetSize?>('size', size))
-      ..add(StringProperty('label', label))
       ..add(StringProperty('hint', hint))
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
       ..add(DiagnosticsProperty<bool>('hasError', hasError))
-      ..add(StringProperty('errorText', errorText))
-      ..add(DiagnosticsProperty<bool>('required', required));
+      ..add(StringProperty('errorText', errorText));
   }
 }
 
@@ -112,7 +110,7 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
                 onSelected: (item) {
                   if (item != null) {
                     _selectedValue = item.value;
-                    widget.onChanged(item);
+                    widget.onChanged?.call(item);
                   }
                   _overlayController.hide();
                 },
@@ -125,8 +123,8 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
           size: widget.size,
           label: widget.label,
           hint: widget.hint,
+          leadingIcon: widget.leadingIcon,
           enabled: widget.enabled,
-          required: widget.required,
           rounded: widget.rounded,
           hasError: widget.hasError,
           errorText: widget.errorText,
@@ -143,9 +141,7 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
             final item = widget.items.firstWhereOrNull(
               (item) => item.value.toLowerCase() == value.toLowerCase(),
             );
-            if (item != null) {
-              widget.onChanged(item);
-            }
+            widget.onChanged?.call(item);
             setState(() {});
           },
         ),
@@ -159,8 +155,8 @@ class _InputComponent extends StatefulWidget {
     this.size,
     this.label,
     this.hint,
+    this.leadingIcon,
     this.enabled = true,
-    this.required = false,
     this.rounded = true,
     this.hasError = false,
     this.errorText,
@@ -171,10 +167,10 @@ class _InputComponent extends StatefulWidget {
   });
 
   final ZetaWidgetSize? size;
-  final String? label;
+  final Widget? label;
   final String? hint;
+  final Widget? leadingIcon;
   final bool enabled;
-  final bool required;
   final bool rounded;
   final bool hasError;
   final String? errorText;
@@ -191,7 +187,6 @@ class _InputComponent extends StatefulWidget {
     super.debugFillProperties(properties);
     properties
       ..add(EnumProperty<ZetaWidgetSize>('size', size))
-      ..add(StringProperty('label', label))
       ..add(StringProperty('hint', hint))
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
@@ -200,8 +195,7 @@ class _InputComponent extends StatefulWidget {
       ..add(ObjectFlagProperty<void Function(String p1)?>.has('onChanged', onChanged))
       ..add(ObjectFlagProperty<VoidCallback?>.has('onToggleMenu', onToggleMenu))
       ..add(DiagnosticsProperty<bool>('menuIsShowing', menuIsShowing))
-      ..add(StringProperty('initialValue', initialValue))
-      ..add(DiagnosticsProperty<bool>('required', required));
+      ..add(StringProperty('initialValue', initialValue));
   }
 }
 
@@ -243,6 +237,7 @@ class _InputComponentState extends State<_InputComponent> {
             ? zeta.colors.red
             : zeta.colors.cool.shade70
         : zeta.colors.cool.shade50;
+    final iconSize = _iconSize(_size);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,11 +245,11 @@ class _InputComponentState extends State<_InputComponent> {
         if (widget.label != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
-            child: Text(
-              widget.label!,
+            child: DefaultTextStyle(
               style: ZetaTextStyles.bodyMedium.copyWith(
                 color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
               ),
+              child: widget.label!,
             ),
           ),
         TextFormField(
@@ -268,6 +263,22 @@ class _InputComponentState extends State<_InputComponent> {
               horizontal: 10,
               vertical: _inputVerticalPadding(_size),
             ),
+            prefixIcon: widget.leadingIcon != null
+                ? Padding(
+                    padding: const EdgeInsets.only(left: ZetaSpacing.x2_5, right: ZetaSpacing.xs),
+                    child: IconTheme(
+                      data: IconThemeData(
+                        color: widget.enabled ? zeta.colors.cool.shade70 : zeta.colors.cool.shade50,
+                        size: iconSize,
+                      ),
+                      child: widget.leadingIcon!,
+                    ),
+                  )
+                : null,
+            prefixIconConstraints: const BoxConstraints(
+              minHeight: ZetaSpacing.m,
+              minWidth: ZetaSpacing.m,
+            ),
             suffixIcon: widget.onToggleMenu == null
                 ? null
                 : IconButton(
@@ -277,7 +288,7 @@ class _InputComponentState extends State<_InputComponent> {
                           ? (widget.rounded ? ZetaIcons.expand_less_round : ZetaIcons.expand_less_sharp)
                           : (widget.rounded ? ZetaIcons.expand_more_round : ZetaIcons.expand_more_sharp),
                       color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
-                      size: _iconSize(_size),
+                      size: iconSize,
                     ),
                   ),
             suffixIconConstraints: const BoxConstraints(
@@ -345,7 +356,7 @@ class _InputComponentState extends State<_InputComponent> {
       };
 
   double _iconSize(ZetaWidgetSize size) => switch (size) {
-        ZetaWidgetSize.large => ZetaSpacing.x6,
+        ZetaWidgetSize.large => ZetaSpacing.x5,
         ZetaWidgetSize.medium => ZetaSpacing.x5,
         ZetaWidgetSize.small => ZetaSpacing.x4,
       };
