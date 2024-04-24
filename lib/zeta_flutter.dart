@@ -36,6 +36,8 @@ export 'src/components/phone_input/phone_input.dart';
 export 'src/components/progress/progress_bar.dart';
 export 'src/components/progress/progress_circle.dart';
 export 'src/components/radio/radio.dart';
+export 'src/components/search_bar/search_bar.dart';
+export 'src/components/segmented_control/segmented_control.dart';
 export 'src/components/select_input/select_input.dart';
 export 'src/components/snack_bar/snack_bar.dart';
 export 'src/components/stepper/stepper.dart';
