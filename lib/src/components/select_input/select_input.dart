@@ -117,6 +117,7 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
               alignment: _menuPosition == _MenuPosition.top ? Alignment.bottomLeft : Alignment.topLeft,
               child: _ZetaSelectInputMenu(
                 size: _menuSize,
+                itemSize: widget.size,
                 items: _menuItems,
                 selectedValue: _selectedValue,
                 onSelected: (item) {
@@ -154,7 +155,7 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
                     _menuPosition = upperHeight > lowerHeight ? _MenuPosition.top : _MenuPosition.bottom;
                     _menuSize = Size(
                       box?.size.width ?? 240,
-                      (upperHeight > lowerHeight ? upperHeight : lowerHeight) - ZetaSpacing.b,
+                      (upperHeight > lowerHeight ? upperHeight : lowerHeight) - ZetaSpacing.m,
                     );
                   });
                   _overlayController.toggle();
@@ -268,6 +269,7 @@ class _InputComponentState extends State<_InputComponent> {
             : zeta.colors.cool.shade70
         : zeta.colors.cool.shade50;
     final iconSize = _iconSize(_size);
+    final inputVerticalPadding = _inputVerticalPadding(_size);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,7 +293,7 @@ class _InputComponentState extends State<_InputComponent> {
             isDense: true,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 10,
-              vertical: _inputVerticalPadding(_size),
+              vertical: inputVerticalPadding,
             ),
             prefixIcon: widget.leadingIcon == null
                 ? null
@@ -311,14 +313,21 @@ class _InputComponentState extends State<_InputComponent> {
             ),
             suffixIcon: widget.onToggleMenu == null
                 ? null
-                : IconButton(
-                    onPressed: widget.onToggleMenu,
-                    icon: Icon(
-                      widget.menuIsShowing
-                          ? (widget.rounded ? ZetaIcons.expand_less_round : ZetaIcons.expand_less_sharp)
-                          : (widget.rounded ? ZetaIcons.expand_more_round : ZetaIcons.expand_more_sharp),
-                      color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
-                      size: iconSize,
+                : Padding(
+                    padding: const EdgeInsets.only(right: ZetaSpacing.xxs),
+                    child: IconButton(
+                      visualDensity: const VisualDensity(
+                        horizontal: -4,
+                        vertical: -4,
+                      ),
+                      onPressed: widget.onToggleMenu,
+                      icon: Icon(
+                        widget.menuIsShowing
+                            ? (widget.rounded ? ZetaIcons.expand_less_round : ZetaIcons.expand_less_sharp)
+                            : (widget.rounded ? ZetaIcons.expand_more_round : ZetaIcons.expand_more_sharp),
+                        color: widget.enabled ? zeta.colors.textDefault : zeta.colors.cool.shade50,
+                        size: iconSize,
+                      ),
                     ),
                   ),
             suffixIconConstraints: const BoxConstraints(
@@ -425,6 +434,7 @@ class ZetaSelectInputItem extends StatelessWidget {
   const ZetaSelectInputItem({
     super.key,
     required this.value,
+    this.size = ZetaWidgetSize.large,
   })  : rounded = true,
         selected = false,
         onPressed = null;
@@ -435,6 +445,7 @@ class ZetaSelectInputItem extends StatelessWidget {
     required this.selected,
     required this.value,
     this.onPressed,
+    this.size = ZetaWidgetSize.large,
   });
 
   /// {@macro zeta-component-rounded}
@@ -449,16 +460,21 @@ class ZetaSelectInputItem extends StatelessWidget {
   /// Handles clicking for [ZetaSelectInputItem]
   final VoidCallback? onPressed;
 
+  /// The size of [ZetaSelectInputItem]
+  final ZetaWidgetSize size;
+
   /// Returns copy of [ZetaSelectInputItem] with those private variables included
   ZetaSelectInputItem copyWith({
     bool? rounded,
     bool? selected,
     VoidCallback? onPressed,
+    ZetaWidgetSize? size,
   }) {
     return ZetaSelectInputItem._(
       rounded: rounded ?? this.rounded,
       selected: selected ?? this.selected,
       onPressed: onPressed ?? this.onPressed,
+      size: size ?? this.size,
       value: value,
       key: key,
     );
@@ -471,7 +487,8 @@ class ZetaSelectInputItem extends StatelessWidget {
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DiagnosticsProperty<bool>('selected', selected))
       ..add(StringProperty('value', value))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('onPressed', onPressed));
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onPressed', onPressed))
+      ..add(EnumProperty<ZetaWidgetSize>('size', size));
   }
 
   @override
@@ -482,13 +499,18 @@ class ZetaSelectInputItem extends StatelessWidget {
       style: ZetaTextStyles.bodyMedium,
       child: OutlinedButton(
         onPressed: onPressed,
-        style: _getStyle(colors),
+        style: _getStyle(colors, size),
         child: Text(value),
       ),
     );
   }
 
-  ButtonStyle _getStyle(ZetaColors colors) {
+  ButtonStyle _getStyle(ZetaColors colors, ZetaWidgetSize size) {
+    final visualDensity = switch (size) {
+      ZetaWidgetSize.large => 0.0,
+      ZetaWidgetSize.medium => -2.0,
+      ZetaWidgetSize.small => -4.0,
+    };
     return ButtonStyle(
       backgroundColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.hovered)) {
@@ -518,11 +540,20 @@ class ZetaSelectInputItem extends StatelessWidget {
       side: MaterialStatePropertyAll(
         selected ? BorderSide(color: colors.primary.shade60) : BorderSide.none,
       ),
-      padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: ZetaSpacing.b)),
+      padding: const MaterialStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: ZetaSpacing.b),
+      ),
       elevation: const MaterialStatePropertyAll(0),
       overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+      textStyle: MaterialStatePropertyAll<TextStyle>(
+        size == ZetaWidgetSize.small ? ZetaTextStyles.bodyXSmall : ZetaTextStyles.bodyMedium,
+      ),
       minimumSize: const MaterialStatePropertyAll<Size>(Size.fromHeight(48)),
       alignment: Alignment.centerLeft,
+      visualDensity: VisualDensity(
+        horizontal: visualDensity,
+        vertical: visualDensity,
+      ),
     );
   }
 }
@@ -534,6 +565,7 @@ class _ZetaSelectInputMenu extends StatelessWidget {
     required this.size,
     this.selectedValue,
     this.rounded = true,
+    this.itemSize,
   });
 
   /// Input items for the menu
@@ -551,6 +583,9 @@ class _ZetaSelectInputMenu extends StatelessWidget {
   /// {@macro zeta-component-rounded}
   final bool rounded;
 
+  /// The size of [ZetaSelectInputItem]
+  final ZetaWidgetSize? itemSize;
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -563,7 +598,8 @@ class _ZetaSelectInputMenu extends StatelessWidget {
       )
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(StringProperty('selectedValue', selectedValue))
-      ..add(DiagnosticsProperty<Size>('size', size));
+      ..add(DiagnosticsProperty<Size>('size', size))
+      ..add(EnumProperty<ZetaWidgetSize>('itemSize', itemSize));
   }
 
   @override
@@ -597,6 +633,7 @@ class _ZetaSelectInputMenu extends StatelessWidget {
                 rounded: rounded,
                 selected: selectedValue?.toLowerCase() == item.value.toLowerCase(),
                 onPressed: () => onSelected(item),
+                size: itemSize,
               );
             }).toList(),
           ),
