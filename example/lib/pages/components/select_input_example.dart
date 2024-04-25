@@ -48,8 +48,15 @@ class _SelectInputExampleState extends State<SelectInputExample> {
                   onChanged: (item) {
                     setState(() {
                       selectedItem = item;
-                      if (item?.value == 'Item 3') {
-                        _errorText = 'Item 3 is not allowed!';
+                      if (item != null) {
+                        _errorText = null;
+                      }
+                    });
+                  },
+                  onTextChanged: (value) {
+                    setState(() {
+                      if (value.isEmpty) {
+                        _errorText = 'Required';
                       } else {
                         _errorText = null;
                       }
@@ -65,9 +72,37 @@ class _SelectInputExampleState extends State<SelectInputExample> {
                     ),
                     ZetaSelectInputItem(
                       value: 'Item 3',
-                    )
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 4',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 5',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 6',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 7',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 8',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 9',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 10',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 11',
+                    ),
+                    ZetaSelectInputItem(
+                      value: 'Item 12',
+                    ),
                   ],
                 ),
+                const SizedBox(height: 120),
               ],
             ),
           ),

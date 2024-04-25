@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../../zeta_flutter.dart';
+
+enum _MenuPosition { top, bottom }
 
 /// Class for [ZetaSelectInput]
 class ZetaSelectInput extends StatefulWidget {
@@ -10,6 +13,7 @@ class ZetaSelectInput extends StatefulWidget {
     super.key,
     required this.items,
     this.onChanged,
+    this.onTextChanged,
     this.selectedItem,
     this.size,
     this.leadingIcon,
@@ -29,6 +33,9 @@ class ZetaSelectInput extends StatefulWidget {
 
   /// Handles changes of select menu
   final ValueSetter<ZetaSelectInputItem?>? onChanged;
+
+  /// Handles changes of input text
+  final ValueSetter<String>? onTextChanged;
 
   /// Determines the size of the input field.
   /// Default is `ZetaDateInputSize.large`
@@ -75,7 +82,8 @@ class ZetaSelectInput extends StatefulWidget {
       ..add(StringProperty('hint', hint))
       ..add(DiagnosticsProperty<bool>('enabled', enabled))
       ..add(DiagnosticsProperty<bool>('hasError', hasError))
-      ..add(StringProperty('errorText', errorText));
+      ..add(StringProperty('errorText', errorText))
+      ..add(ObjectFlagProperty<ValueSetter<String>?>.has('onTextChanged', onTextChanged));
   }
 }
 
@@ -84,6 +92,8 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
   final _link = LayerLink();
   late String? _selectedValue;
   late List<ZetaSelectInputItem> _menuItems;
+  Size _menuSize = const Size(240, 240);
+  _MenuPosition? _menuPosition = _MenuPosition.bottom;
 
   @override
   void initState() {
@@ -101,12 +111,14 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
         overlayChildBuilder: (BuildContext context) {
           return CompositedTransformFollower(
             link: _link,
-            targetAnchor: Alignment.bottomLeft,
+            targetAnchor: _menuPosition == _MenuPosition.top ? Alignment.topLeft : Alignment.bottomLeft,
+            followerAnchor: _menuPosition == _MenuPosition.top ? Alignment.bottomLeft : Alignment.topLeft,
             child: Align(
-              alignment: AlignmentDirectional.topStart,
+              alignment: _menuPosition == _MenuPosition.top ? Alignment.bottomLeft : Alignment.topLeft,
               child: _ZetaSelectInputMenu(
+                size: _menuSize,
                 items: _menuItems,
-                selected: _selectedValue,
+                selectedValue: _selectedValue,
                 onSelected: (item) {
                   if (item != null) {
                     _selectedValue = item.value;
@@ -129,9 +141,27 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
           hasError: widget.hasError,
           errorText: widget.errorText,
           initialValue: _selectedValue,
-          onToggleMenu: widget.items.isEmpty ? null : () => setState(_overlayController.toggle),
+          onToggleMenu: widget.items.isEmpty
+              ? null
+              : () {
+                  final box = context.findRenderObject() as RenderBox?;
+                  final offset = box?.size.topLeft(
+                    box.localToGlobal(Offset.zero),
+                  );
+                  final upperHeight = offset?.dy ?? 0;
+                  final lowerHeight = MediaQuery.of(context).size.height - upperHeight - (box?.size.height ?? 0);
+                  setState(() {
+                    _menuPosition = upperHeight > lowerHeight ? _MenuPosition.top : _MenuPosition.bottom;
+                    _menuSize = Size(
+                      box?.size.width ?? 240,
+                      (upperHeight > lowerHeight ? upperHeight : lowerHeight) - ZetaSpacing.b,
+                    );
+                  });
+                  _overlayController.toggle();
+                },
           menuIsShowing: _overlayController.isShowing,
           onChanged: (value) {
+            widget.onTextChanged?.call(value);
             _selectedValue = value;
             _menuItems = widget.items
                 .where(
@@ -193,7 +223,7 @@ class _InputComponent extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('hasError', hasError))
       ..add(StringProperty('errorText', errorText))
       ..add(ObjectFlagProperty<void Function(String p1)?>.has('onChanged', onChanged))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('onToggleMenu', onToggleMenu))
+      ..add(ObjectFlagProperty<void Function()?>.has('onToggleMenu', onToggleMenu))
       ..add(DiagnosticsProperty<bool>('menuIsShowing', menuIsShowing))
       ..add(StringProperty('initialValue', initialValue));
   }
@@ -263,8 +293,9 @@ class _InputComponentState extends State<_InputComponent> {
               horizontal: 10,
               vertical: _inputVerticalPadding(_size),
             ),
-            prefixIcon: widget.leadingIcon != null
-                ? Padding(
+            prefixIcon: widget.leadingIcon == null
+                ? null
+                : Padding(
                     padding: const EdgeInsets.only(left: ZetaSpacing.x2_5, right: ZetaSpacing.xs),
                     child: IconTheme(
                       data: IconThemeData(
@@ -273,8 +304,7 @@ class _InputComponentState extends State<_InputComponent> {
                       ),
                       child: widget.leadingIcon!,
                     ),
-                  )
-                : null,
+                  ),
             prefixIconConstraints: const BoxConstraints(
               minHeight: ZetaSpacing.m,
               minWidth: ZetaSpacing.m,
@@ -454,7 +484,7 @@ class ZetaSelectInputItem extends StatelessWidget {
         onPressed: onPressed,
         style: _getStyle(colors),
         child: Text(value),
-      ).paddingVertical(ZetaSpacing.x2_5),
+      ),
     );
   }
 
@@ -488,9 +518,11 @@ class ZetaSelectInputItem extends StatelessWidget {
       side: MaterialStatePropertyAll(
         selected ? BorderSide(color: colors.primary.shade60) : BorderSide.none,
       ),
-      padding: const MaterialStatePropertyAll(EdgeInsets.zero),
+      padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: ZetaSpacing.b)),
       elevation: const MaterialStatePropertyAll(0),
       overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+      minimumSize: const MaterialStatePropertyAll<Size>(Size.fromHeight(48)),
+      alignment: Alignment.centerLeft,
     );
   }
 }
@@ -499,7 +531,8 @@ class _ZetaSelectInputMenu extends StatelessWidget {
   const _ZetaSelectInputMenu({
     required this.items,
     required this.onSelected,
-    this.selected,
+    required this.size,
+    this.selectedValue,
     this.rounded = true,
   });
 
@@ -510,7 +543,10 @@ class _ZetaSelectInputMenu extends StatelessWidget {
   final ValueSetter<ZetaSelectInputItem?> onSelected;
 
   /// The value of the currently selected item
-  final String? selected;
+  final String? selectedValue;
+
+  /// The size of the menu.
+  final Size size;
 
   /// {@macro zeta-component-rounded}
   final bool rounded;
@@ -526,47 +562,45 @@ class _ZetaSelectInputMenu extends StatelessWidget {
         ),
       )
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
-      ..add(StringProperty('selected', selected));
+      ..add(StringProperty('selectedValue', selectedValue))
+      ..add(DiagnosticsProperty<Size>('size', size));
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surfacePrimary,
-        borderRadius: rounded ? ZetaRadius.minimal : ZetaRadius.none,
-        boxShadow: const [
-          BoxShadow(blurRadius: 2, color: Color.fromRGBO(40, 51, 61, 0.04)),
-          BoxShadow(
-            blurRadius: 8,
-            color: Color.fromRGBO(96, 104, 112, 0.16),
-            blurStyle: BlurStyle.outer,
-            offset: Offset(0, 4),
-          ),
-        ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: size.width,
+        maxHeight: size.height,
       ),
-      child: Builder(
-        builder: (BuildContext bcontext) {
-          return Column(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colors.surfacePrimary,
+          borderRadius: rounded ? ZetaRadius.minimal : ZetaRadius.none,
+          boxShadow: const [
+            BoxShadow(blurRadius: 2, color: Color.fromRGBO(40, 51, 61, 0.04)),
+            BoxShadow(
+              blurRadius: 8,
+              color: Color.fromRGBO(96, 104, 112, 0.16),
+              blurStyle: BlurStyle.outer,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: SingleChildScrollView(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: items.map((item) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  item.copyWith(
-                    rounded: rounded,
-                    selected: selected == item.value,
-                    onPressed: () {
-                      onSelected(item);
-                    },
-                  ),
-                  const SizedBox(height: ZetaSpacing.x1),
-                ],
+              return item.copyWith(
+                rounded: rounded,
+                selected: selectedValue?.toLowerCase() == item.value.toLowerCase(),
+                onPressed: () => onSelected(item),
               );
             }).toList(),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
