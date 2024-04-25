@@ -92,7 +92,7 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
   final _link = LayerLink();
   late String? _selectedValue;
   late List<ZetaSelectInputItem> _menuItems;
-  Size _menuSize = const Size(240, 240);
+  Size _menuSize = Size.zero;
   _MenuPosition? _menuPosition = _MenuPosition.bottom;
 
   @override
@@ -158,7 +158,7 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
                   setState(() {
                     _menuPosition = upperHeight > lowerHeight ? _MenuPosition.top : _MenuPosition.bottom;
                     _menuSize = Size(
-                      box?.size.width ?? (MediaQuery.of(context).size.width - ZetaSpacing.x12),
+                      box?.size.width ?? (MediaQuery.of(context).size.width - ZetaSpacing.x10),
                       (upperHeight > lowerHeight ? upperHeight : lowerHeight) - ZetaSpacing.m,
                     );
                     _menuItems = List.from(widget.items);
