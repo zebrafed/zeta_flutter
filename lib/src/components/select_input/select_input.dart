@@ -145,6 +145,9 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
           onToggleMenu: widget.items.isEmpty
               ? null
               : () {
+                  if (_overlayController.isShowing) {
+                    return _overlayController.hide();
+                  }
                   final box = context.findRenderObject() as RenderBox?;
                   final offset = box?.size.topLeft(
                     box.localToGlobal(Offset.zero),
@@ -157,8 +160,9 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
                       box?.size.width ?? 240,
                       (upperHeight > lowerHeight ? upperHeight : lowerHeight) - ZetaSpacing.m,
                     );
+                    _menuItems = List.from(widget.items);
                   });
-                  _overlayController.toggle();
+                  _overlayController.show();
                 },
           menuIsShowing: _overlayController.isShowing,
           onChanged: (value) {
