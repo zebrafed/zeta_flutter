@@ -146,7 +146,8 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
               ? null
               : () {
                   if (_overlayController.isShowing) {
-                    return _overlayController.hide();
+                    _overlayController.hide();
+                    return setState(() {});
                   }
                   final box = context.findRenderObject() as RenderBox?;
                   final offset = box?.size.topLeft(
@@ -157,7 +158,7 @@ class _ZetaSelectInputState extends State<ZetaSelectInput> {
                   setState(() {
                     _menuPosition = upperHeight > lowerHeight ? _MenuPosition.top : _MenuPosition.bottom;
                     _menuSize = Size(
-                      box?.size.width ?? 240,
+                      box?.size.width ?? (MediaQuery.of(context).size.width - ZetaSpacing.x12),
                       (upperHeight > lowerHeight ? upperHeight : lowerHeight) - ZetaSpacing.m,
                     );
                     _menuItems = List.from(widget.items);
