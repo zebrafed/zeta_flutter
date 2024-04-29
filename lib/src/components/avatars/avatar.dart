@@ -343,6 +343,7 @@ class ZetaAvatarBadge extends StatelessWidget {
     final backgroundColor = type == ZetaAvatarBadgeType.notification ? colors.negative : color;
     final badgeSize = _getContainerSize();
     final borderSize = _getBorderSize();
+    final paddedSize = badgeSize + ZetaSpacing.x1;
 
     final innerContent = Container(
       margin: const EdgeInsets.all(0.01),
@@ -356,7 +357,7 @@ class ZetaAvatarBadge extends StatelessWidget {
                 value! > 99 ? '99+' : '$value',
                 style: TextStyle(
                   color: backgroundColor?.onColor,
-                  fontSize: badgeSize / 2,
+                  fontSize: badgeSize / 4,
                 ),
               ),
             )
@@ -370,8 +371,10 @@ class ZetaAvatarBadge extends StatelessWidget {
     );
 
     return Container(
-      width: badgeSize + ZetaSpacing.x1,
-      height: badgeSize + ZetaSpacing.x1,
+      width: paddedSize,
+      height: type == ZetaAvatarBadgeType.notification
+          ? paddedSize / 2
+          : paddedSize,
       decoration: BoxDecoration(
         borderRadius: ZetaRadius.full,
         border: Border.all(
