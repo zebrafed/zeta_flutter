@@ -41,16 +41,8 @@ class ZetaFilterSelection extends StatelessWidget {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.all(ZetaSpacing.xxs),
-              children: [
-                for (int i = 0; i < items.length; i++)
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (i > 0) const SizedBox(width: 6),
-                      items[i].copyWith(rounded: rounded),
-                    ],
-                  ),
-              ],
+              children:
+                  items.map((e) => e.copyWith(rounded: rounded)).divide(const SizedBox(width: ZetaSpacing.x2)).toList(),
             ),
           ),
         ],
