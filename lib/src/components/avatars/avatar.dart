@@ -372,9 +372,7 @@ class ZetaAvatarBadge extends StatelessWidget {
 
     return Container(
       width: paddedSize,
-      height: type == ZetaAvatarBadgeType.notification
-          ? paddedSize / 2
-          : paddedSize,
+      height: type == ZetaAvatarBadgeType.notification ? paddedSize / 2 : paddedSize,
       decoration: BoxDecoration(
         borderRadius: ZetaRadius.full,
         border: Border.all(
