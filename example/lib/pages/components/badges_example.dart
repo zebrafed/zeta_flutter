@@ -56,8 +56,10 @@ class _StatusLabel extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        ZetaStatusLabel(label: 'Label', status: type),
+        ZetaStatusLabel(label: 'Label', status: type, customIcon: ZetaIcons.star_round),
         ZetaStatusLabel(label: 'Label', status: type, rounded: false),
-        ZetaStatusLabel(label: 'Label', status: type, rounded: true),
+        ZetaStatusLabel(label: 'Label', status: type, rounded: false, customIcon: ZetaIcons.star_sharp),
       ],
     );
   }
@@ -99,8 +101,8 @@ class _Badge extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ZetaBadge(label: 'Label', status: type, rounded: false),
         ZetaBadge(label: 'Label', status: type),
+        ZetaBadge(label: 'Label', status: type, rounded: false),
       ],
     );
   }
@@ -130,7 +132,8 @@ class _Indicators extends StatelessWidget {
         Column(
           children: [
             Text(
-              'ZetaIndicator.icon',
+              'ZetaIndicator\nicon',
+              textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 15),
@@ -164,7 +167,11 @@ class _Indicators extends StatelessWidget {
         const SizedBox.square(dimension: ZetaSpacing.xl),
         Column(
           children: [
-            Text('ZetaIndicator.notification', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              'ZetaIndicator\nnotification',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 15),
             Row(
               mainAxisSize: MainAxisSize.min,
