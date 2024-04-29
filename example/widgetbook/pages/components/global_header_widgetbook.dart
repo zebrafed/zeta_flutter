@@ -50,13 +50,9 @@ class _GlobalHeaderExampleState extends State<GlobalHeaderExample> {
         child: Column(
           children: [
             ZetaGlobalHeader(
-              title:
-                  widget.c.knobs.string(label: "Title", initialValue: "Title"),
-              tabItems:
-                  widget.c.knobs.boolean(label: "Children") ? childrenTwo : [],
-              utilityButtons: widget.c.knobs.boolean(label: "Menu buttons")
-                  ? utilityButtons
-                  : [],
+              title: widget.c.knobs.string(label: "Title", initialValue: "Title"),
+              tabItems: widget.c.knobs.boolean(label: "Children") ? childrenTwo : [],
+              utilityButtons: widget.c.knobs.boolean(label: "Menu buttons") ? utilityButtons : [],
             )
           ],
         ),
