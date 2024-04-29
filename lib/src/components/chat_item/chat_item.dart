@@ -72,8 +72,7 @@ class ZetaChatItem extends StatelessWidget {
   final VoidCallback? onPttTap;
 
   DateFormat get _dateFormat => timeFormat ?? DateFormat('hh:mm a');
-  String? get _count =>
-      count != null && count! > 99 ? '99+' : count?.toString();
+  String? get _count => count != null && count! > 99 ? '99+' : count?.toString();
 
   double _getSlidableExtend({
     required int slidableActionsCount,
@@ -173,16 +172,13 @@ class ZetaChatItem extends StatelessWidget {
                                     ),
                                   Flexible(
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Flexible(
                                           child: DefaultTextStyle(
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: (highlighted
-                                                    ? ZetaTextStyles.labelLarge
-                                                    : ZetaTextStyles.bodyMedium)
+                                            style: (highlighted ? ZetaTextStyles.labelLarge : ZetaTextStyles.bodyMedium)
                                                 .copyWith(
                                               color: colors.textDefault,
                                             ),
@@ -194,8 +190,7 @@ class ZetaChatItem extends StatelessWidget {
                                             if (time != null)
                                               Text(
                                                 _dateFormat.format(time!),
-                                                style:
-                                                    ZetaTextStyles.bodyXSmall,
+                                                style: ZetaTextStyles.bodyXSmall,
                                               ),
                                             IconTheme(
                                               data: const IconThemeData(
@@ -206,51 +201,40 @@ class ZetaChatItem extends StatelessWidget {
                                                   ...additionalIcons,
                                                   if (enabledWarningIcon)
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
+                                                      padding: const EdgeInsets.only(
                                                         left: ZetaSpacing.xxs,
                                                       ),
                                                       child: Icon(
                                                         ZetaIcons.info_round,
-                                                        color:
-                                                            colors.cool.shade70,
+                                                        color: colors.cool.shade70,
                                                       ),
                                                     ),
                                                   if (enabledWarningIcon)
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
+                                                      padding: const EdgeInsets.only(
                                                         left: ZetaSpacing.xxs,
                                                       ),
                                                       child: Icon(
-                                                        Icons
-                                                            .circle_notifications,
+                                                        Icons.circle_notifications,
                                                         color: colors.negative,
                                                       ),
                                                     ),
                                                   if (_count != null)
                                                     Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
+                                                      margin: const EdgeInsets.only(
                                                         left: ZetaSpacing.xxs,
                                                       ),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        horizontal:
-                                                            ZetaSpacing.x2,
+                                                      padding: const EdgeInsets.symmetric(
+                                                        horizontal: ZetaSpacing.x2,
                                                       ),
                                                       decoration: BoxDecoration(
                                                         color: colors.primary,
-                                                        borderRadius:
-                                                            ZetaRadius.full,
+                                                        borderRadius: ZetaRadius.full,
                                                       ),
                                                       child: Text(
                                                         _count!,
-                                                        style: ZetaTextStyles
-                                                            .labelSmall
-                                                            .copyWith(
-                                                          color: colors
-                                                              .textInverse,
+                                                        style: ZetaTextStyles.labelSmall.copyWith(
+                                                          color: colors.textInverse,
                                                         ),
                                                       ),
                                                     ),
@@ -282,12 +266,8 @@ class ZetaChatItem extends StatelessWidget {
                                       left: ZetaSpacing.xxs,
                                     ),
                                     child: Icon(
-                                      starred
-                                          ? ZetaIcons.star_sharp
-                                          : ZetaIcons.star_outline_sharp,
-                                      color: starred
-                                          ? colors.yellow.shade60
-                                          : null,
+                                      starred ? ZetaIcons.star_sharp : ZetaIcons.star_outline_sharp,
+                                      color: starred ? colors.yellow.shade60 : null,
                                     ),
                                   ),
                                 ],
