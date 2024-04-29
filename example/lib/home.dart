@@ -15,11 +15,14 @@ import 'package:zeta_example/pages/components/dialog_example.dart';
 import 'package:zeta_example/pages/components/dialpad_example.dart';
 import 'package:zeta_example/pages/components/dropdown_example.dart';
 import 'package:zeta_example/pages/components/global_header_example.dart';
+import 'package:zeta_example/pages/components/filter_selection_example.dart';
 import 'package:zeta_example/pages/components/list_item_example.dart';
 import 'package:zeta_example/pages/components/navigation_bar_example.dart';
 import 'package:zeta_example/pages/components/navigation_rail_example.dart';
 import 'package:zeta_example/pages/components/phone_input_example.dart';
 import 'package:zeta_example/pages/components/radio_example.dart';
+import 'package:zeta_example/pages/components/screen_header_bar_example.dart';
+import 'package:zeta_example/pages/components/select_input_example.dart';
 import 'package:zeta_example/pages/components/search_bar_example.dart';
 import 'package:zeta_example/pages/components/segmented_control_example.dart';
 import 'package:zeta_example/pages/components/stepper_example.dart';
@@ -57,16 +60,14 @@ final List<Component> components = [
   Component(CheckBoxExample.name, (context) => const CheckBoxExample()),
   Component(ChipExample.name, (context) => const ChipExample()),
   Component(ListItemExample.name, (context) => const ListItemExample()),
-  Component(
-      NavigationBarExample.name, (context) => const NavigationBarExample()),
+  Component(NavigationBarExample.name, (context) => const NavigationBarExample()),
   Component(PaginationExample.name, (context) => const PaginationExample()),
-  Component(
-      PasswordInputExample.name, (context) => const PasswordInputExample()),
+  Component(PasswordInputExample.name, (context) => const PasswordInputExample()),
   Component(GroupHeaderExample.name, (context) => const GroupHeaderExample()),
   Component(DropdownExample.name, (context) => const DropdownExample()),
   Component(ProgressExample.name, (context) => const ProgressExample()),
-  Component(SegmentedControlExample.name,
-      (context) => const SegmentedControlExample()),
+  Component(SegmentedControlExample.name, (context) => const SegmentedControlExample()),
+  Component(SegmentedControlExample.name, (context) => const SegmentedControlExample()),
   Component(SnackBarExample.name, (context) => const SnackBarExample()),
   Component(StepperExample.name, (context) => const StepperExample()),
   Component(TabsExample.name, (context) => const TabsExample()),
@@ -78,8 +79,11 @@ final List<Component> components = [
   Component(DialogExample.name, (context) => const DialogExample()),
   Component(SearchBarExample.name, (context) => const SearchBarExample()),
   Component(TooltipExample.name, (context) => const TooltipExample()),
-  Component(
-      NavigationRailExample.name, (context) => const NavigationRailExample()),
+  Component(NavigationRailExample.name, (context) => const NavigationRailExample()),
+  Component(NavigationRailExample.name, (context) => const NavigationRailExample()),
+  Component(SelectInputExample.name, (context) => const SelectInputExample()),
+  Component(ScreenHeaderBarExample.name, (context) => const ScreenHeaderBarExample()),
+  Component(FilterSelectionExample.name, (context) => const FilterSelectionExample()),
 ];
 
 final List<Component> theme = [
@@ -144,27 +148,21 @@ class _HomeState extends State<Home> {
               title: Text('Widgets'),
               backgroundColor: Zeta.of(context).colors.warm.shade30,
               children: _components
-                  .map((item) => ListTile(
-                      title: Text(item.name),
-                      onTap: () => context.go('/${item.name}')))
+                  .map((item) => ListTile(title: Text(item.name), onTap: () => context.go('/${item.name}')))
                   .toList(),
             ),
             ExpansionTile(
               title: Text('Theme'),
               backgroundColor: Zeta.of(context).colors.warm.shade30,
               children: _theme
-                  .map((item) => ListTile(
-                      title: Text(item.name),
-                      onTap: () => context.go('/${item.name}')))
+                  .map((item) => ListTile(title: Text(item.name), onTap: () => context.go('/${item.name}')))
                   .toList(),
             ),
             ExpansionTile(
               title: Text('Assets'),
               backgroundColor: Zeta.of(context).colors.warm.shade30,
               children: _assets
-                  .map((item) => ListTile(
-                      title: Text(item.name),
-                      onTap: () => context.go('/${item.name}')))
+                  .map((item) => ListTile(title: Text(item.name), onTap: () => context.go('/${item.name}')))
                   .toList(),
             ),
           ],

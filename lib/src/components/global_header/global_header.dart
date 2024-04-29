@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../zeta_flutter.dart';
-import '../../theme/theme_data.dart';
 
 /// Global header component
 class ZetaGlobalHeader extends StatefulWidget {
@@ -41,8 +40,7 @@ extension on DeviceType {
 
   /// Render
   bool get isSmall {
-    return this == DeviceType.mobileLandscape ||
-        this == DeviceType.mobilePortrait;
+    return this == DeviceType.mobileLandscape || this == DeviceType.mobilePortrait;
   }
 }
 
@@ -113,8 +111,7 @@ class _GlobalHeaderState extends State<ZetaGlobalHeader> {
               ),
               Row(
                 children: [
-                  if (deviceType.isSmall)
-                    const Expanded(child: ZetaSearchBar()),
+                  if (deviceType.isSmall) const Expanded(child: ZetaSearchBar()),
                   if (widget.tabItems.isNotEmpty)
                     Expanded(
                       child: SingleChildScrollView(
@@ -122,11 +119,9 @@ class _GlobalHeaderState extends State<ZetaGlobalHeader> {
                         child: Row(
                           /// Large screem filters some tab items to render on top
 
-                          children:
-                              deviceType.isLarge && widget.tabItems.length > 5
-                                  ? renderedChildren(widget.tabItems)
-                                      .sublist(5, widget.tabItems.length - 1)
-                                  : renderedChildren(widget.tabItems),
+                          children: deviceType.isLarge && widget.tabItems.length > 5
+                              ? renderedChildren(widget.tabItems).sublist(5, widget.tabItems.length - 1)
+                              : renderedChildren(widget.tabItems),
                         ),
                       ),
                     ),
