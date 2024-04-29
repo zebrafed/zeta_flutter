@@ -17,6 +17,7 @@ import 'pages/components/date_input_widgetbook.dart';
 import 'pages/components/dial_pad_widgetbook.dart';
 import 'pages/components/dialog_widgetbook.dart';
 import 'pages/components/dropdown_widgetbook.dart';
+import 'pages/components/filter_selection_widgetbook.dart';
 import 'pages/components/in_page_banner_widgetbook.dart';
 import 'pages/components/list_item_widgetbook.dart';
 import 'pages/components/navigation_bar_widgetbook.dart';
@@ -26,7 +27,10 @@ import 'pages/components/password_input_widgetbook.dart';
 import 'pages/components/phone_input_widgetbook.dart';
 import 'pages/components/progress_widgetbook.dart';
 import 'pages/components/radio_widgetbook.dart';
+import 'pages/components/screen_header_bar_widgetbook.dart';
+import 'pages/components/search_bar_widgetbook.dart';
 import 'pages/components/segmented_control_widgetbook.dart';
+import 'pages/components/select_input_widgetbook.dart';
 import 'pages/components/stepper_widgetbook.dart';
 import 'pages/components/switch_widgetbook.dart';
 import 'pages/components/snack_bar_widgetbook.dart';
@@ -133,8 +137,12 @@ class HotReload extends StatelessWidget {
               builder: (context) => stepperUseCase(context),
             ),
             WidgetbookUseCase(name: 'Dialog', builder: (context) => dialogUseCase(context)),
+            WidgetbookUseCase(name: 'Search Bar', builder: (context) => searchBarUseCase(context)),
             WidgetbookUseCase(name: 'Navigation Rail', builder: (context) => navigationRailUseCase(context)),
             WidgetbookUseCase(name: 'Tooltip', builder: (context) => tooltipUseCase(context)),
+            WidgetbookUseCase(name: 'Select Input', builder: (context) => selectInputUseCase(context)),
+            WidgetbookUseCase(name: 'Screen Header Bar', builder: (context) => screenHeaderBarUseCase(context)),
+            WidgetbookUseCase(name: 'Filter Selection', builder: (context) => filterSelectionUseCase(context)),
           ]..sort((a, b) => a.name.compareTo(b.name)),
         ),
         WidgetbookCategory(
