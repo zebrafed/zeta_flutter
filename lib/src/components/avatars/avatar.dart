@@ -169,15 +169,15 @@ class ZetaAvatar extends StatelessWidget {
         ),
         if (upperBadge != null)
           Positioned(
-            right: 1,
+            right: 0,
             child: upperBadge!.copyWith(
               size: size,
             ),
           ),
         if (lowerBadge != null)
           Positioned(
-            right: 1,
-            bottom: 1,
+            right: 0,
+            bottom: 0,
             child: lowerBadge!.copyWith(
               size: size,
             ),
@@ -375,10 +375,12 @@ class ZetaAvatarBadge extends StatelessWidget {
       height: type == ZetaAvatarBadgeType.notification ? paddedSize / 2 : paddedSize,
       decoration: BoxDecoration(
         borderRadius: ZetaRadius.full,
-        border: Border.all(
-          width: borderSize,
-          color: Zeta.of(context).colors.surfacePrimary,
-        ),
+        border: type != ZetaAvatarBadgeType.notification
+            ? Border.all(
+                width: borderSize,
+                color: Zeta.of(context).colors.surfacePrimary,
+              )
+            : null,
       ),
       child: Center(child: innerContent),
     );
