@@ -31,9 +31,9 @@ Widget priorityPillUseCase(BuildContext context) => WidgetbookTestWidget(
         child: ZetaPriorityPill(
           index: context.knobs.string(label: 'Index'),
           priority: context.knobs.string(label: 'Label'),
-          size: context.knobs.list<ZetaWidgetSize>(
+          size: context.knobs.list<ZetaPriorityPillSize>(
             label: 'Size',
-            options: ZetaWidgetSize.values,
+            options: ZetaPriorityPillSize.values,
             labelBuilder: (value) => value.name.capitalize(),
           ),
           type: context.knobs.list<ZetaPriorityPillType>(

@@ -21,7 +21,7 @@ class BadgesExample extends StatelessWidget {
             _DividingText('Priority Pill'),
             _PriorityPill(),
             const SizedBox(height: ZetaSpacing.l),
-            _PriorityPill(size: ZetaWidgetSize.small),
+            _PriorityPill(size: ZetaPriorityPillSize.small),
             _DividingText('Badge'),
             _Badge(),
             _DividingText('Indicators'),
@@ -82,10 +82,10 @@ class _StatusLabel extends StatelessWidget {
 
 class _PriorityPill extends StatelessWidget {
   const _PriorityPill({
-    this.size = ZetaWidgetSize.large,
+    this.size = ZetaPriorityPillSize.large,
   });
 
-  final ZetaWidgetSize size;
+  final ZetaPriorityPillSize size;
 
   @override
   Widget build(BuildContext context) {

@@ -18,6 +18,15 @@ enum ZetaPriorityPillType {
   low,
 }
 
+/// The size of [ZetaPriorityPill].
+enum ZetaPriorityPillSize {
+  /// large
+  large,
+
+  /// small
+  small,
+}
+
 extension on ZetaPriorityPillType {
   ZetaColorSwatch color(BuildContext context) {
     final colors = Zeta.of(context).colors;
@@ -45,7 +54,7 @@ class ZetaPriorityPill extends StatelessWidget {
     this.rounded = true,
     this.isBadge = false,
     this.type = ZetaPriorityPillType.urgent,
-    this.size = ZetaWidgetSize.large,
+    this.size = ZetaPriorityPillSize.large,
     super.key,
   });
 
@@ -71,12 +80,12 @@ class ZetaPriorityPill extends StatelessWidget {
   /// The size of [ZetaPriorityPill].
   ///
   /// Default is `ZetaWidgetSize.large`.
-  final ZetaWidgetSize size;
+  final ZetaPriorityPillSize size;
 
   @override
   Widget build(BuildContext context) {
     final color = type.color(context);
-    final size = this.size == ZetaWidgetSize.small ? ZetaSpacing.x5 : ZetaSpacing.x7;
+    final size = this.size == ZetaPriorityPillSize.small ? ZetaSpacing.x5 : ZetaSpacing.x7;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -100,7 +109,7 @@ class ZetaPriorityPill extends StatelessWidget {
                       ? type.name.substring(0, 1).capitalize()
                       : type.index.toString())
                   : index!.substring(0, 1).capitalize(),
-              style: this.size == ZetaWidgetSize.small
+              style: this.size == ZetaPriorityPillSize.small
                   ? ZetaTextStyles.labelSmall.copyWith(
                       fontSize: 11,
                       height: 1.1,
@@ -117,7 +126,7 @@ class ZetaPriorityPill extends StatelessWidget {
               ),
               child: Text(
                 (priority?.isEmpty ?? true) ? type.name.capitalize() : priority!,
-                style: this.size == ZetaWidgetSize.small
+                style: this.size == ZetaPriorityPillSize.small
                     ? ZetaTextStyles.bodyXSmall.copyWith(
                         fontSize: 11,
                         height: 1.1,
@@ -140,6 +149,6 @@ class ZetaPriorityPill extends StatelessWidget {
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DiagnosticsProperty<bool>('isBadge', isBadge))
       ..add(EnumProperty<ZetaPriorityPillType?>('type', type))
-      ..add(EnumProperty<ZetaWidgetSize>('size', size));
+      ..add(EnumProperty<ZetaPriorityPillSize>('size', size));
   }
 }
