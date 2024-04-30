@@ -23,10 +23,24 @@ Widget statusLabelUseCase(BuildContext context) {
 }
 
 Widget priorityPillUseCase(BuildContext context) => WidgetbookTestWidget(
-      widget: ZetaPriorityPill(
-        index: context.knobs.int.slider(label: 'Index'),
-        priority: context.knobs.string(label: 'Priority', initialValue: 'Priority'),
-        rounded: roundedKnob(context),
+      widget: Padding(
+        padding: const EdgeInsets.all(ZetaSpacing.m),
+        child: ZetaPriorityPill(
+          index: context.knobs.string(label: 'Index'),
+          priority: context.knobs.string(label: 'Label'),
+          size: context.knobs.list<ZetaWidgetSize>(
+            label: 'Size',
+            options: ZetaWidgetSize.values,
+            labelBuilder: (value) => value.name.capitalize(),
+          ),
+          type: context.knobs.list<ZetaPriorityPillType>(
+            label: 'Priority',
+            options: ZetaPriorityPillType.values,
+            labelBuilder: (value) => value.name.capitalize(),
+          ),
+          rounded: context.knobs.boolean(label: 'Rounded', initialValue: true),
+          isBadge: context.knobs.boolean(label: 'Badge'),
+        ),
       ),
     );
 

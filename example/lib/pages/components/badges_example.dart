@@ -20,6 +20,8 @@ class BadgesExample extends StatelessWidget {
             _StatusLabel(),
             _DividingText('Priority Pill'),
             _PriorityPill(),
+            const SizedBox(height: ZetaSpacing.l),
+            _PriorityPill(size: ZetaWidgetSize.small),
             _DividingText('Badge'),
             _Badge(),
             _DividingText('Indicators'),
@@ -79,16 +81,45 @@ class _StatusLabel extends StatelessWidget {
 }
 
 class _PriorityPill extends StatelessWidget {
-  const _PriorityPill();
+  const _PriorityPill({
+    this.size = ZetaWidgetSize.large,
+  });
+
+  final ZetaWidgetSize size;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        ZetaPriorityPill(index: 1000, priority: 'Rounded', rounded: true),
-        ZetaPriorityPill(index: 2, priority: 'Sharp', rounded: false),
-      ].divide(const SizedBox.square(dimension: ZetaSpacing.m)).toList(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ZetaPriorityPill(size: size, isBadge: true),
+            ZetaPriorityPill(size: size, isBadge: true, type: ZetaPriorityPillType.high),
+            ZetaPriorityPill(size: size, isBadge: true, type: ZetaPriorityPillType.medium),
+            ZetaPriorityPill(size: size, isBadge: true, type: ZetaPriorityPillType.low),
+          ].divide(const SizedBox.square(dimension: ZetaSpacing.m)).toList(),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ZetaPriorityPill(size: size),
+            ZetaPriorityPill(size: size, type: ZetaPriorityPillType.high),
+            ZetaPriorityPill(size: size, type: ZetaPriorityPillType.medium),
+            ZetaPriorityPill(size: size, type: ZetaPriorityPillType.low),
+          ].divide(const SizedBox.square(dimension: ZetaSpacing.m)).toList(),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ZetaPriorityPill(size: size, rounded: false),
+            ZetaPriorityPill(size: size, rounded: false, type: ZetaPriorityPillType.high),
+            ZetaPriorityPill(size: size, rounded: false, type: ZetaPriorityPillType.medium),
+            ZetaPriorityPill(size: size, rounded: false, type: ZetaPriorityPillType.low),
+          ].divide(const SizedBox.square(dimension: ZetaSpacing.m)).toList(),
+        ),
+      ],
     );
   }
 }
