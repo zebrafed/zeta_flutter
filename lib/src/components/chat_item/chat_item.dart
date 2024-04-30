@@ -35,7 +35,7 @@ class ZetaChatItem extends StatelessWidget {
 
   /// Normally the begining of the chat message.
   final Widget subtitle;
-  
+
   /// Normally [ZetaAvatar].
   final Widget leading;
 
