@@ -39,6 +39,9 @@ Widget chatItemWidgetBook(BuildContext context) {
       onMenuMoreTap: enabledOnMenuMore ? () {} : null,
       onPttTap: enabledOnPtt ? () {} : null,
       starred: starred,
+      leading: const ZetaAvatar(
+        size: ZetaAvatarSize.l,
+      ),
       title: Text(title),
       subtitle: Text(subtitle),
     ),

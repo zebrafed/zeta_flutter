@@ -23,6 +23,9 @@ class _ChatItemExampleState extends State<ChatItemExample> {
               time: DateTime.now(),
               enabledWarningIcon: true,
               enabledNotificationIcon: true,
+              leading: const ZetaAvatar(
+                size: ZetaAvatarSize.l,
+              ),
               count: 100,
               onTap: () {},
               onDeleteTap: () {},
@@ -41,6 +44,9 @@ class _ChatItemExampleState extends State<ChatItemExample> {
                 time: DateTime.now(),
                 onTap: () {},
                 starred: true,
+                leading: const ZetaAvatar(
+                  size: ZetaAvatarSize.l,
+                ),
                 title: Text("Chat name ID"),
                 subtitle: Text(
                   "Dummy text to represent the first lines of most recent message",

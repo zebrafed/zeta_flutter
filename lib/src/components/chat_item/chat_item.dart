@@ -14,6 +14,7 @@ class ZetaChatItem extends StatelessWidget {
     this.timeFormat,
     required this.title,
     required this.subtitle,
+    required this.leading,
     this.enabledWarningIcon = false,
     this.enabledNotificationIcon = false,
     this.additionalIcons = const [],
@@ -34,6 +35,9 @@ class ZetaChatItem extends StatelessWidget {
 
   /// Normally the begining of the chat message.
   final Widget subtitle;
+  
+  /// Normally [ZetaAvatar].
+  final Widget leading;
 
   /// The time when the message is sent. It applies default date format - [timeFormat].
   final DateTime? time;
@@ -146,9 +150,7 @@ class ZetaChatItem extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const ZetaAvatar(
-                        size: ZetaAvatarSize.l,
-                      ),
+                      leading,
                       Flexible(
                         child: Padding(
                           padding: const EdgeInsets.only(left: ZetaSpacing.s),
