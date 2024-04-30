@@ -28,8 +28,6 @@ class BadgesExample extends StatelessWidget {
             _Indicators(),
             _DividingText('Tags'),
             _Tags(),
-            _DividingText('WorkCloud indicators'),
-            _WorkcloudIndicators(),
           ],
         ),
       ),
@@ -251,53 +249,6 @@ class _Tags extends StatelessWidget {
           ZetaTag.right(label: 'Rounded'),
         ].divide(SizedBox.square(dimension: ZetaSpacing.m)).toList(),
       ),
-    );
-  }
-}
-
-class _WorkcloudIndicators extends StatelessWidget {
-  const _WorkcloudIndicators();
-
-  Widget workcloudIndicatorExampleRow(ZetaWorkcloudIndicatorType type) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ZetaWorkcloudIndicator(
-          priorityType: type,
-          prioritySize: ZetaWidgetSize.large,
-          icon: ZetaIcons.star_half_round,
-          label: 'Label',
-        ),
-        ZetaWorkcloudIndicator(
-          prioritySize: ZetaWidgetSize.medium,
-          index: '14',
-          priorityType: type,
-          label: 'Label!',
-        ),
-        ZetaWorkcloudIndicator(
-          priorityType: type,
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 30),
-        Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('Medium'), Text('Small'), Text('X-Small')],
-            ),
-            ...List.generate(10, (index) {
-              return workcloudIndicatorExampleRow(ZetaWorkcloudIndicatorType.values[index]);
-            }),
-          ].divide(const SizedBox.square(dimension: ZetaSpacing.s)).toList(),
-        ).paddingAll(ZetaSpacing.m)
-      ],
     );
   }
 }

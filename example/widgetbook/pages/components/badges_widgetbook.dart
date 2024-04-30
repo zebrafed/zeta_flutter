@@ -106,28 +106,3 @@ Widget tagsUseCase(BuildContext context) => WidgetbookTestWidget(
         ),
       ),
     );
-
-Widget workcloudIndicatorsUseCase(BuildContext context) {
-  final bool rounded = roundedKnob(context);
-
-  return WidgetbookTestWidget(
-    widget: Padding(
-      padding: const EdgeInsets.all(ZetaSpacing.m),
-      child: ZetaWorkcloudIndicator(
-        index: context.knobs.string(label: 'Index', initialValue: '1'),
-        label: context.knobs.string(label: 'Label', initialValue: 'Label'),
-        prioritySize: context.knobs.list(
-          label: 'Size',
-          labelBuilder: enumLabelBuilder,
-          options: ZetaWidgetSize.values,
-        ),
-        priorityType: context.knobs.list(
-          label: 'Type',
-          labelBuilder: enumLabelBuilder,
-          options: ZetaWorkcloudIndicatorType.values,
-        ),
-        icon: iconKnob(context, rounded: rounded, nullable: true),
-      ),
-    ),
-  );
-}
