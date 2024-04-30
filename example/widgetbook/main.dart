@@ -84,9 +84,7 @@ class HotReload extends StatelessWidget {
             ),
             WidgetbookUseCase(name: 'Avatar', builder: (context) => avatarUseCase(context)),
             WidgetbookUseCase(name: 'Checkbox', builder: (context) => checkboxUseCase(context)),
-            WidgetbookUseCase(
-                name: 'Contact Item',
-                builder: (context) => contactItemUseCase(context)),
+            WidgetbookUseCase(name: 'Contact Item', builder: (context) => contactItemUseCase(context)),
             WidgetbookComponent(
               name: 'Buttons',
               useCases: [

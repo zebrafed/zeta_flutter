@@ -5,12 +5,9 @@ import 'package:zeta_flutter/zeta_flutter.dart';
 import '../../test/test_components.dart';
 
 Widget contactItemUseCase(BuildContext context) {
-  final title = context.knobs
-      .string(label: 'Title', initialValue: "Contact / Group Name");
-  final subtitle = context.knobs.string(
-      label: 'Subtitle', initialValue: "Store Associate - Bakery Dept.");
-  final enabledDivider =
-      context.knobs.boolean(label: 'Enabled Divider', initialValue: true);
+  final title = context.knobs.string(label: 'Title', initialValue: "Contact / Group Name");
+  final subtitle = context.knobs.string(label: 'Subtitle', initialValue: "Store Associate - Bakery Dept.");
+  final enabledDivider = context.knobs.boolean(label: 'Enabled Divider', initialValue: true);
 
   return WidgetbookTestWidget(
     widget: ZetaContactItem(
