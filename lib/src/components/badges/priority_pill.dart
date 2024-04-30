@@ -76,6 +76,7 @@ class ZetaPriorityPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = type.color(context);
+    final size = this.size == ZetaWidgetSize.small ? ZetaSpacing.x5 : ZetaSpacing.x7;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -87,8 +88,8 @@ class ZetaPriorityPill extends StatelessWidget {
         children: [
           Container(
             alignment: Alignment.center,
-            height: size == ZetaWidgetSize.small ? ZetaSpacing.x5 : ZetaSpacing.x7,
-            width: size == ZetaWidgetSize.small ? ZetaSpacing.x5 : ZetaSpacing.x7,
+            height: size,
+            width: size,
             decoration: BoxDecoration(
               shape: rounded ? BoxShape.circle : BoxShape.rectangle,
               color: color,
@@ -99,7 +100,7 @@ class ZetaPriorityPill extends StatelessWidget {
                       ? type.name.substring(0, 1).capitalize()
                       : type.index.toString())
                   : index!.substring(0, 1).capitalize(),
-              style: size == ZetaWidgetSize.small
+              style: this.size == ZetaWidgetSize.small
                   ? ZetaTextStyles.labelSmall.copyWith(
                       fontSize: 11,
                       height: 1.1,
@@ -116,7 +117,7 @@ class ZetaPriorityPill extends StatelessWidget {
               ),
               child: Text(
                 (priority?.isEmpty ?? true) ? type.name.capitalize() : priority!,
-                style: size == ZetaWidgetSize.small
+                style: this.size == ZetaWidgetSize.small
                     ? ZetaTextStyles.bodyXSmall.copyWith(
                         fontSize: 11,
                         height: 1.1,
