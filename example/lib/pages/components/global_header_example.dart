@@ -24,7 +24,7 @@ class _GroupHeaderExampleState extends State<GroupHeaderExample> {
             ZetaGlobalHeader(
               title: "Title",
               tabItems: childrenTwo,
-              utilityButtons: [
+              actionButtons: [
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
@@ -44,6 +44,10 @@ class _GroupHeaderExampleState extends State<GroupHeaderExample> {
                   ),
                 ),
               ],
+              avatar: const ZetaAvatar(
+                initials: 'PS',
+                size: ZetaAvatarSize.s,
+              ),
             ),
             const SizedBox(
               height: ZetaSpacing.x5,

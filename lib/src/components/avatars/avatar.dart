@@ -91,6 +91,27 @@ class ZetaAvatar extends StatelessWidget {
   /// Notification Badge shown at top right corner of avatar.
   final ZetaIndicator? upperBadge;
 
+  /// Return copy of avatar with certain changed fields
+  ZetaAvatar copyWith({
+    ZetaAvatarSize? size,
+    Widget? image,
+    String? initials,
+    Color? backgroundColor,
+    Color? borderColor,
+    ZetaIndicator? lowerBadge,
+    ZetaIndicator? upperBadge,
+  }) {
+    return ZetaAvatar(
+      size: size ?? this.size,
+      image: image ?? this.image,
+      initials: initials ?? this.initials,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      borderColor: borderColor ?? this.borderColor,
+      lowerBadge: lowerBadge ?? this.lowerBadge,
+      upperBadge: upperBadge ?? this.upperBadge,
+    );
+  }
+
   bool get _showPlaceholder => image == null && (initials == null || initials!.isEmpty);
 
   @override

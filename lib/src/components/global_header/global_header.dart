@@ -6,12 +6,8 @@ import '../../../zeta_flutter.dart';
 /// Global header component
 class ZetaGlobalHeader extends StatefulWidget {
   /// Constructor for [ZetaGlobalHeader]
-  const ZetaGlobalHeader({
-    super.key,
-    required this.title,
-    this.tabItems = const [],
-    this.utilityButtons = const [],
-  });
+  const ZetaGlobalHeader(
+      {super.key, required this.title, this.tabItems = const [], this.actionButtons = const [], this.avatar});
 
   /// Header title in top left of header
   final String title;
@@ -19,8 +15,10 @@ class ZetaGlobalHeader extends StatefulWidget {
   /// Tab item buttons
   final List<ZetaTabItem> tabItems;
 
-  /// Utility buttons
-  final List<IconButton> utilityButtons;
+  /// Action buttons.
+  final List<IconButton> actionButtons;
+
+  final ZetaAvatar? avatar;
 
   @override
   State<ZetaGlobalHeader> createState() => _GlobalHeaderState();
@@ -38,9 +36,9 @@ extension on DeviceType {
     return this == DeviceType.desktopL || this == DeviceType.desktopXL;
   }
 
-  /// Render
+  /// Render search bar on bottom half of menu
   bool get isSmall {
-    return this == DeviceType.mobileLandscape || this == DeviceType.mobilePortrait;
+    return this == DeviceType.mobilePortrait;
   }
 }
 
@@ -68,7 +66,7 @@ class _GlobalHeaderState extends State<ZetaGlobalHeader> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 // Top Section
                 children: [
                   Row(
@@ -97,11 +95,8 @@ class _GlobalHeaderState extends State<ZetaGlobalHeader> {
                     ),
                   Row(
                     children: [
-                      ...widget.utilityButtons,
-                      const ZetaAvatar(
-                        initials: 'PS',
-                        size: ZetaAvatarSize.s,
-                      ),
+                      ...widget.actionButtons,
+                      if (widget.avatar != null) widget.avatar!.copyWith(size: ZetaAvatarSize.s),
                     ].gap(ZetaSpacing.s),
                   ),
                 ].gap(ZetaSpacing.s),

@@ -21,7 +21,7 @@ class GlobalHeaderExample extends StatefulWidget {
 class _GlobalHeaderExampleState extends State<GlobalHeaderExample> {
   List<ZetaTabItem> children = [];
   final childrenTwo = List.filled(10, ZetaTabItem());
-  final utilityButtons = [
+  final actionButtons = [
     IconButton(
       onPressed: () {},
       icon: const Icon(
@@ -52,7 +52,13 @@ class _GlobalHeaderExampleState extends State<GlobalHeaderExample> {
             ZetaGlobalHeader(
               title: widget.c.knobs.string(label: "Title", initialValue: "Title"),
               tabItems: widget.c.knobs.boolean(label: "Children") ? childrenTwo : [],
-              utilityButtons: widget.c.knobs.boolean(label: "Menu buttons") ? utilityButtons : [],
+              actionButtons: widget.c.knobs.boolean(label: "Menu buttons") ? actionButtons : [],
+              avatar: widget.c.knobs.boolean(label: "Show Avatar")
+                  ? const ZetaAvatar(
+                      initials: 'PS',
+                      size: ZetaAvatarSize.s,
+                    )
+                  : null,
             )
           ],
         ),
