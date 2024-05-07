@@ -110,8 +110,8 @@ class ZetaAvatar extends StatelessWidget {
     String? initials,
     Color? backgroundColor,
     Color? borderColor,
-    ZetaIndicator? lowerBadge,
-    ZetaIndicator? upperBadge,
+    ZetaAvatarBadge? lowerBadge,
+    ZetaAvatarBadge? upperBadge,
   }) {
     return ZetaAvatar(
       size: size ?? this.size,
@@ -143,6 +143,7 @@ class ZetaAvatar extends StatelessWidget {
                     fontSize: size.fontSize,
                     letterSpacing: 0,
                     color: backgroundColor?.onColor,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               )
@@ -153,57 +154,59 @@ class ZetaAvatar extends StatelessWidget {
       child: innerChild,
     );
 
-    return Stack(
-      children: [
-        Container(
-          width: sizePixels,
-          height: sizePixels,
-          decoration: BoxDecoration(
-            border: borderColor != null ? Border.all(color: borderColor!, width: 0) : null,
-            borderRadius: ZetaRadius.full,
-            color: backgroundColor ?? (_showPlaceholder ? zetaColors.surfacePrimary : zetaColors.cool.shade20),
-          ),
-          child: borderColor != null
-              ? Container(
-                  width: contentSizePixels,
-                  height: contentSizePixels,
-                  decoration: BoxDecoration(
-                    color: backgroundColor ?? zetaColors.surfaceHovered,
-                    border: Border.all(color: borderColor!, width: borderSize),
-                    borderRadius: ZetaRadius.full,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: ZetaRadius.full,
-                    child: innerContent,
-                  ),
-                )
-              : DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: ZetaRadius.full,
-                    color: backgroundColor ?? zetaColors.surfaceHovered,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: ZetaRadius.full,
-                    child: innerContent,
-                  ),
-                ),
-        ),
-        if (upperBadge != null)
-          Positioned(
-            right: 0,
-            child: upperBadge!.copyWith(
-              size: size,
+    return SelectionContainer.disabled(
+      child: Stack(
+        children: [
+          Container(
+            width: sizePixels,
+            height: sizePixels,
+            decoration: BoxDecoration(
+              border: borderColor != null ? Border.all(color: borderColor!, width: 0) : null,
+              borderRadius: ZetaRadius.full,
+              color: backgroundColor ?? (_showPlaceholder ? zetaColors.surfacePrimary : zetaColors.cool.shade20),
             ),
+            child: borderColor != null
+                ? Container(
+                    width: contentSizePixels,
+                    height: contentSizePixels,
+                    decoration: BoxDecoration(
+                      color: backgroundColor ?? zetaColors.surfaceHovered,
+                      border: Border.all(color: borderColor!, width: borderSize),
+                      borderRadius: ZetaRadius.full,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: ZetaRadius.full,
+                      child: innerContent,
+                    ),
+                  )
+                : DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: ZetaRadius.full,
+                      color: backgroundColor ?? zetaColors.surfaceHovered,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: ZetaRadius.full,
+                      child: innerContent,
+                    ),
+                  ),
           ),
-        if (lowerBadge != null)
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: lowerBadge!.copyWith(
-              size: size,
+          if (upperBadge != null)
+            Positioned(
+              right: 0,
+              child: upperBadge!.copyWith(
+                size: size,
+              ),
             ),
-          ),
-      ],
+          if (lowerBadge != null)
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: lowerBadge!.copyWith(
+                size: size,
+              ),
+            ),
+        ],
+      ),
     );
   }
 

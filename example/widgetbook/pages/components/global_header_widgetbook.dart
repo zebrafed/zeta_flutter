@@ -4,23 +4,7 @@ import 'package:zeta_flutter/zeta_flutter.dart';
 
 import '../../test/test_components.dart';
 
-Widget globalHeaderUseCase(BuildContext context) => WidgetbookTestWidget(
-      widget: Center(
-        child: GlobalHeaderExample(context),
-      ),
-    );
-
-class GlobalHeaderExample extends StatefulWidget {
-  const GlobalHeaderExample(this.c);
-  final BuildContext c;
-
-  @override
-  State<GlobalHeaderExample> createState() => _GlobalHeaderExampleState();
-}
-
-class _GlobalHeaderExampleState extends State<GlobalHeaderExample> {
-  List<ZetaTabItem> children = [];
-  final childrenTwo = List.filled(10, ZetaTabItem());
+Widget globalHeaderUseCase(BuildContext context) {
   final actionButtons = [
     IconButton(
       onPressed: () {},
@@ -34,35 +18,21 @@ class _GlobalHeaderExampleState extends State<GlobalHeaderExample> {
         ZetaIcons.help_round,
       ),
     ),
-    IconButton(
-      onPressed: () {},
-      icon: const Icon(
-        ZetaIcons.apps_round,
-      ),
-    ),
   ];
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          children: [
-            ZetaGlobalHeader(
-              title: widget.c.knobs.string(label: "Title", initialValue: "Title"),
-              tabItems: widget.c.knobs.boolean(label: "Children") ? childrenTwo : [],
-              actionButtons: widget.c.knobs.boolean(label: "Menu buttons") ? actionButtons : [],
-              avatar: widget.c.knobs.boolean(label: "Show Avatar")
-                  ? const ZetaAvatar(
-                      initials: 'PS',
-                      size: ZetaAvatarSize.s,
-                    )
-                  : null,
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  return WidgetbookTestWidget(
+    widget: ZetaGlobalHeader(
+      title: context.knobs.string(label: "Title", initialValue: "Title"),
+      tabItems: List.generate(
+          context.knobs.int.slider(label: "Tabs"), (index) => ZetaGlobalHeaderItem(label: 'Button ${index + 1}')),
+      searchBar: context.knobs.boolean(label: 'Search bar', initialValue: true)
+          ? ZetaSearchBar(shape: ZetaWidgetBorder.full, size: ZetaWidgetSize.large)
+          : null,
+      actionButtons: context.knobs.boolean(label: "Menu buttons", initialValue: true) ? actionButtons : [],
+      avatar: context.knobs.boolean(label: "Show Avatar", initialValue: true)
+          ? const ZetaAvatar(initials: 'PS', size: ZetaAvatarSize.s)
+          : null,
+      onAppsButton: context.knobs.boolean(label: "Apps menu", initialValue: true) ? () => {} : null,
+    ),
+  );
 }

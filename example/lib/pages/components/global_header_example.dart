@@ -11,61 +11,47 @@ class GroupHeaderExample extends StatefulWidget {
 }
 
 class _GroupHeaderExampleState extends State<GroupHeaderExample> {
-  final childrenOne = List.filled(5, ZetaTabItem());
-  final childrenTwo = List.filled(10, ZetaTabItem());
+  final childrenOne = List.filled(5, ZetaGlobalHeaderItem(label: 'Button'));
+  final childrenTwo = List.filled(10, ZetaGlobalHeaderItem(label: 'Button'));
 
   @override
   Widget build(BuildContext context) {
     return ExampleScaffold(
-      name: "GlobalHeader",
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(children: [
-            ZetaGlobalHeader(
-              title: "Title",
-              tabItems: childrenTwo,
-              actionButtons: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    ZetaIcons.alert_round,
+      name: "Global Header",
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Center(
+          child: SingleChildScrollView(
+            child: Column(children: [
+              Text(constraints.maxWidth.toString()),
+              ZetaGlobalHeader(
+                title: "Title",
+                tabItems: childrenOne,
+                searchBar: ZetaSearchBar(shape: ZetaWidgetBorder.full, size: ZetaWidgetSize.large),
+                onAppsButton: () {},
+                actionButtons: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      ZetaIcons.alert_round,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    ZetaIcons.help_round,
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      ZetaIcons.help_round,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    ZetaIcons.apps_round,
-                  ),
-                ),
-              ],
-              avatar: const ZetaAvatar(
-                initials: 'PS',
-                size: ZetaAvatarSize.s,
+                ],
+                avatar: const ZetaAvatar(initials: 'PS'),
               ),
-            ),
-            const SizedBox(
-              height: ZetaSpacing.x5,
-            ),
-            // ZetaGlobalHeader(
-            //   title: "Title",
-            //   buttons: childrenOne,
-            // ),
-            const SizedBox(
-              height: ZetaSpacing.x5,
-            ),
-            // ZetaGlobalHeader(
-            //   title: "Title",
-            //   buttons: childrenTwo,
-            // ),
-          ]),
-        ),
-      ),
+              const SizedBox(
+                height: ZetaSpacing.x5,
+              ),
+              ZetaGlobalHeader(title: "Title", tabItems: childrenTwo),
+            ]),
+          ),
+        );
+      }),
     );
   }
 }

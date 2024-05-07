@@ -4,32 +4,37 @@ import 'package:flutter/material.dart';
 import '../../../zeta_flutter.dart';
 
 /// Tab item to be used in [ZetaGlobalHeader]
-class ZetaTabItem extends StatefulWidget {
+class ZetaGlobalHeaderItem extends StatefulWidget {
   ///Constructor for tab item
-  const ZetaTabItem({super.key, this.dropdown, this.active, this.handlePress});
+  const ZetaGlobalHeaderItem({super.key, this.dropdown, this.active, this.handlePress, required this.label});
 
   /// Dropdown widget for tab item
   final Widget? dropdown;
 
-  /// If the tab item is the actvie tab item
+  /// If the tab item is the active tab item
   final bool? active;
 
   /// Handle press of tab item
   final VoidCallback? handlePress;
 
+  /// Content displayed on tab.
+  final String label;
+
   @override
-  State<ZetaTabItem> createState() => _ZetaTabItemState();
+  State<ZetaGlobalHeaderItem> createState() => _ZetaGlobalHeaderItemState();
 
   /// Return copy
-  ZetaTabItem copyWith({
+  ZetaGlobalHeaderItem copyWith({
     Widget? dropdown,
     bool? active,
     VoidCallback? handlePress,
+    String? label,
   }) {
-    return ZetaTabItem(
+    return ZetaGlobalHeaderItem(
       dropdown: dropdown ?? this.dropdown,
       active: active ?? this.active,
       handlePress: handlePress ?? this.handlePress,
+      label: label ?? this.label,
     );
   }
 
@@ -38,11 +43,12 @@ class ZetaTabItem extends StatefulWidget {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<bool?>('active', active))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('handlePress', handlePress));
+      ..add(ObjectFlagProperty<VoidCallback?>.has('handlePress', handlePress))
+      ..add(StringProperty('label', label));
   }
 }
 
-class _ZetaTabItemState extends State<ZetaTabItem> {
+class _ZetaGlobalHeaderItemState extends State<ZetaGlobalHeaderItem> {
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
@@ -55,18 +61,9 @@ class _ZetaTabItemState extends State<ZetaTabItem> {
         onTap: widget.handlePress,
         child: Row(
           children: [
-            Text(
-              'Button',
-              style: TextStyle(color: foregroundColor),
-            ),
-            const SizedBox(
-              width: ZetaSpacing.x2,
-            ),
-            if (widget.dropdown != null)
-              Icon(
-                ZetaIcons.expand_more_round,
-                color: foregroundColor,
-              ),
+            Text(widget.label, style: TextStyle(color: foregroundColor)),
+            const SizedBox(width: ZetaSpacing.x2),
+            if (widget.dropdown != null) Icon(ZetaIcons.expand_more_round, color: foregroundColor),
           ],
         ).paddingHorizontal(ZetaSpacing.m).paddingVertical(ZetaSpacing.s),
       ),

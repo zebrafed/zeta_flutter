@@ -30,9 +30,9 @@ import 'pages/components/password_input_widgetbook.dart';
 import 'pages/components/phone_input_widgetbook.dart';
 import 'pages/components/progress_widgetbook.dart';
 import 'pages/components/radio_widgetbook.dart';
+import 'pages/components/screen_header_bar_widgetbook.dart';
 import 'pages/components/search_bar_widgetbook.dart';
 import 'pages/components/segmented_control_widgetbook.dart';
-import 'pages/components/screen_header_bar_widgetbook.dart';
 import 'pages/components/select_input_widgetbook.dart';
 import 'pages/components/stepper_widgetbook.dart';
 import 'pages/components/switch_widgetbook.dart';
@@ -161,7 +161,6 @@ class HotReload extends StatelessWidget {
         DeviceFrameAddon(
           devices: [
             Devices.windows.wideMonitor,
-            Devices.macOS.wideMonitor,
             Devices.ios.iPad,
             Devices.ios.iPhone13,
             Zebra.ec30,
