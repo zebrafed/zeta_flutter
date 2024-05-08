@@ -165,9 +165,9 @@ class ZetaButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (trailingIcon != null)
+              if (leadingIcon != null)
                 Icon(
-                  trailingIcon,
+                  leadingIcon,
                   size: _iconSize,
                 ),
               if (label.isNotEmpty)
@@ -175,9 +175,9 @@ class ZetaButton extends StatelessWidget {
                   label,
                   style: _textStyle,
                 ),
-              if (leadingIcon != null)
+              if (trailingIcon != null)
                 Icon(
-                  leadingIcon,
+                  trailingIcon,
                   size: _iconSize,
                 ),
             ]
