@@ -211,13 +211,13 @@ class ZetaButton extends StatelessWidget {
   double get _textPadding {
     switch (size) {
       case ZetaWidgetSize.large:
-        return ZetaSpacing.m;
+        return ZetaSpacing.x4;
 
       case ZetaWidgetSize.medium:
-        return ZetaSpacing.x3_5;
+        return ZetaSpacing.x3;
 
       case ZetaWidgetSize.small:
-        return ZetaSpacing.x2_5;
+        return ZetaSpacing.x1;
     }
   }
 
