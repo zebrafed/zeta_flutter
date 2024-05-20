@@ -234,7 +234,7 @@ class ZetaColors {
   ///
   /// Defaults to `ZetaColors.cool.70`.
   ///
-  /// Maps to [ColorScheme.onBackground].
+  /// Maps to [ColorScheme.onSurface].
   ///
   /// {@macro zeta-color-dark}
   Color get textSubtle => cool.shade70;
@@ -248,7 +248,7 @@ class ZetaColors {
 
   /// Inverse text / icon color.
   ///
-  /// Used for text that is not on [ColorScheme.background] or [ThemeData.scaffoldBackgroundColor].
+  /// Used for text that is not on [ColorScheme.surface] or [ThemeData.scaffoldBackgroundColor].
   ///
   /// Defaults to `ZetaColors.cool.20`.
   ///
@@ -268,7 +268,7 @@ class ZetaColors {
   ///
   /// Defaults to `ZetaColors.cool.70`.
   ///
-  /// Maps to [ColorScheme.onBackground].
+  /// Maps to [ColorScheme.onSurface].
   ///
   /// {@macro zeta-color-dark}
   Color get iconSubtle => textSubtle;
@@ -282,7 +282,7 @@ class ZetaColors {
 
   /// Inverse icon color.
   ///
-  /// Used for text that is not on [ColorScheme.background] or [ThemeData.scaffoldBackgroundColor].
+  /// Used for text that is not on [ColorScheme.surface] or [ThemeData.scaffoldBackgroundColor].
   ///
   /// Defaults to `ZetaColors.cool.20`.
   ///
@@ -619,9 +619,7 @@ class ZetaColors {
     return ZetaColorScheme(
       zetaColors: this,
       brightness: brightness,
-      background: surfaceTertiary,
       error: effectiveError,
-      onBackground: textDefault,
       onError: effectiveError.onColor,
       onPrimary: effectivePrimary.onColor,
       onSecondary: effectiveSecondary.onColor,
@@ -762,7 +760,7 @@ extension ZetaColorGetters on ColorScheme {
   ///
   /// Defaults to `ZetaColors.cool.70`.
   ///
-  /// Maps to [ColorScheme.onBackground].
+  /// Maps to [ColorScheme.onSurface].
   ///
   /// {@macro zeta-color-dark}
   Color get textSubtle => _resolve?.zetaColors.textSubtle ?? _resolveDefault(_ZetaColorProperties.textSubtle);
@@ -776,7 +774,7 @@ extension ZetaColorGetters on ColorScheme {
 
   /// Inverse text / icon color.
   ///
-  /// Used for text that is not on [ColorScheme.background] or [ThemeData.scaffoldBackgroundColor].
+  /// Used for text that is not on [ColorScheme.surface] or [ThemeData.scaffoldBackgroundColor].
   ///
   /// Defaults to `ZetaColors.cool.20`.
   ///
@@ -835,7 +833,7 @@ extension ZetaColorGetters on ColorScheme {
 
   /// Tertiary surface color.
   ///
-  /// Maps to [ColorScheme.background] and [ThemeData.scaffoldBackgroundColor]
+  /// Maps to [ThemeData.scaffoldBackgroundColor].
   ///
   /// * `ZetaColors.warm.10`.
   Color get surfaceTertiary =>
