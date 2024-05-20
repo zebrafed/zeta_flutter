@@ -147,7 +147,7 @@ class ZetaAvatar extends StatelessWidget {
                   width: contentSizePixels,
                   height: contentSizePixels,
                   decoration: BoxDecoration(
-                    color: backgroundColor ?? zetaColors.surfaceHovered,
+                    color: backgroundColor ?? zetaColors.surfaceHover,
                     border: Border.all(color: borderColor!, width: borderSize),
                     borderRadius: ZetaRadius.full,
                   ),
@@ -159,7 +159,7 @@ class ZetaAvatar extends StatelessWidget {
               : DecoratedBox(
                   decoration: BoxDecoration(
                     borderRadius: ZetaRadius.full,
-                    color: backgroundColor ?? zetaColors.surfaceHovered,
+                    color: backgroundColor ?? zetaColors.surfaceHover,
                   ),
                   child: ClipRRect(
                     borderRadius: ZetaRadius.full,
@@ -340,7 +340,7 @@ class ZetaAvatarBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
-    final backgroundColor = type == ZetaAvatarBadgeType.notification ? colors.negative : color;
+    final backgroundColor = type == ZetaAvatarBadgeType.notification ? colors.surfaceNegative : color;
     final badgeSize = _getContainerSize();
     final borderSize = _getBorderSize();
     final paddedSize = badgeSize + ZetaSpacing.x1;

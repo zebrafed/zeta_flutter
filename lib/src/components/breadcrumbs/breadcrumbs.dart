@@ -274,7 +274,7 @@ class _BreadCrumbsTruncatedState extends State<BreadCrumbsTruncated> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.hovered)) {
-                  return colors.surfaceHovered;
+                  return colors.surfaceHover;
                 }
                 if (states.contains(MaterialState.pressed)) {
                   return colors.primary.shade10;
