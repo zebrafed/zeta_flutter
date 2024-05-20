@@ -387,13 +387,8 @@ class _DropdownItemState<T> extends State<_DropdownItem<T>> {
         if (states.contains(WidgetState.pressed)) {
           return colors.surfaceSelected;
         }
-<<<<<<< HEAD
-        if (states.contains(MaterialState.hovered)) {
-          return colors.surfaceHover;
-=======
         if (states.contains(WidgetState.hovered)) {
-          return colors.surfaceHovered;
->>>>>>> b63c589836f2b9ef1dcd60208868e65fafa7b6d3
+          return colors.surfaceHover;
         }
 
         return colors.surfacePrimary;

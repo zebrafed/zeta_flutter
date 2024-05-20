@@ -111,10 +111,10 @@ class _ColorExampleState extends State<ColorExample> {
         final Map<String, Color> backdrop = {
           'surfacePrimary': colors.surfacePrimary,
           'surfaceDisabled': colors.surfaceDisabled,
-          'surfaceHovered': colors.surfaceHover,
+          'surfaceHover': colors.surfaceHover,
           'surfaceSecondary': colors.surfaceSecondary,
           'surfaceTertiary': colors.surfaceTertiary,
-          'surfaceSelectedHovered': colors.surfaceSelectedHover,
+          'surfaceSelectedHover': colors.surfaceSelectedHover,
           'surfaceSelected': colors.surfaceSelected,
         };
 

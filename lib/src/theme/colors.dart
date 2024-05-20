@@ -214,7 +214,7 @@ class ZetaColors {
 
   /// Tertiary surface color.
   ///
-  /// Maps to [ColorScheme.background] and [ThemeData.scaffoldBackgroundColor]
+  /// Maps to [ColorScheme.surface] and [ThemeData.scaffoldBackgroundColor]
   ///
   /// * `ZetaColors.warm.10`.
   final Color surfaceTertiary;
@@ -696,8 +696,8 @@ enum _ZetaColorProperties {
   green,
   blue,
   surfaceSelected,
-  surfaceSelectedHovered,
-  surfaceHovered,
+  surfaceSelectedHover,
+  surfaceHover,
   surfaceDisabled,
   surfaceTertiary,
   surfaceSecondary,
@@ -852,13 +852,13 @@ extension ZetaColorGetters on ColorScheme {
   /// Defaults to `ZetaColors.cool.20`.
   ///
   /// {@macro zeta-color-dark}
-  Color get surfaceHovered => _resolve?.zetaColors.surfaceHover ?? _resolveDefault(_ZetaColorProperties.surfaceHovered);
+  Color get surfaceHover => _resolve?.zetaColors.surfaceHover ?? _resolveDefault(_ZetaColorProperties.surfaceHover);
 
   /// Selected hover surface color.
   ///
   /// Defaults to: `ZetaColors.blue.20`.
-  Color get surfaceSelectedHovered =>
-      _resolve?.zetaColors.surfaceSelectedHover ?? _resolveDefault(_ZetaColorProperties.surfaceSelectedHovered);
+  Color get surfaceSelectedHover =>
+      _resolve?.zetaColors.surfaceSelectedHover ?? _resolveDefault(_ZetaColorProperties.surfaceSelectedHover);
 
   /// Selected surface color.
   ///
@@ -1000,9 +1000,9 @@ extension ZetaColorGetters on ColorScheme {
         return ZetaColorBase.blue.apply(brightness: brightness, contrast: contrast) as T;
       case _ZetaColorProperties.surfaceSelected:
         return ZetaColorBase.blue.apply(brightness: brightness, contrast: contrast).shade10 as T;
-      case _ZetaColorProperties.surfaceSelectedHovered:
+      case _ZetaColorProperties.surfaceSelectedHover:
         return ZetaColorBase.blue.apply(brightness: brightness, contrast: contrast).shade20 as T;
-      case _ZetaColorProperties.surfaceHovered:
+      case _ZetaColorProperties.surfaceHover:
         return ZetaColorBase.cool.apply(brightness: brightness, contrast: contrast).shade20 as T;
       case _ZetaColorProperties.surfaceDisabled:
         return ZetaColorBase.cool.apply(brightness: brightness, contrast: contrast).shade30 as T;
