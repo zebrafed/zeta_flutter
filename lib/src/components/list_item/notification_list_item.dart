@@ -197,7 +197,7 @@ class _ZetaNotificationListItemState extends State<ZetaNotificationListItem> {
     return BoxDecoration(
       color: _notificationRead ? colors.surfacePrimary : colors.surfaceSelected,
       borderRadius: ZetaRadius.rounded,
-      border: widget.hasMore! ? Border(bottom: BorderSide(width: ZetaSpacing.x1, color: colors.blue)) : null,
+      border: (widget.hasMore ?? false) ? Border(bottom: BorderSide(width: ZetaSpacing.x1, color: colors.blue)) : null,
     );
   }
 }
