@@ -8,62 +8,56 @@ class ZetaNotificationListItem extends StatefulWidget {
   /// Constructor for [ZetaNotificationListItem]
   const ZetaNotificationListItem({
     super.key,
-    required this.notificationBadge,
-    required this.message,
+    required this.leading,
+    required this.body,
     required this.title,
+    this.notificationRead = false,
     this.notificationTime,
-    this.linkText,
-    this.linkOnClick,
-    required this.buttonOnClick,
-    this.hasMore = false,
+    required this.action,
+    this.showDivider = false,
   });
 
   /// Notification Badge to indicate type of notification or who it's coming from
-  final ZetaNotificationBadge notificationBadge;
+  final ZetaNotificationBadge leading;
 
-  /// Notification message
-  final String message;
+  /// Body of notification item
+  final Widget body;
 
   /// Notification title
   final String title;
 
+  /// If notification has been read
+  final bool notificationRead;
+
   /// Time of notificaiton
   final String? notificationTime;
 
-  /// Attached link text
-  final String? linkText;
+  /// If notification is a grouped and there are more notifications show divider.
+  final bool? showDivider;
 
-  /// Link onClick method
-  final VoidCallback? linkOnClick;
-
-  /// User actions button on click
-  final VoidCallback buttonOnClick;
-
-  /// If notification is a grouped and there are more notifications
-  final bool? hasMore;
+  /// Pass in a action widget to handle action functionality.
+  final Widget action;
 
   @override
   State<ZetaNotificationListItem> createState() => _ZetaNotificationListItemState();
 
   /// Function that returns copy of a notification item with altered fields
   ZetaNotificationListItem copyWith(
-      {ZetaNotificationBadge? notificationBadge,
-      String? message,
+      {ZetaNotificationBadge? leading,
+      Widget? body,
       String? title,
       String? notificationTime,
       String? linkText,
       VoidCallback? linkOnClick,
-      VoidCallback? buttonOnClick,
-      bool? hasMore}) {
+      Widget? actionWidget,
+      bool? showDivider}) {
     return ZetaNotificationListItem(
-      notificationBadge: notificationBadge ?? this.notificationBadge,
-      message: message ?? this.message,
+      leading: leading ?? this.leading,
+      body: body ?? this.body,
       title: title ?? this.title,
       notificationTime: notificationTime ?? this.notificationTime,
-      linkText: linkText ?? this.linkText,
-      linkOnClick: linkOnClick ?? this.linkOnClick,
-      buttonOnClick: buttonOnClick ?? this.buttonOnClick,
-      hasMore: hasMore ?? this.hasMore,
+      action: actionWidget ?? this.action,
+      showDivider: showDivider ?? this.showDivider,
     );
   }
 
@@ -72,30 +66,26 @@ class ZetaNotificationListItem extends StatefulWidget {
     super.debugFillProperties(properties);
     properties
       ..add(StringProperty('notificationTime', notificationTime))
-      ..add(StringProperty('message', message))
       ..add(StringProperty('title', title))
-      ..add(StringProperty('linkText', linkText))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('linkOnClick', linkOnClick))
-      ..add(ObjectFlagProperty<VoidCallback>.has('buttonOnClick', buttonOnClick))
-      ..add(DiagnosticsProperty<bool?>('hasMore', hasMore));
+      ..add(DiagnosticsProperty<bool>('notificationRead', notificationRead))
+      ..add(DiagnosticsProperty<bool?>('showDivider', showDivider));
   }
 }
 
 class _ZetaNotificationListItemState extends State<ZetaNotificationListItem> {
-  bool _notificationRead = false;
-
   @override
   Widget build(BuildContext context) {
     final colors = Zeta.of(context).colors;
-    return Container(
-      width: 366,
-      height: 160 + (widget.hasMore != null ? 4 : 0),
+    return DecoratedBox(
       decoration: _getStyle(colors),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              widget.notificationBadge,
+              widget.leading,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +95,7 @@ class _ZetaNotificationListItemState extends State<ZetaNotificationListItem> {
                       children: [
                         Row(
                           children: [
-                            if (!_notificationRead)
+                            if (!widget.notificationRead)
                               ZetaIndicator(
                                 color: colors.blue,
                                 size: ZetaWidgetSize.small,
@@ -132,72 +122,24 @@ class _ZetaNotificationListItemState extends State<ZetaNotificationListItem> {
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: ZetaSpacing.x11,
-                      child: Text(
-                        widget.message,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+                    widget.body
                   ].gap(ZetaSpacing.x1),
                 ),
               ),
             ].gap(ZetaSpacing.x2),
           ),
-          if (widget.linkText != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(56, 0, 0, 0),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _notificationRead = true;
-                  });
-                  widget.linkOnClick!.call();
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      ZetaIcons.attachment_round,
-                      size: ZetaSpacing.x3,
-                      color: colors.primary,
-                    ),
-                    Text(
-                      widget.linkText!,
-                      style: TextStyle(fontSize: ZetaSpacing.x3, color: colors.primary),
-                    )
-                  ],
-                ),
-              ),
-            )
-          else
-            const SizedBox.square(
-              dimension: ZetaSpacing.x3,
-            ),
-          Container(
-            alignment: Alignment.centerRight,
-            child: ZetaButton(
-              label: "User Action",
-              size: ZetaWidgetSize.small,
-              type: ZetaButtonType.outline,
-              onPressed: () {
-                setState(() {
-                  _notificationRead = true;
-                });
-                widget.buttonOnClick.call();
-              },
-            ),
-          )
-        ].gap(ZetaSpacing.x2),
+          Container(alignment: Alignment.centerRight, child: widget.action)
+        ],
       ).paddingAll(ZetaSpacing.x2),
     );
   }
 
   BoxDecoration _getStyle(ZetaColors colors) {
     return BoxDecoration(
-      color: _notificationRead ? colors.surfacePrimary : colors.surfaceSelected,
+      color: widget.notificationRead ? colors.surfacePrimary : colors.surfaceSelected,
       borderRadius: ZetaRadius.rounded,
-      border: (widget.hasMore ?? false) ? Border(bottom: BorderSide(width: ZetaSpacing.x1, color: colors.blue)) : null,
+      border:
+          (widget.showDivider ?? false) ? Border(bottom: BorderSide(width: ZetaSpacing.x1, color: colors.blue)) : null,
     );
   }
 }

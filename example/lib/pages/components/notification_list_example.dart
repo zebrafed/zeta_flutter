@@ -16,59 +16,50 @@ class _NotificationListItemExampleState extends State<NotificationListItemExampl
   Widget build(BuildContext context) {
     return ExampleScaffold(
       name: "NotificationListItem",
-      child: Expanded(
-        child: Container(
-          child: Center(
-              child: Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: SingleChildScrollView(
+          child: Column(
               children: [
-                ZetaNotificationListItem(
-                  message: "New urgent message from Phil Starr that spans multiple lines but line count caps ...",
-                  title: 'Urgent Message',
-                  notificationBadge: ZetaNotificationBadge.icon(icon: ZetaIcons.check_circle_round),
-                  notificationTime: "Just now",
-                  linkOnClick: () {
-                    print("Dounloading PDF");
-                  },
-                  linkText: "Spring-Donation-Drive.pdf",
-                  buttonOnClick: () {
-                    print("Button CLick");
-                  },
-                ),
-                ZetaNotificationListItem(
-                  message: "Message that is less then word limit",
-                  title: 'Urgent Message',
-                  notificationBadge: ZetaNotificationBadge.avatar(
-                    avatar: ZetaAvatar.initials(
-                      initials: "AO",
-                    ),
-                  ),
-                  notificationTime: "5 minutes ago",
-                  buttonOnClick: () {
-                    print("Button CLick");
-                  },
-                  hasMore: true,
-                ),
-                ZetaNotificationListItem(
-                  message: "New urgent message from Phil Starr that spans multiple lines but line count caps ...",
-                  title: 'Urgent Message',
-                  notificationBadge: ZetaNotificationBadge.image(
-                    image: Image.network('https://picsum.photos/250?image=9'),
-                  ),
-                  linkOnClick: () {
-                    print("Dounloading PDF");
-                  },
-                  linkText: "Spring-Donation-Drive.pdf",
-                  buttonOnClick: () {
-                    print("Button CLick");
-                  },
-                ),
-              ].gap(ZetaSpacing.l),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 400),
+          child: ZetaNotificationListItem(
+            body: Text(
+              "New urgent" * 300,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-          )),
+            title: 'Urgent Message',
+            leading: ZetaNotificationBadge.icon(icon: ZetaIcons.check_circle_round),
+            notificationTime: "Just now",
+            action: ZetaButton.negative(
+              label: "Remove",
+              onPressed: () {},
+            ),
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 200),
+          child: ZetaNotificationListItem(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "New urgent" * 300,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                ZetaButton.text(label: "label")
+              ],
+            ),
+            title: 'Urgent Message',
+            leading: ZetaNotificationBadge.icon(icon: ZetaIcons.check_circle_round),
+            notificationTime: "Just now",
+            action: ZetaButton.negative(
+              label: "Remove",
+              onPressed: () {},
+            ),
+          ),
+        ),
+      ].gap(ZetaSpacing.l))),
     );
   }
 }
