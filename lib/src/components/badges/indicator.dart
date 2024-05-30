@@ -170,6 +170,7 @@ class ZetaIndicator extends StatelessWidget {
       ..add(DiagnosticsProperty<ZetaWidgetSize>('size', size))
       ..add(DiagnosticsProperty<int?>('value', value))
       ..add(DiagnosticsProperty<IconData?>('icon', icon))
-      ..add(DiagnosticsProperty<bool>('inverseBorder', inverse));
+      ..add(DiagnosticsProperty<bool>('inverseBorder', inverse))
+      ..add(ColorProperty('color', color));
   }
 }

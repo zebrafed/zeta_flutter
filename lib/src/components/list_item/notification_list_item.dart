@@ -42,21 +42,22 @@ class ZetaNotificationListItem extends StatefulWidget {
   State<ZetaNotificationListItem> createState() => _ZetaNotificationListItemState();
 
   /// Function that returns copy of a notification item with altered fields
-  ZetaNotificationListItem copyWith(
-      {ZetaNotificationBadge? leading,
-      Widget? body,
-      String? title,
-      String? notificationTime,
-      String? linkText,
-      VoidCallback? linkOnClick,
-      Widget? actionWidget,
-      bool? showDivider}) {
+  ZetaNotificationListItem copyWith({
+    ZetaNotificationBadge? leading,
+    Widget? body,
+    String? title,
+    String? notificationTime,
+    String? linkText,
+    VoidCallback? linkOnClick,
+    Widget? action,
+    bool? showDivider,
+  }) {
     return ZetaNotificationListItem(
       leading: leading ?? this.leading,
       body: body ?? this.body,
       title: title ?? this.title,
       notificationTime: notificationTime ?? this.notificationTime,
-      action: actionWidget ?? this.action,
+      action: action ?? this.action,
       showDivider: showDivider ?? this.showDivider,
     );
   }
@@ -111,24 +112,24 @@ class _ZetaNotificationListItemState extends State<ZetaNotificationListItem> {
                             if (widget.notificationTime != null) Text(widget.notificationTime!),
                             Container(
                               padding: const EdgeInsets.all(ZetaSpacing.x0_5),
-                              decoration: BoxDecoration(color: colors.negative, borderRadius: ZetaRadius.full),
+                              decoration: BoxDecoration(color: colors.surfaceNegative, borderRadius: ZetaRadius.full),
                               child: Icon(
                                 ZetaIcons.important_notification_round,
                                 color: colors.white,
                                 size: ZetaSpacing.x3,
                               ),
-                            )
+                            ),
                           ].gap(ZetaSpacing.x1),
-                        )
+                        ),
                       ],
                     ),
-                    widget.body
+                    widget.body,
                   ].gap(ZetaSpacing.x1),
                 ),
               ),
             ].gap(ZetaSpacing.x2),
           ),
-          Container(alignment: Alignment.centerRight, child: widget.action)
+          Container(alignment: Alignment.centerRight, child: widget.action),
         ],
       ).paddingAll(ZetaSpacing.x2),
     );
