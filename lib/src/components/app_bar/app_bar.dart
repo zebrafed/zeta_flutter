@@ -115,7 +115,7 @@ class _ZetaAppBarState extends State<ZetaAppBar> {
   Widget? _getTitle() {
     return widget.type != ZetaAppBarType.extendedTitle
         ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: widget.titleSpacing ?? ZetaSpacing.b),
+            padding: EdgeInsets.symmetric(horizontal: widget.titleSpacing ?? ZetaSpacing.large),
             child: widget.title,
           )
         : null;
@@ -132,11 +132,11 @@ class _ZetaAppBarState extends State<ZetaAppBar> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: ZetaSpacing.b),
+        padding: const EdgeInsets.symmetric(horizontal: ZetaSpacing.large),
         child: AppBar(
           elevation: 0,
           iconTheme: IconThemeData(color: colors.cool.shade90),
-          leadingWidth: ZetaSpacing.x10,
+          leadingWidth: ZetaSpacing.xL6,
           leading: widget.leading,
           automaticallyImplyLeading: widget.automaticallyImplyLeading,
           centerTitle: widget.type == ZetaAppBarType.centeredTitle,
@@ -162,7 +162,7 @@ class _ZetaAppBarState extends State<ZetaAppBar> {
                   IconButtonTheme(
                     data: IconButtonThemeData(
                       style: IconButton.styleFrom(
-                        iconSize: ZetaSpacing.x5,
+                        iconSize: ZetaSpacing.xL,
                       ),
                     ),
                     child: Row(
@@ -175,9 +175,9 @@ class _ZetaAppBarState extends State<ZetaAppBar> {
                         ),
                         if (widget.onSearchMicrophoneIconPressed != null) ...[
                           SizedBox(
-                            height: ZetaSpacing.m,
+                            height: ZetaSpacing.xL2,
                             child: VerticalDivider(
-                              width: ZetaSpacing.x0_5,
+                              width: ZetaSpacingBase.x0_5,
                               color: colors.cool.shade70,
                             ),
                           ),
@@ -195,8 +195,8 @@ class _ZetaAppBarState extends State<ZetaAppBar> {
               ? Padding(
                   padding: EdgeInsets.only(
                     top: widget.preferredSize.height,
-                    left: ZetaSpacing.s,
-                    right: ZetaSpacing.s,
+                    left: ZetaSpacing.medium,
+                    right: ZetaSpacing.medium,
                   ),
                   child: DefaultTextStyle(
                     style: ZetaTextStyles.bodyLarge.copyWith(
