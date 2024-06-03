@@ -191,7 +191,7 @@ class ZetaButton extends StatelessWidget {
         return ZetaSpacing.xL6;
 
       case ZetaWidgetSize.small:
-        return ZetaSpacing.xL4
+        return ZetaSpacing.xL4;
     }
   }
 

@@ -230,7 +230,7 @@ class _ZetaPasswordInputState extends State<ZetaPasswordInput> {
   double get _inputHeight {
     switch (widget.size) {
       case ZetaWidgetSize.small:
-        return ZetaSpacing.xL4
+        return ZetaSpacing.xL4;
       case ZetaWidgetSize.medium:
         return ZetaSpacing.xL6;
       case ZetaWidgetSize.large:

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../zeta_flutter.dart';
 
 const _itemHeight = ZetaSpacing.xL5;
-const _itemWidth = ZetaSpacing.xL4
+const _itemWidth = ZetaSpacing.xL4;
 
 /// The type of a [ZetaPagination]
 enum ZetaPaginationType {

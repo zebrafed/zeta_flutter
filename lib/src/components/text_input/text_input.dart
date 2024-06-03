@@ -163,7 +163,7 @@ class ZetaTextInputState extends State<ZetaTextInput> implements ZetaFormFieldSt
       case ZetaWidgetSize.large:
         size = ZetaSpacing.xL6;
       case ZetaWidgetSize.medium:
-        size = ZetaSpacing.xL4
+        size = ZetaSpacing.xL4;
       case ZetaWidgetSize.small:
         size = ZetaSpacing.xL2;
     }

@@ -9,13 +9,7 @@ class RadiusExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<BorderRadius> radii = [
-      ZetaRadius.none,
-      ZetaRadius.minimal,
-      ZetaRadius.rounded,
-      ZetaRadius.wide,
-      ZetaRadius.full
-    ];
+    List<BorderRadius> radii = [ZetaRadius.none, ZetaRadius.minimal, ZetaRadius.rounded, ZetaRadius.full];
     final colors = Zeta.of(context).colors;
     return ExampleScaffold(
       name: name,
