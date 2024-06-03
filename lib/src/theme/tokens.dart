@@ -130,7 +130,7 @@ class ZetaSpacingBase {
   /// 48dp space
   static const double x12 = 48;
 
-  /// 52dp space
+  /// 56dp space
   static const double x12_5 = 56;
 
   /// 64dp space
