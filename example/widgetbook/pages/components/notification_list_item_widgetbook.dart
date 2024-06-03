@@ -27,6 +27,7 @@ Widget notificationListItemUseCase(BuildContext context) => WidgetbookTestWidget
                 ),
           title: context.knobs.string(label: "Title", initialValue: "Urgent Notification"),
           notificationTime: context.knobs.stringOrNull(label: "Notification Time", initialValue: "Just Now"),
+          notificationRead: context.knobs.boolean(label: "Notification Read", initialValue: false),
           leading: context.knobs.list(
             label: 'Badge',
             options: [

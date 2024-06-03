@@ -85,6 +85,7 @@ class _ZetaNotificationListItemState extends State<ZetaNotificationListItem> {
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               widget.leading,
               Expanded(
@@ -103,13 +104,17 @@ class _ZetaNotificationListItemState extends State<ZetaNotificationListItem> {
                               ),
                             Text(
                               widget.title,
-                              style: const TextStyle(fontWeight: FontWeight.w500),
+                              style: ZetaTextStyles.labelLarge,
                             ),
                           ],
                         ),
                         Row(
                           children: [
-                            if (widget.notificationTime != null) Text(widget.notificationTime!),
+                            if (widget.notificationTime != null)
+                              Text(
+                                widget.notificationTime!,
+                                style: ZetaTextStyles.bodySmall.apply(color: colors.textDisabled),
+                              ),
                             Container(
                               padding: const EdgeInsets.all(ZetaSpacing.x0_5),
                               decoration: BoxDecoration(color: colors.surfaceNegative, borderRadius: ZetaRadius.full),
