@@ -56,6 +56,7 @@ class TestWidgetCB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ZetaProvider(
+      the
       builder: (context, theme, __) {
         return Builder(builder: (context) {
           return MaterialApp(

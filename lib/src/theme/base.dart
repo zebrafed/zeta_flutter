@@ -39,6 +39,14 @@ class ZetaThemeServiceBase extends ZetaThemeService {
   /// Contrast => aa or aaa. defaults to aa.
   ZetaContrast themeContrast;
 
+  /// Getters
+
+  ZetaThemeData get getData => themeData;
+
+  ThemeMode get getMode => themeMode;
+
+  ZetaContrast get _contrast => themeContrast;
+
   @override
   Future<(ZetaThemeData?, ThemeMode?, ZetaContrast?)> loadTheme() async {
     return (themeData, themeMode, themeContrast);

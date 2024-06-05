@@ -7,16 +7,16 @@ import 'home.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final preferences = await SharedPreferences.getInstance();
-  final themeService = SharedPrefsThemeService(preferences);
-  final themePreferences = await themeService.loadTheme();
+  // final preferences = await SharedPreferences.getInstance();
+  // final themeService = SharedPrefsThemeService(preferences);
+  final themeService = ZetaThemeServiceBase.def();
 
   runApp(
     ZetaExample(
       themeService: themeService,
-      initialThemeData: themePreferences.$1 ?? ZetaThemeData(),
-      initialThemeMode: themePreferences.$2 ?? ThemeMode.system,
-      initialContrast: themePreferences.$3 ?? ZetaContrast.aa,
+      // initialThemeData: themePreferences.$1 ?? ZetaThemeData(),
+      // initialThemeMode: themePreferences.$2 ?? ThemeMode.system,
+      // initialContrast: themePreferences.$3 ?? ZetaContrast.aa,
     ),
   );
 }
@@ -25,23 +25,20 @@ class ZetaExample extends StatelessWidget {
   const ZetaExample({
     super.key,
     required this.themeService,
-    required this.initialContrast,
-    required this.initialThemeMode,
-    required this.initialThemeData,
+    // required this.initialContrast,
+    // required this.initialThemeMode,
+    // required this.initialThemeData,
   });
 
   final ZetaThemeService themeService;
-  final ZetaContrast initialContrast;
-  final ThemeMode initialThemeMode;
-  final ZetaThemeData initialThemeData;
+  // final ZetaContrast initialContrast;
+  // final ThemeMode initialThemeMode;
+  // final ZetaThemeData initialThemeData;
 
   @override
   Widget build(BuildContext context) {
     return ZetaProvider(
       themeService: themeService,
-      initialContrast: initialContrast,
-      initialThemeData: initialThemeData,
-      initialThemeMode: initialThemeMode,
       builder: (context, themeData, themeMode) {
         final dark = themeData.colorsDark.toScheme();
         final light = themeData.colorsLight.toScheme();

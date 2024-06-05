@@ -129,29 +129,9 @@ class ZetaProvider extends StatefulWidget with Diagnosticable {
   /// and [initialThemeData] arguments provide initial values.
   ZetaProvider({
     required this.builder,
-    this.initialThemeMode = ThemeMode.system,
-    this.initialContrast = ZetaContrast.aa,
-    this.themeService,
-    ZetaThemeData? initialThemeData,
+    required this.themeService,
     super.key,
-  }) : initialThemeData = initialThemeData ?? ZetaThemeData();
-
-  /// Specifies the initial theme mode for the app.
-  ///
-  /// It can be one of the values: [ThemeMode.system], [ThemeMode.light], or [ThemeMode.dark].
-  /// Defaults to [ThemeMode.system].
-  final ThemeMode initialThemeMode;
-
-  /// Provides the initial theme data for the app.
-  ///
-  /// This contains all the theming information. If not provided,
-  /// it defaults to a basic [ZetaThemeData] instance.
-  final ZetaThemeData initialThemeData;
-
-  /// Specifies the initial contrast setting for the app.
-  ///
-  /// Defaults to [ZetaContrast.aa].
-  final ZetaContrast initialContrast;
+  });
 
   /// A builder function to construct the widget tree using the provided theming information.
   ///
@@ -162,7 +142,7 @@ class ZetaProvider extends StatefulWidget with Diagnosticable {
   /// A `ZetaThemeService`
   ///
   /// It provides the structure for loading and saving themes in Zeta application.
-  final ZetaThemeService? themeService;
+  final ZetaThemeService themeService;
 
   @override
   State<ZetaProvider> createState() => ZetaProviderState();
@@ -203,18 +183,38 @@ class ZetaProvider extends StatefulWidget with Diagnosticable {
   }
 }
 
+extension on ZetaThemeService {
+  Future<bool> themeEqual(ZetaThemeService other) async {
+    final themes1 = await this.loadTheme();
+    final themes2 = await other.loadTheme();
+    return themes1.$1 == themes2.$1 && themes1.$2 == themes2.$2 && themes1.$3 == themes2.$3;
+  }
+
+  @override
+  Future<bool> operator ==(Object other) async =>
+      identical(this, other) || other is ZetaThemeService && await themeEqual(other);
+}
+
 /// The state associated with [ZetaProvider].
 class ZetaProviderState extends State<ZetaProvider> with Diagnosticable, WidgetsBindingObserver {
   // Fields for ZetaThemeManager.
 
-  /// Represents the late initialization of the ZetaContrast value.
-  late ZetaContrast _contrast;
-
-  /// Represents the late initialization of the ThemeMode value.
+  /// Specifies the initial theme mode for the app.
+  ///
+  /// It can be one of the values: [ThemeMode.system], [ThemeMode.light], or [ThemeMode.dark].
+  /// Defaults to [ThemeMode.system].
   late ThemeMode _themeMode;
 
-  /// Represents the late initialization of the ZetaThemeData object.
+  /// Provides the initial theme data for the app.
+  ///
+  /// This contains all the theming information. If not provided,
+  /// it defaults to a basic [ZetaThemeData] instance.
   late ZetaThemeData _themeData;
+
+  /// Specifies the initial contrast setting for the app.
+  ///
+  /// Defaults to [ZetaContrast.aa].
+  late ZetaContrast _contrast;
 
   /// Represents the late initialization of the system's current brightness (dark or light mode).
   late Brightness _platformBrightness;
@@ -240,14 +240,25 @@ class ZetaProviderState extends State<ZetaProvider> with Diagnosticable, Widgets
     // Set the initial brightness with the system's current brightness from the first view of the platform dispatcher.
     _platformBrightness = MediaQueryData.fromView(PlatformDispatcher.instance.views.first).platformBrightness;
 
-    // Set the initial theme mode.
-    _themeMode = widget.initialThemeMode;
+    _initializeTheme();
+  }
 
-    // Set the initial contrast.
-    _contrast = widget.initialContrast;
+  /// Function to Initialize the themes by utilizing the passed in theme service
+  ///
+  /// Applys contrasts where necessary
+  Future<void> _initializeTheme() async {
+    final preferences = await widget.themeService.loadTheme();
+    setState(() {
+      // Set the initial theme mode.
 
-    // Apply the initial contrast to the theme data.
-    _themeData = widget.initialThemeData.apply(contrast: _contrast);
+      _themeMode = preferences.$2!;
+      // Set the initial contrast.
+
+      _contrast = preferences.$3!;
+      // Apply the initial contrast to the theme data.
+
+      _themeData = preferences.$1!.apply(contrast: _contrast);
+    });
   }
 
   /// Clean up function to be called when this object is removed from the tree.
@@ -306,14 +317,8 @@ class ZetaProviderState extends State<ZetaProvider> with Diagnosticable, Widgets
   @override
   void didUpdateWidget(ZetaProvider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.initialContrast != widget.initialContrast ||
-        oldWidget.initialThemeMode != widget.initialThemeMode ||
-        oldWidget.initialThemeData != widget.initialThemeData) {
-      setState(() {
-        _themeMode = widget.initialThemeMode;
-        _contrast = widget.initialContrast;
-        _themeData = widget.initialThemeData.apply(contrast: _contrast);
-      });
+    if (oldWidget.themeService != widget.themeService) {
+      _initializeTheme();
     }
   }
 
