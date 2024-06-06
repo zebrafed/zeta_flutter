@@ -249,6 +249,10 @@ class _ZetaDropDownState<T> extends State<ZetaDropdown<T>> {
       setState(() {
         _menuPosition = MenuPosition.up;
       });
+    } else {
+      setState(() {
+        _menuPosition = MenuPosition.down;
+      });
     }
 
     _tooltipController.toggle();
