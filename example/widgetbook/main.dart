@@ -180,10 +180,8 @@ class HotReload extends StatelessWidget {
             WidgetbookTheme(name: 'Dark Mode AAA', data: _Theme(isDark: true, isAAA: true)),
           ],
           themeBuilder: (context, theme, child) {
-            _Theme _theme = theme;
             return ZetaProvider(
-              initialContrast: _theme.isAAA ? ZetaContrast.aaa : ZetaContrast.aa,
-              initialThemeMode: _theme.isDark ? ThemeMode.dark : ThemeMode.light,
+              themeService: ZetaThemeServiceBase.def(),
               builder: (context, theme, themeMode) {
                 return Builder(
                   builder: (context) {

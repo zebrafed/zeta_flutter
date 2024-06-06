@@ -36,6 +36,7 @@ class TestWidgetStatusLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ZetaProvider(
+      themeService: ZetaThemeServiceBase.def(),
       builder: (context, theme, __) {
         return Builder(builder: (context) {
           return MaterialApp(

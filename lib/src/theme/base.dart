@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../zeta_flutter.dart';
 
+/// Generic ZetaThemeService Class
+/// Returns a ZetaThemeService that can be customized with optional theming.
 class ZetaThemeServiceBase extends ZetaThemeService {
   /// Default constructor with custom colors passed in as parameters
   ZetaThemeServiceBase({
@@ -41,11 +43,14 @@ class ZetaThemeServiceBase extends ZetaThemeService {
 
   /// Getters
 
+  /// Returns theme data.
   ZetaThemeData get getData => themeData;
 
+  /// Returns theme mode
   ThemeMode get getMode => themeMode;
 
-  ZetaContrast get _contrast => themeContrast;
+  /// Returns theme
+  ZetaContrast get getContrast => themeContrast;
 
   @override
   Future<(ZetaThemeData?, ThemeMode?, ZetaContrast?)> loadTheme() async {

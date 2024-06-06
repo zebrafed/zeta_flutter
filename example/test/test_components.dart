@@ -20,7 +20,7 @@ class TestWidget extends StatelessWidget {
     final size = screenSize ?? const Size(1280, 720);
 
     return ZetaProvider(
-      initialThemeMode: themeMode ?? ThemeMode.system,
+      themeService: ZetaThemeServiceBase.def(),
       builder: (context, theme, __) {
         return Builder(
           builder: (context) {

@@ -125,8 +125,7 @@ typedef ZetaAppBuilder = Widget Function(BuildContext context, ZetaThemeData the
 class ZetaProvider extends StatefulWidget with Diagnosticable {
   /// Constructs a [ZetaProvider] widget.
   ///
-  /// The [builder] argument is required. The [initialThemeMode], [initialContrast],
-  /// and [initialThemeData] arguments provide initial values.
+  /// The [builder] argument is required. The [themeService] arguments provide initial values.
   ZetaProvider({
     required this.builder,
     required this.themeService,
@@ -151,10 +150,7 @@ class ZetaProvider extends StatefulWidget with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty<ZetaThemeData>('themeData', initialThemeData))
       ..add(ObjectFlagProperty<ZetaAppBuilder>.has('builder', builder))
-      ..add(EnumProperty<ThemeMode>('initialThemeMode', initialThemeMode))
-      ..add(EnumProperty<ZetaContrast>('initialContrast', initialContrast))
       ..add(DiagnosticsProperty<ZetaThemeService?>('themeService', themeService));
   }
 
@@ -185,14 +181,10 @@ class ZetaProvider extends StatefulWidget with Diagnosticable {
 
 extension on ZetaThemeService {
   Future<bool> themeEqual(ZetaThemeService other) async {
-    final themes1 = await this.loadTheme();
+    final themes1 = await loadTheme();
     final themes2 = await other.loadTheme();
     return themes1.$1 == themes2.$1 && themes1.$2 == themes2.$2 && themes1.$3 == themes2.$3;
   }
-
-  @override
-  Future<bool> operator ==(Object other) async =>
-      identical(this, other) || other is ZetaThemeService && await themeEqual(other);
 }
 
 /// The state associated with [ZetaProvider].
@@ -240,7 +232,7 @@ class ZetaProviderState extends State<ZetaProvider> with Diagnosticable, Widgets
     // Set the initial brightness with the system's current brightness from the first view of the platform dispatcher.
     _platformBrightness = MediaQueryData.fromView(PlatformDispatcher.instance.views.first).platformBrightness;
 
-    _initializeTheme();
+    unawaited(_initializeTheme());
   }
 
   /// Function to Initialize the themes by utilizing the passed in theme service
@@ -317,8 +309,15 @@ class ZetaProviderState extends State<ZetaProvider> with Diagnosticable, Widgets
   @override
   void didUpdateWidget(ZetaProvider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.themeService != widget.themeService) {
-      _initializeTheme();
+    var themeChanged = false;
+    unawaited(
+      oldWidget.themeService.themeEqual(widget.themeService).then((changed) {
+        themeChanged = changed;
+      }),
+    );
+
+    if (themeChanged) {
+      unawaited(_initializeTheme());
     }
   }
 
@@ -349,7 +348,7 @@ class ZetaProviderState extends State<ZetaProvider> with Diagnosticable, Widgets
 
   void _saveThemeChange() {
     unawaited(
-      widget.themeService?.saveTheme(
+      widget.themeService.saveTheme(
         themeData: _themeData,
         themeMode: _themeMode,
         contrast: _contrast,
