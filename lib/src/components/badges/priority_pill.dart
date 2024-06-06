@@ -50,7 +50,7 @@ class ZetaPriorityPill extends StatelessWidget {
   ///Constructs [ZetaPriorityPill]
   const ZetaPriorityPill({
     this.index,
-    @Deprecated('Use label instead. ' 'Deprecated in 0.11.0') this.priority,
+    @Deprecated('Use label instead. ' 'This variable has been renamed as of 0.11.0') this.priority,
     this.label,
     this.rounded = true,
     this.isBadge = false,
@@ -73,7 +73,7 @@ class ZetaPriorityPill extends StatelessWidget {
   final String? index;
 
   /// Text in main part of component.
-  @Deprecated('Use label instead. ' 'Deprecated in 0.11.0')
+  @Deprecated('Use label instead. ' 'This variable has been renamed as of 0.11.0')
   final String? priority;
 
   /// Text in main part of component.

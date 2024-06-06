@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../zeta_flutter.dart';
 
 ///Zeta Badge.
-@Deprecated('Use ZetaLabel instead. ' 'This enum has been deprecated as of 0.11.0')
+@Deprecated('Use ZetaLabel instead. ' 'This widget has been renamed as of 0.11.0')
 typedef ZetaBadge = ZetaLabel;
 
 /// Zeta Badge.

@@ -6,11 +6,11 @@ import 'package:flutter/services.dart';
 import '../../../zeta_flutter.dart';
 
 /// [ZetaBanner] type.
-@Deprecated('Use ZetaBannerStatus instead. ' 'This enum has been deprecated as of 0.11.0')
+@Deprecated('Use ZetaBannerStatus instead. ' 'This widget has been renamed as of 0.11.0')
 typedef ZetaSystemBannerStatus = ZetaBannerStatus;
 
 /// Zeta Banner. Extends [MaterialBanner].
-@Deprecated('Use ZetaBanner instead. ' 'This enum has been deprecated as of 0.11.0')
+@Deprecated('Use ZetaBanner instead. ' 'This widget has been renamed as of 0.11.0')
 typedef ZetaSystemBanner = ZetaBanner;
 
 /// [ZetaBanner] type
