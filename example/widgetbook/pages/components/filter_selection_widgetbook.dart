@@ -24,7 +24,7 @@ Widget filterSelectionUseCase(BuildContext context) {
                   ZetaFilterChip(
                     label: 'Label ${i + 1}',
                     selected: items[i],
-                    onTap: (value) => setState(() => items[i] = value),
+                    // onTap: (value) => setState(() => items[i] = value),TODO: LUKE
                   ),
               ],
               onPressed: () {},

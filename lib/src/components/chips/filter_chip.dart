@@ -10,8 +10,11 @@ class ZetaFilterChip extends ZetaChip {
     required super.label,
     super.rounded,
     super.selected,
-    super.onTap,
-  }) : super(type: ZetaChipType.filter);
+    super.draggable = false,
+    super.data,
+    super.onDragCompleted,
+    // super.onTap - return toggle state on tap. TODO:LUKE
+  });
 
   /// Creates another instance of [ZetaFilterChip].
   ZetaFilterChip copyWith({
@@ -21,7 +24,7 @@ class ZetaFilterChip extends ZetaChip {
       label: label,
       selected: selected,
       rounded: rounded ?? this.rounded,
-      onTap: onTap,
+      // onTap: onTap, TODO:LUKE
     );
   }
 }

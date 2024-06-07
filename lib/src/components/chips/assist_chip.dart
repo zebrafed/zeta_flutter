@@ -10,5 +10,9 @@ class ZetaAssistChip extends ZetaChip {
     required super.label,
     super.leading,
     super.rounded,
-  }) : super(type: ZetaChipType.assist);
+    super.draggable = false,
+    super.data,
+    super.onDragCompleted,
+    super.onTap,
+  });
 }

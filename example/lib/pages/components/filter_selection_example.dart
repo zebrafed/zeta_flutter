@@ -29,7 +29,7 @@ class _FilterSelectionExampleState extends State<FilterSelectionExample> {
                 ZetaFilterChip(
                   label: 'Label ${i + 1}',
                   selected: items[i],
-                  onTap: (value) => setState(() => items[i] = value),
+                  // onTap: (value) => setState(() => items[i] = value), TODO: LUKE
                 ),
             ],
             onPressed: () {},
@@ -42,7 +42,7 @@ class _FilterSelectionExampleState extends State<FilterSelectionExample> {
                 ZetaFilterChip(
                   label: 'Label ${i + 1}',
                   selected: items2[i],
-                  onTap: (value) => setState(() => items2[i] = value),
+                  // onTap: (value) => setState(() => items2[i] = value),TODO:LUKE
                 ),
             ],
             onPressed: () {},
