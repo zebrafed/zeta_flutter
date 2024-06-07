@@ -9,7 +9,7 @@ export './input_chip.dart';
 
 /// Zeta Chip component.
 ///
-/// This covers the board functionality of [ZetaAssistChip], [ZetaFilterChip] and [ZetaInputChip].
+/// This covers the broad functionality of [ZetaAssistChip], [ZetaFilterChip] and [ZetaInputChip].
 class ZetaChip extends StatefulWidget {
   /// Constructs a [ZetaChip].
   const ZetaChip({
@@ -23,6 +23,7 @@ class ZetaChip extends StatefulWidget {
     this.draggable = false,
     this.data,
     this.onDragCompleted,
+    this.onToggle,
   });
 
   /// The label on the [ZetaChip]
@@ -44,6 +45,9 @@ class ZetaChip extends StatefulWidget {
 
   /// Callback when chip is tapped.
   final VoidCallback? onTap;
+
+  /// Callback for when Filter Chip is toggled.
+  final ValueSetter<bool>? onToggle;
 
   /// Whether the chip can be dragged.
   final bool draggable;
@@ -70,7 +74,8 @@ class ZetaChip extends StatefulWidget {
       ..add(DiagnosticsProperty<bool>('draggable', draggable))
       ..add(DiagnosticsProperty('data', data))
       ..add(ObjectFlagProperty<VoidCallback?>.has('onDragCompleted', onDragCompleted))
-      ..add(ObjectFlagProperty<VoidCallback?>.has('onTap', onTap));
+      ..add(ObjectFlagProperty<VoidCallback?>.has('onTap', onTap))
+      ..add(ObjectFlagProperty<ValueSetter<bool>>.has('onToggle', onToggle));
   }
 }
 
@@ -127,8 +132,7 @@ class _ZetaChipState extends State<ZetaChip> {
           onTap: () {
             if (widget.selected != null) {
               setState(() => selected = !selected);
-              // widget.onTap?.call(selected);
-              // TODO: Filter on tapo call back
+              widget.onToggle?.call(selected);
             } else {
               widget.onTap?.call();
             }

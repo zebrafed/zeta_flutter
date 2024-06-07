@@ -149,6 +149,7 @@ class _HomeState extends State<Home> {
     final _components = components..sort((a, b) => a.name.compareTo(b.name));
     final _assets = assets..sort((a, b) => a.name.compareTo(b.name));
     final _theme = theme..sort((a, b) => a.name.compareTo(b.name));
+    ZetaFilterChip(label: 'l');
     return ExampleScaffold(
       // x-release-please-start-version
       name: 'zeta_flutter v0.10.0',
