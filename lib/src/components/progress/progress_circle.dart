@@ -20,7 +20,7 @@ enum ZetaCircleSizes {
   l,
 
   /// 64 X 64
-  xl_1
+  xl
 }
 
 ///Class definition for [ZetaProgressCircle]
@@ -29,7 +29,7 @@ class ZetaProgressCircle extends ZetaProgress {
   const ZetaProgressCircle({
     super.key,
     super.progress = 0,
-    this.size = ZetaCircleSizes.xl_1,
+    this.size = ZetaCircleSizes.xl,
     this.rounded = true,
     this.onCancel,
   });
@@ -156,7 +156,7 @@ class ZetaProgressCircleState extends ZetaProgressState<ZetaProgressCircle> {
         return const Size(ZetaSpacing.xl_6, ZetaSpacing.xl_6);
       case ZetaCircleSizes.l:
         return const Size(ZetaSpacing.xl_8, ZetaSpacing.xl_8);
-      case ZetaCircleSizes.xl_1:
+      case ZetaCircleSizes.xl:
         return const Size(ZetaSpacing.xl_9, ZetaSpacing.xl_9);
     }
   }

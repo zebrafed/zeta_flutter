@@ -29,7 +29,7 @@ Widget progressCircleUseCase(BuildContext context) => WidgetbookTestWidget(
         progress: context.knobs.double.slider(label: 'Progress', min: 0, max: 1, initialValue: 0.5).toDouble(),
         rounded: roundedKnob(context),
         size: context.knobs.list(
-          initialOption: ZetaCircleSizes.xl_1,
+          initialOption: ZetaCircleSizes.xl,
           label: 'Size',
           options: ZetaCircleSizes.values,
           labelBuilder: enumLabelBuilder,
