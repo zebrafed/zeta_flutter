@@ -24,7 +24,6 @@ jobs:
           fi
   changes:
     name: "Check for changes in code"
-    needs: up-to-date
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -46,41 +45,10 @@ jobs:
             custom-docs
             pubspec.yaml
   code-quality:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    needs: changes
-    if: needs.changes.outputs.files == 'true'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.head_ref }}
-      - name: Get branch name
-        id: branch-name
-        uses: tj-actions/branch-names@v7.0.7
-      - uses: subosito/flutter-action@v2
-      - name: Setup flutter
-        run: flutter pub get
-      - name: Lint and format
-        run: |
-          dart format . -l 120
-          dart fix --apply
-          flutter analyze
-          cd example && flutter test
-      - name: Check for modified files
-        id: git-check
-        run: echo "modified=$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)" >>  $GITHUB_ENV
-      - name: Update changes in GitHub repository
-        if: env.modified == 'true'
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add -A
-          git commit -m '[automated commit] lint format and import sort'
-          git push
+    uses: ./.github/workflows/code-quality.yml
   deploy-preview:
     name: Deploy preview version of the storybook on firebase
-    needs: code-quality
+    needs: [up-to-date, code-quality]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
