@@ -8,6 +8,7 @@ import 'package:zeta_flutter/zeta_flutter.dart';
 import 'pages/assets/icon_widgetbook.dart';
 import 'pages/components/accordion_widgetbook.dart';
 import 'pages/components/notification_list_item_widgetbook.dart';
+import 'pages/components/slider_widgetbook.dart';
 import 'pages/components/text_input_widgetbook.dart';
 import 'pages/components/top_app_bar_widgetbook.dart';
 import 'pages/components/avatar_widgetbook.dart';
@@ -187,6 +188,7 @@ class _HotReloadState extends State<HotReload> {
             WidgetbookUseCase(name: 'Search Bar', builder: (context) => searchBarUseCase(context)),
             WidgetbookUseCase(name: 'Segmented Control', builder: (context) => segmentedControlUseCase(context)),
             WidgetbookUseCase(name: 'Select Input', builder: (context) => selectInputUseCase(context)),
+            WidgetbookUseCase(name: 'Slider', builder: (context) => sliderUseCase(context)),
             WidgetbookUseCase(name: 'Snack Bar', builder: (context) => snackBarUseCase(context)),
             WidgetbookUseCase(name: 'Stepper Input', builder: (context) => stepperInputUseCase(context)),
             WidgetbookUseCase(name: 'Stepper', builder: (context) => stepperUseCase(context)),
