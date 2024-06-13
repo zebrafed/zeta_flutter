@@ -12,6 +12,7 @@ class ZetaSlider extends StatefulWidget {
     required this.value,
     this.onChange,
     this.rounded = false,
+    this.divisions,
   });
 
   /// Double value to represent slider percentage
@@ -23,6 +24,9 @@ class ZetaSlider extends StatefulWidget {
   /// {@macro zeta-component-rounded}
   final bool rounded;
 
+  /// Number of divisions.
+  final int? divisions;
+
   @override
   State<ZetaSlider> createState() => _ZetaSliderState();
   @override
@@ -31,7 +35,8 @@ class ZetaSlider extends StatefulWidget {
     properties
       ..add(DiagnosticsProperty<bool>('rounded', rounded))
       ..add(DoubleProperty('value', value))
-      ..add(ObjectFlagProperty<ValueChanged<double>?>.has('onChange', onChange));
+      ..add(ObjectFlagProperty<ValueChanged<double>?>.has('onChange', onChange))
+      ..add(IntProperty('divisions', divisions));
   }
 }
 
@@ -60,9 +65,9 @@ class _ZetaSliderState extends State<ZetaSlider> {
         /// Thumb
         thumbColor: colors.surfaceDefaultInverse,
         disabledThumbColor: colors.surfaceDisabled,
-        overlayShape: SliderThumb(size: ZetaSpacing.large, rounded: widget.rounded, color: _activeColor),
+        overlayShape: SliderThumb(size: ZetaSpacing.xl_1, rounded: widget.rounded, color: _activeColor),
         thumbShape: SliderThumb(
-          size: ZetaSpacing.small,
+          size: ZetaSpacing.large,
           rounded: widget.rounded,
           color: _activeColor,
         ),
@@ -70,7 +75,7 @@ class _ZetaSliderState extends State<ZetaSlider> {
       child: Slider(
         value: widget.value,
         onChanged: widget.onChange,
-        divisions: 10,
+        divisions: widget.divisions,
         onChangeStart: (_) {
           setState(() {
             _selected = true;
