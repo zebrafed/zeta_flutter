@@ -6,7 +6,6 @@ jobs:
   code-quality:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    if: needs.changes.outputs.files == 'true'
     steps:
       - uses: actions/checkout@v4
         with:
