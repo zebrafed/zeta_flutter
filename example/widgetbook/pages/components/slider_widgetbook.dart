@@ -26,7 +26,7 @@ class _ZetaSliderExampleState extends State<ZetaSliderExample> {
     return ZetaSlider(
       value: value,
       rounded: widget.c.knobs.boolean(label: "Rounded"),
-      divisions: widget.c.knobs.intOrNull.slider(label: "Divisions"),
+      divisions: widget.c.knobs.intOrNull.slider(label: "Divisions", min: 1, initialValue: 10),
       onChange: widget.c.knobs.boolean(label: "Disabled")
           ? null
           : (newValue) {
