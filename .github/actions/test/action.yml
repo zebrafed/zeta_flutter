@@ -1,0 +1,7 @@
+name: "Tests"
+outputs:
+  test:
+    description: "string to comment"
+runs:
+  using: "node20"
+  main: "index.js"
