@@ -39,10 +39,21 @@ jobs:
       - name: Test
         id: getTest
         uses: ./.github/actions/test
+      - run: mkdir -p coverage/old
+      - run: mkdir -p coverage/new
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: coverage.json
+          path: coverage/old/coverage.json
+
       - name: Coverage
         id: getCoverage
         uses: ./.github/actions/coverage
-
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage.json
+          path: coverage/new/coverage.json
       - name: Check branch is up to date
         id: getUpToDate
         run: |
@@ -88,17 +99,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo 1
           template='<h2>PR Checks complete</h2>✅ - Linting / Formatting</br>'
-          echo 2
           template="$template ${{ steps.getAnalysis.outputs.analyze }}</br>"
-          echo 3
           template="$template ${{ steps.getTest.outputs.test }}</br>"
-          echo 4
-          template="$template ${{ steps.getCoverage.outputs.coverage }}</br>"
-          echo 5
           template="$template ${{ steps.getUpToDate.outputs.out }}</br>"
-          echo 6
+
+          if [[ -z "${{steps.getTest.outputs.err}}" ]]; then
+              template="$template ${{ steps.getCoverage.outputs.coverage }}</br>"              
+          fi
 
           # Add / amend comment on PR.
           gh pr comment ${{github.event.pull_request.number}} --body="${template}" --edit-last -R ${{github.repository}} || gh pr comment ${{github.event.pull_request.number}} --body="${template}" -R ${{github.repository}} || echo 'Token not working' 
