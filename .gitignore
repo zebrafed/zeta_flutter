@@ -50,7 +50,7 @@ doc/api/
 .fvm/flutter_sdk
 .pub-cache/
 .pub/
-/coverage/
+/coverage/**/
 lib/generated_plugin_registrant.dart
 **/android/**/gradle-wrapper.jar
 **/android/.gradle

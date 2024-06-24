@@ -1,13 +1,15 @@
-import console from "node:console";
 import core from "@actions/core";
 import { parse, sum } from 'lcov-utils'
-import { readFileSync, writeFileSync } from "node:fs";
-let oldCov = ''
+import { readFileSync } from "node:fs";
+let oldCoverage = '';
 try {
-    oldCov = JSON.parse(readFileSync('coverage/old/coverage.json', 'utf8'));
-} catch {
-    console.log('Old coverage not found.')
+    oldCoverage = core.getInput('oldCoverage');
+    core.info(`Retrieved old coverage ${oldCoverage}`)
+} catch (error) {
+    core.info(`Unable to retrieve old coverage`)
 }
+oldCoverage = 12.67;
+
 try {
     const contents = readFileSync('coverage/lcov.info', 'utf8')
     const lcov = parse(contents)
@@ -21,13 +23,14 @@ try {
         return `<tr><td>${fileName}</td><td>${percent}%</td><td>${passing}</td></tr>`;
     })
 
-    if (oldCov && oldCov.percent) {
-        if (oldCov.percent > totalPercent) {
-            totalPercent = totalPercent + '% (🔻 down from ' + oldCov.percent + ')'
-        } else if (oldCov.percent < totalPercent) {
-            totalPercent = totalPercent + '% (👆 up from ' + oldCov.percent + ')'
+    if (oldCoverage != null) {
+
+        if (oldCoverage > totalPercent) {
+            totalPercent = totalPercent + `% (🔻 down from ' + oldCoverage + ')`
+        } else if (oldCoverage < totalPercent) {
+            totalPercent = totalPercent + `% (👆 up from ' + oldCoverage + ')`
         } else {
-            totalPercent = totalPercent + '% (no change)'
+            totalPercent = totalPercent + `% (no change)`
         }
 
     } else {
@@ -45,12 +48,9 @@ try {
 
     const output = str.replace(/(\r\n|\n|\r)/gm, "");
 
-
     core.setOutput("coverage", output);
-    writeFileSync('coverage/new/coverage.json', `{percent:${totalPercent.replace(/%/g, "")}}`);
     core.info('✅')
-}
-catch (error) {
-    core.setOutput("coverage", 'Fail');
+} catch (error) {
+    core.setOutput("coverage", '⚠️ - Coverage check failed');
     core.info('⛔️')
 }

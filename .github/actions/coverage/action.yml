@@ -1,4 +1,7 @@
 name: "Code coverage"
+inputs:
+  oldCoverage:
+    description: "previous coverage percent"
 outputs:
   coverage:
     description: "string to comment"

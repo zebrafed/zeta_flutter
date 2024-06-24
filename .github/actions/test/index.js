@@ -1,7 +1,18 @@
-
-import console from "node:console";
 import core from "@actions/core";
+import { parse, sum } from 'lcov-utils'
 import { execSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+
+try {
+    const contents = readFileSync('coverage/lcov.info', 'utf8')
+    const lcov = parse(contents)
+    const digest = sum(lcov)
+    let totalPercent = digest.lines;
+
+    core.setOutput('oldCoverage', totalPercent);
+} catch (error) {
+    core.info('Unable to retrieve old coverage');
+}
 
 try {
     execSync('flutter test --coverage --reporter json', { encoding: 'utf-8' });

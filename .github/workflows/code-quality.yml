@@ -34,28 +34,18 @@ jobs:
         id: lint
         run: dart fix --apply
       - name: Analyze
-        id: getAnalysis
+        id: analyze
         uses: ./.github/actions/analyze
       - name: Test
-        id: getTest
+        id: test
         uses: ./.github/actions/test
-      - run: mkdir -p coverage/old
-      - run: mkdir -p coverage/new
-      - uses: actions/download-artifact@v4
-        continue-on-error: true
-        with:
-          name: coverage.json
-          path: coverage/old/coverage.json
-
       - name: Coverage
-        id: getCoverage
+        id: coverage
         uses: ./.github/actions/coverage
-      - uses: actions/upload-artifact@v4
         with:
-          name: coverage.json
-          path: coverage/new/coverage.json
+          oldCoverage: ${{steps.test.outputs.oldCoverage}}
       - name: Check branch is up to date
-        id: getUpToDate
+        id: upToDate
         run: |
           set -e
           behind_by='err'
@@ -100,19 +90,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           template='<h2>PR Checks complete</h2>✅ - Linting / Formatting</br>'
-          template="$template ${{ steps.getAnalysis.outputs.analyze }}</br>"
-          template="$template ${{ steps.getTest.outputs.test }}</br>"
-          template="$template ${{ steps.getUpToDate.outputs.out }}</br>"
+          template="$template ${{ steps.analyze.outputs.analyze }}</br>"
+          template="$template ${{ steps.test.outputs.test }}</br>"
+          template="$template ${{ steps.upToDate.outputs.out }}</br>"
 
-          if [[ -z "${{steps.getTest.outputs.err}}" ]]; then
-              template="$template ${{ steps.getCoverage.outputs.coverage }}</br>"              
+          if [[ -z "${{steps.test.outputs.err}}" ]]; then
+              template="$template ${{ steps.coverage.outputs.coverage }}</br>"              
           fi
 
           # Add / amend comment on PR.
           gh pr comment ${{github.event.pull_request.number}} --body="${template}" --edit-last -R ${{github.repository}} || gh pr comment ${{github.event.pull_request.number}} --body="${template}" -R ${{github.repository}} || echo 'Token not working' 
 
           # Concatenates failure outputs.
-          fail="${{steps.getAnalysis.outputs.err}}${{steps.getTest.outputs.err}}${{steps.getUpToDate.outputs.err}}"
+          fail="${{steps.analyze.outputs.err}}${{steps.test.outputs.err}}${{steps.upToDate.outputs.err}}"
 
           # Checks if there is any content in the failure variable.
           if [[ -z "$fail" ]];
