@@ -3,7 +3,7 @@ import { execSync } from "node:child_process";
 
 try {
     execSync('dart analyze', { encoding: 'utf-8' });
-    core.setOutput("analyze", '✅ - Static analysis passed.');
+    core.setOutput("analyze", '✅ - Static analysis passed');
     core.info('✅')
 }
 catch (error) {

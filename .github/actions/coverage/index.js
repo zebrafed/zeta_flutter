@@ -8,7 +8,7 @@ try {
 } catch (error) {
     core.info(`Unable to retrieve old coverage`)
 }
-oldCoverage = 12.67;
+
 
 try {
     const contents = readFileSync('coverage/lcov.info', 'utf8')

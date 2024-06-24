@@ -16,7 +16,7 @@ try {
 
 try {
     execSync('flutter test --coverage --reporter json', { encoding: 'utf-8' });
-    core.setOutput("test", '✅ - All tests passed.');
+    core.setOutput("test", '✅ - All tests passed');
     core.info('✅')
 } catch (error) {
     if (error.stdout) {
