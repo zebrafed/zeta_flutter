@@ -14,7 +14,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           cache: true
-      - uses: ZebraDevs/flutter-code-quality@fix/commit-changes
+      - uses: ZebraDevs/flutter-code-quality@main
         with:
           token: ${{secrets.GITHUB_TOKEN}}
   check-secret:
