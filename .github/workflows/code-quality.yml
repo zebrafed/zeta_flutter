@@ -39,7 +39,7 @@ jobs:
         run: dart format . -l 120
       - name: Apply linter auto-fixes
         id: lint
-        run: dart fix --apply
+        run:
       - name: Analyze
         id: analyze
         uses: ./.github/actions/analyze
