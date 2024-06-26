@@ -47,7 +47,7 @@ class ZetaAvatar extends ZetaStatelessWidget {
   });
 
   /// Constructor for [ZetaAvatar] with image.
-  ZetaAvatar.image({
+  const ZetaAvatar.image({
     super.key,
     this.size = ZetaAvatarSize.xl,
     this.image,
