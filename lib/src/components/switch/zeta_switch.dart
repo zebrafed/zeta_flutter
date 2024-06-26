@@ -82,10 +82,10 @@ class ZetaSwitch extends StatelessWidget {
     final zetaColors = Zeta.of(context).colors;
 
     return MaterialSwitch(
-                  size: _size,
+      size: _size,
       trackOutlineWidth: const WidgetStatePropertyAll(0),
       trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
-            trackColor: WidgetStateProperty.resolveWith((states) {
+      trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return zetaColors.cool.shade30;
         } else {
@@ -96,7 +96,7 @@ class ZetaSwitch extends StatelessWidget {
         (states) => states.contains(WidgetState.disabled) ? zetaColors.cool.shade50 : zetaColors.cool.shade20,
       ),
       value: value ?? false,
-                        onChanged: onChanged,
+      onChanged: onChanged,
       thumbSize: _variant == ZetaSwitchType.web ? const Size.square(ZetaSpacing.xl_2) : null,
     );
   }

@@ -14,8 +14,8 @@ class Zeta extends InheritedWidget {
   /// The [contrast], [themeMode], [themeData], and [child] arguments are required.
   const Zeta({
     super.key,
-     required Brightness mediaBrightness,
-     required this.contrast,
+    required Brightness mediaBrightness,
+    required this.contrast,
     required this.themeMode,
     required this.themeData,
     required super.child,
