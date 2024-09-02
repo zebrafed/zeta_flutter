@@ -89,7 +89,7 @@ class ZetaNotificationListItem extends ZetaStatelessWidget {
                                 children: [
                                   if (!notificationRead)
                                     ZetaIndicator(
-                                      color: colors.blue,
+                                      color: colors.mainPrimary,
                                       size: ZetaWidgetSize.small,
                                     ),
                                   Text(
@@ -104,7 +104,7 @@ class ZetaNotificationListItem extends ZetaStatelessWidget {
                                 if (notificationTime != null)
                                   Text(
                                     notificationTime!,
-                                    style: ZetaTextStyles.bodySmall.apply(color: colors.textDisabled),
+                                    style: ZetaTextStyles.bodySmall.apply(color: colors.mainDisabled),
                                   ),
                                 Container(
                                   padding: const EdgeInsets.all(2),
@@ -114,7 +114,7 @@ class ZetaNotificationListItem extends ZetaStatelessWidget {
                                   ),
                                   child: ZetaIcon(
                                     ZetaIcons.important_notification,
-                                    color: colors.white,
+                                    color: colors.mainInverse,
                                     size: Zeta.of(context).spacing.medium,
                                   ),
                                 ),
@@ -143,7 +143,7 @@ class ZetaNotificationListItem extends ZetaStatelessWidget {
       color: notificationRead ? colors.surfacePrimary : colors.surfaceSelected,
       borderRadius: Zeta.of(context).radius.rounded,
       border: (showDivider ?? false)
-          ? Border(bottom: BorderSide(width: Zeta.of(context).spacing.minimum, color: colors.blue))
+          ? Border(bottom: BorderSide(width: Zeta.of(context).spacing.minimum, color: colors.mainPrimary))
           : null,
     );
   }
