@@ -8,6 +8,8 @@ import 'package:zeta_flutter/zeta_flutter.dart';
 
 /// Interface used for zeta color primitives
 abstract interface class ZetaPrimitives {
+  Brightness get brightness;
+
   /// Blue
   ///
   /// {@macro zeta-colors-swatch}
@@ -135,6 +137,8 @@ abstract interface class ZetaPrimitives {
 
 /// Light primitives
 final class ZetaPrimitivesLight implements ZetaPrimitives {
+  Brightness get brightness => Brightness.light;
+
   /// Blue
   ///
   /// {@macro zeta-colors-swatch}
@@ -429,6 +433,8 @@ final class ZetaPrimitivesLight implements ZetaPrimitives {
 
 /// Dark primitives
 final class ZetaPrimitivesDark implements ZetaPrimitives {
+  Brightness get brightness => Brightness.dark;
+
   /// Blue
   ///
   /// {@macro zeta-colors-swatch}
