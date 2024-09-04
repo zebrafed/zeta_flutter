@@ -23,7 +23,7 @@ void main() {
     goldenFileComparator = TolerantComparator(testUri, tolerance: 0.01);
 
     mockZetaColors = MockZetaSemanticColors();
-    when(mockZetaColors.primitives).thenReturn(ZetaPrimitivesLight());
+    when(mockZetaColors.primitives).thenReturn(const ZetaPrimitivesLight());
   });
 
   group('ZetaChatItem Tests', () {
