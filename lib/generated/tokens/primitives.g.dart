@@ -25,7 +25,7 @@ abstract interface class ZetaPrimitives {
   /// Secondary color
   ZetaColorSwatch get secondary => _secondary ?? yellow;
 
-  /// Brightness of primitives
+  /// The brightness of the primitives
   final Brightness brightness;
 
   /// Blue
@@ -155,12 +155,8 @@ abstract interface class ZetaPrimitives {
 
 /// Light primitives
 final class ZetaPrimitivesLight extends ZetaPrimitives {
-  /// Constructor for light primitives
+  /// Constructs a new ZetaPrimitivesLight instance with the (optional) primary and secondary colors.
   const ZetaPrimitivesLight({super.primary, super.secondary}) : super(brightness: Brightness.light);
-
-  /// Blue
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get blue => const ZetaColorSwatch(
         swatch: {
@@ -177,10 +173,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF0073e6,
       );
-
-  /// Cool
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get cool => const ZetaColorSwatch(
         swatch: {
@@ -197,10 +189,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF7a8190,
       );
-
-  /// Green
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get green => const ZetaColorSwatch(
         swatch: {
@@ -217,10 +205,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF00864f,
       );
-
-  /// Orange
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get orange => const ZetaColorSwatch(
         swatch: {
@@ -237,10 +221,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFFae6500,
       );
-
-  /// Pink
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get pink => const ZetaColorSwatch(
         swatch: {
@@ -257,10 +237,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFFd30589,
       );
-
-  /// Pure
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaPureColorSwatch get pure => const ZetaPureColorSwatch(
         swatch: {
@@ -270,10 +246,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF151519,
       );
-
-  /// Purple
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get purple => const ZetaColorSwatch(
         swatch: {
@@ -290,10 +262,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF7e0cff,
       );
-
-  /// Red
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get red => const ZetaColorSwatch(
         swatch: {
@@ -310,10 +278,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFFd70015,
       );
-
-  /// Teal
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get teal => const ZetaColorSwatch(
         swatch: {
@@ -330,10 +294,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF1a8080,
       );
-
-  /// Warm
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get warm => const ZetaColorSwatch(
         swatch: {
@@ -350,10 +310,6 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF858585,
       );
-
-  /// Yellow
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get yellow => const ZetaColorSwatch(
         swatch: {
@@ -370,68 +326,36 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
         },
         primary: 0xFF8d7400,
       );
-
-  /// 0dp space
   @override
   double get x0 => 0;
-
-  /// 4dp space
   @override
   double get x1 => 4;
-
-  /// 8dp space
   @override
   double get x2 => 8;
-
-  /// 12dp space
   @override
   double get x3 => 12;
-
-  /// 16dp space
   @override
   double get x4 => 16;
-
-  /// 20dp space
   @override
   double get x5 => 20;
-
-  /// 24dp space
   @override
   double get x6 => 24;
-
-  /// 28dp space
   @override
   double get x7 => 28;
-
-  /// 32dp space
   @override
   double get x8 => 32;
-
-  /// 36dp space
   @override
   double get x9 => 36;
-
-  /// 40dp space
   @override
   double get x10 => 40;
-
-  /// 44dp space
   @override
   double get x11 => 44;
-
-  /// 48dp space
   @override
   double get x12 => 48;
-
-  /// 64dp space
   @override
   double get x13 => 64;
-
-  /// 80dp space
   @override
   double get x14 => 80;
-
-  /// 96dp space
   @override
   double get x15 => 96;
   @override
@@ -452,12 +376,8 @@ final class ZetaPrimitivesLight extends ZetaPrimitives {
 
 /// Dark primitives
 final class ZetaPrimitivesDark extends ZetaPrimitives {
-  /// Constructor for dark primitives
+  /// Constructs a new ZetaPrimitivesDark instance with the (optional) primary and secondary colors.
   const ZetaPrimitivesDark({super.primary, super.secondary}) : super(brightness: Brightness.dark);
-
-  /// Blue
-  ///
-  /// {@macro zeta-colors-swatch}
   @override
   ZetaColorSwatch get blue => const ZetaColorSwatch(
         swatch: {
@@ -474,7 +394,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFF599fe5,
       );
-
   @override
   ZetaColorSwatch get cool => const ZetaColorSwatch(
         swatch: {
@@ -491,7 +410,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFF8d95a3,
       );
-
   @override
   ZetaColorSwatch get green => const ZetaColorSwatch(
         swatch: {
@@ -508,7 +426,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFF67b796,
       );
-
   @override
   ZetaColorSwatch get orange => const ZetaColorSwatch(
         swatch: {
@@ -525,7 +442,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFFd78d26,
       );
-
   @override
   ZetaColorSwatch get pink => const ZetaColorSwatch(
         swatch: {
@@ -542,7 +458,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFFee78c3,
       );
-
   @override
   ZetaPureColorSwatch get pure => const ZetaPureColorSwatch(
         swatch: {
@@ -552,7 +467,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFF1d1e23,
       );
-
   @override
   ZetaColorSwatch get purple => const ZetaColorSwatch(
         swatch: {
@@ -569,7 +483,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFF9b71df,
       );
-
   @override
   ZetaColorSwatch get red => const ZetaColorSwatch(
         swatch: {
@@ -586,7 +499,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFFf36170,
       );
-
   @override
   ZetaColorSwatch get teal => const ZetaColorSwatch(
         swatch: {
@@ -603,7 +515,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFF65c4c4,
       );
-
   @override
   ZetaColorSwatch get warm => const ZetaColorSwatch(
         swatch: {
@@ -620,7 +531,6 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFFb9b9b9,
       );
-
   @override
   ZetaColorSwatch get yellow => const ZetaColorSwatch(
         swatch: {
@@ -637,68 +547,36 @@ final class ZetaPrimitivesDark extends ZetaPrimitives {
         },
         primary: 0xFFc2a728,
       );
-
-  /// 0dp space
   @override
   double get x0 => 0;
-
-  /// 4dp space
   @override
   double get x1 => 4;
-
-  /// 8dp space
   @override
   double get x2 => 8;
-
-  /// 12dp space
   @override
   double get x3 => 12;
-
-  /// 16dp space
   @override
   double get x4 => 16;
-
-  /// 20dp space
   @override
   double get x5 => 20;
-
-  /// 24dp space
   @override
   double get x6 => 24;
-
-  /// 28dp space
   @override
   double get x7 => 28;
-
-  /// 32dp space
   @override
   double get x8 => 32;
-
-  /// 36dp space
   @override
   double get x9 => 36;
-
-  /// 40dp space
   @override
   double get x10 => 40;
-
-  /// 44dp space
   @override
   double get x11 => 44;
-
-  /// 48dp space
   @override
   double get x12 => 48;
-
-  /// 64dp space
   @override
   double get x13 => 64;
-
-  /// 80dp space
   @override
   double get x14 => 80;
-
-  /// 96dp space
   @override
   double get x15 => 96;
   @override
